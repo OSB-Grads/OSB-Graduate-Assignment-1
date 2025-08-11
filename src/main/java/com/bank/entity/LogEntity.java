@@ -1,5 +1,6 @@
 package com.bank.entity;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class LogEntity {
@@ -77,7 +78,7 @@ public class LogEntity {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
