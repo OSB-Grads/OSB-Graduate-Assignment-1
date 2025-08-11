@@ -3,7 +3,7 @@ package com.bank.entity;
 import java.sql.Timestamp;
 
 public class UserEntity {
-    private int id;
+    private Long id;
     private String username;
     private String passwordHash;
     private String fullName;
@@ -36,7 +36,7 @@ public class UserEntity {
         return username;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,7 +68,7 @@ public class UserEntity {
         this.updatedAt = updatedAt;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -76,7 +76,7 @@ public class UserEntity {
         return createdAt;
     }
 
-    public UserEntity(int id, String username, String passwordHash, String fullName, String email, String phone, Timestamp createdAt, Timestamp updatedAt) {
+    public UserEntity(Long id, String username, String passwordHash, String fullName, String email, String phone, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
