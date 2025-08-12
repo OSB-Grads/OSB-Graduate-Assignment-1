@@ -25,6 +25,10 @@ public class AccountEntity {
         this.intrest = intrest;
     }
 
+    public AccountEntity() {
+
+    }
+
 
     public String getAccount_number() {
         return account_number;
