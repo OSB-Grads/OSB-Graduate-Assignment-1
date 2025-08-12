@@ -17,9 +17,8 @@ public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper)
     this.userMapper=userMapper;
 }
     public UserDTO validateUserCredentials(String user,String password) throws Exception,InvalidCredentialsException, UserNotfoundException {
-       UserEntity userEntity=new UserEntity();
+       UserEntity userEntity=dao.getUserByUsername(user);
         String pass=userEntity.getPasswordHash();
-           userEntity=dao.getUserByUsername(user);
            if(userEntity==null){
                throw new UserNotfoundException();
            }
