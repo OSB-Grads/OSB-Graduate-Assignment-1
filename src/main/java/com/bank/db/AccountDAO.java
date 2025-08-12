@@ -1,0 +1,103 @@
+package com.bank.db;
+
+import com.bank.entity.AccountEntity;
+import com.bank.entity.LogEntity;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+
+public class AccountDAO {
+
+    public enum AccountType {
+        SAVINGS,
+        FIXED_DEPOSIT
+    }
+
+    private final DatabaseManager db;
+
+
+    public AccountDAO(DatabaseManager db) {
+        this.db = db;
+    }
+
+
+    public void insertAccountDetails(AccountEntity accountEntity) {
+        try {
+            String sql = String.format(
+                    "INSERT INTO accounts(account_number,user_id,account_type) VALUES('%s','%d','%s')",
+                    accountEntity.getAccount_number(),
+                    accountEntity.getUser_id(),
+                    accountEntity.getAccount_type()
+            );
+            db.query(sql);
+        } catch (Exception e) {
+            System.out.println("Error while executing the Acoount Details " + e);
+        }
+
+    }
+
+    public List<AccountEntity> getAccountDetails() {
+        List<AccountEntity> result = new ArrayList<>();
+        String sql = "SELECT * FROM accounts";
+
+        try {
+            List<Map<String, Object>> rows = db.query(sql);
+            for (Map<String, Object> row : rows) {
+                AccountEntity account = new AccountEntity();
+                account.setAccount_number((String) row.get("account_number"));
+                account.setUser_id((Integer) row.get("user_id"));
+                account.setAccount_type(String.valueOf(AccountType.valueOf((String) row.get("account_type"))));
+                result.add(account);
+            }
+        } catch (Exception e) {
+            System.out.println("Error retrieving account details: " + e);
+        }
+        return result;
+    }
+
+
+    // Get account by ID
+    public AccountEntity getAccountById(int accountNumber) {
+        AccountEntity account = new AccountEntity();
+        String sql = "SELECT * FROM accounts WHERE id = " + accountNumber;
+
+        try {
+            List<Map<String, Object>> rows = db.query(sql);
+            if (!rows.isEmpty()) {
+                Map<String, Object> row = rows.get(0); // Since account IDs are unique, we expect a single row
+                account.setAccount_number((String) row.get("account_number"));
+                account.setUser_id((Integer) row.get("user_id"));
+                account.setAccount_type(String.valueOf(AccountType.valueOf((String) row.get("account_type"))));
+            }
+        } catch (Exception e) {
+            System.out.println("Error retrieving account by ID: " + e);
+        }
+
+        return account;
+    }
+
+    // Update account details
+
+    public void updateAccountDetails(AccountEntity accountEntity) {
+        String sql = String.format(
+                "UPDATE accounts SET " +
+                        "balance = '%f', " +
+                        "is_locked = '%b', " +
+                        "updated_at = CURRENT_TIMESTAMP " + // Automatically update the timestamp
+                        "WHERE id = '%d'",
+                accountEntity.getBalance(),
+                accountEntity.isIs_locked()
+        );
+
+        try {
+            db.query(sql);
+        } catch (Exception e) {
+            System.out.println("Error while updating account details: " + e);
+        }
+    }
+
+
+}

@@ -1,12 +1,8 @@
 package com.bank.entity;
 import java.sql.Timestamp;
 
-/**
- * Represents a transaction in the banking application.
- * This entity encapsulates all transaction-related data and is used for database mapping.
- */
 
-public class transactionEntity {
+public class TransactionEntity {
 
     /* =======================
        Fields (Properties)
@@ -21,17 +17,13 @@ public class transactionEntity {
    private String status;
    private Timestamp created_at;
 
-
     /* =======================
        Constructors
        ======================= */
 
-    /**
-     * Full constructor for creating a TransactionEntity instance.
-     */
+    public TransactionEntity() { }
 
-
-    public transactionEntity() {
+    public TransactionEntity(int transaction_id, int from_account_id, int to_account_id, String transaction_type, double amount, String description, String status, Timestamp created_at) {
         this.transaction_id = transaction_id;
         this.from_account_id = from_account_id;
         this.to_account_id = to_account_id;
