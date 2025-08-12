@@ -104,7 +104,7 @@ public class userDao {
     // Mapper
     private UserEntity mapResultSetToUser(ResultSet rs) throws Exception {
         UserEntity user = new UserEntity();
-        user.setId(rs.getInt("id"));
+        user.setId(rs.getLong("id"));
         user.setUsername(rs.getString("username"));
         user.setPasswordHash(rs.getString("password_hash"));
         user.setFullName(rs.getString("full_name"));
