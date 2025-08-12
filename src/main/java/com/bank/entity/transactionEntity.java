@@ -1,9 +1,16 @@
 package com.bank.entity;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+
+/**
+ * Represents a transaction in the banking application.
+ * This entity encapsulates all transaction-related data and is used for database mapping.
+ */
 
 public class transactionEntity {
 
-    /* Transaction Entity Properties */
+    /* =======================
+       Fields (Properties)
+       ======================= */
 
    private int transaction_id;
    private int from_account_id;
@@ -12,11 +19,19 @@ public class transactionEntity {
    private double amount;
    private String description;
    private String status;
-   private LocalDate created_at;
+   private Timestamp created_at;
 
-    /* Transaction Entity Constructor */
 
-    public transactionEntity(int transaction_id,  int from_account_id, int to_account_id,String transaction_type, double amount, String description, String status, LocalDate created_at) {
+    /* =======================
+       Constructors
+       ======================= */
+
+    /**
+     * Full constructor for creating a TransactionEntity instance.
+     */
+
+
+    public transactionEntity() {
         this.transaction_id = transaction_id;
         this.from_account_id = from_account_id;
         this.to_account_id = to_account_id;
@@ -27,7 +42,11 @@ public class transactionEntity {
         this.created_at = created_at;
     }
 
-    /* Transaction Entity Getters and Setters */
+
+   /* =======================
+       Getters and Setters
+       ======================= */
+
 
     public String getTransaction_type() {
         return transaction_type;
@@ -85,11 +104,11 @@ public class transactionEntity {
         this.status = status;
     }
 
-    public LocalDate getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return created_at;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.created_at = createdAt;
     }
 }
