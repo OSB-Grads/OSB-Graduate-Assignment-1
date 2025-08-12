@@ -1,10 +1,12 @@
 package com.bank.entity;
-import java.security.Timestamp;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
-public class transactionEntity {
 
-    /* Transaction Entity Properties */
+public class TransactionEntity {
+
+    /* =======================
+       Fields (Properties)
+       ======================= */
 
    private int transaction_id;
    private int from_account_id;
@@ -15,9 +17,13 @@ public class transactionEntity {
    private String status;
    private Timestamp created_at;
 
-    /* Transaction Entity Constructor */
+    /* =======================
+       Constructors
+       ======================= */
 
-    public transactionEntity(int transaction_id,  int from_account_id, int to_account_id,String transaction_type, double amount, String description, String status, Timestamp created_at) {
+    public TransactionEntity() { }
+
+    public TransactionEntity(int transaction_id, int from_account_id, int to_account_id, String transaction_type, double amount, String description, String status, Timestamp created_at) {
         this.transaction_id = transaction_id;
         this.from_account_id = from_account_id;
         this.to_account_id = to_account_id;
@@ -28,7 +34,11 @@ public class transactionEntity {
         this.created_at = created_at;
     }
 
-    /* Transaction Entity Getters and Setters */
+
+   /* =======================
+       Getters and Setters
+       ======================= */
+
 
     public String getTransaction_type() {
         return transaction_type;

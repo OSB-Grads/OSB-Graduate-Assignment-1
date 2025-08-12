@@ -25,6 +25,10 @@ public class LogDTO {
         this.createdAt = createdAt;
     }
 
+    public LogDTO() {
+
+    }
+
     public int getId() {
         return id;
     }

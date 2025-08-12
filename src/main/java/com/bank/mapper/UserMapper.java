@@ -4,6 +4,7 @@ import com.bank.dto.UserDTO;
 import com.bank.entity.UserEntity;
 import com.bank.util.PasswordUtil;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,8 @@ public class UserMapper {
         userDTO.setFullName(user.getFullName());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhone(user.getPhone());
-        userDTO.setCreatedAt(String.valueOf(user.getCreatedAt()));
-        userDTO.setUpdatedAt(String.valueOf(user.getUpdatedAt()));
+        userDTO.setCreatedAt(user.getCreatedAt());
+        userDTO.setUpdatedAt(user.getUpdatedAt());
 
 
 
