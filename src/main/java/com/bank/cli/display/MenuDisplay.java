@@ -1,4 +1,7 @@
 package com.bank.cli.display;
+import Orchestrators.UserOrchestrator;
+import com.bank.dto.AccountDTO;
+import com.bank.services.AccountService;
 
 import java.util.Scanner;
 
@@ -8,9 +11,15 @@ import java.util.Scanner;
  */
 public class MenuDisplay {
     private Scanner scanner;
-    
-    public MenuDisplay() {
+    private final AccountService accountService;
+
+
+    public MenuDisplay(AccountService accountService) {
         this.scanner = new Scanner(System.in);
+        this.accountService=accountService;
+
+
+
     }
     
     /**
@@ -113,12 +122,21 @@ public class MenuDisplay {
         String username = scanner.nextLine().trim();
         System.out.print("Password: ");
         String password = scanner.nextLine().trim();
-        
-        // TODO: Call AuthService to validate credentials
-        // TODO: If successful, call showUserMenu()
-        System.out.println("TODO: Implement login logic using AuthService");
+
+//        try {
+//            //this to be changed after creation of auth services
+//            boolean valid = userOrchestrator.validateUserCredentials(username, password);
+//            if (valid) {
+//                showSuccess("Login successful!");
+//                showUserMenu();
+//            } else {
+//                showError("Invalid username or password.");
+//            }
+//        } catch (Exception e) {
+//            showError("Login failed: " + e.getMessage());
+//        }
     }
-    
+
     private void handleCreateProfile() {
         System.out.println("\n=== CREATE CUSTOMER PROFILE ===");
         System.out.print("Username: ");
@@ -131,19 +149,65 @@ public class MenuDisplay {
         String email = scanner.nextLine().trim();
         System.out.print("Phone: ");
         String phone = scanner.nextLine().trim();
-        
-        // TODO: Call UserService to create new user
-        System.out.println("TODO: Implement user creation logic using UserService");
+
+//        try {
+//            userOrchestrator.signup(username, password, fullName, email, phone);  // <-- underlined change
+//            showSuccess("Profile created successfully!");
+//        } catch (Exception e) {
+//            showError("Failed to create profile: " + e.getMessage());
+//        }
     }
-    
+
+
     private void handleCreateAccount() {
         System.out.println("\n=== CREATE BANK ACCOUNT ===");
         System.out.println("1. Savings Account");
         System.out.println("2. Fixed Deposit Account");
         System.out.print("Select account type (1-2): ");
-        
-        // TODO: Implement account creation logic
-        System.out.println("TODO: Implement account creation using AccountService");
+
+        try {
+            int choice = Integer.parseInt(scanner.nextLine().trim());
+            String accountType;
+            boolean isLocked;
+
+            switch (choice) {
+                case 1:
+                    accountType = "SAVINGS";
+                    isLocked = false;
+                    break;
+                case 2:
+                    accountType = "FIXED_DEPOSIT";
+                    isLocked = true;
+                    break;
+                default:
+                    System.out.println("Invalid account type selected.");
+                    return;
+            }
+
+
+//            if (currentUserId == null) {
+//                System.out.println("Please login first to create an account.");
+//                return;
+//            }
+
+
+            AccountDTO dto = new AccountDTO();
+//            dto.setUserId(currentUserId);
+            dto.setAccountType(accountType);
+            dto.setBalance(0.0);
+            dto.setLocked(isLocked);
+
+            // Call service to create account
+            accountService.createAccount(dto);
+
+            System.out.println("Account creation request completed.");
+
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a number.");
+        } catch (Exception e) {
+            System.out.println("Error creating account: " + e.getMessage());
+        }
+
     }
     
     private void handleDeposit() {

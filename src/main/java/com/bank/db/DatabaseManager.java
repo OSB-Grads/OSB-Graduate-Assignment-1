@@ -108,8 +108,8 @@ public class DatabaseManager {
             
             // Accounts table
             "CREATE TABLE IF NOT EXISTS accounts (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "account_number VARCHAR(20) UNIQUE NOT NULL, " +
+             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+             "account_number VARCHAR(20) UNIQUE NOT NULL, " +
             "user_id INTEGER NOT NULL, " +
             "account_type VARCHAR(20) NOT NULL CHECK (account_type IN ('SAVINGS', 'FIXED_DEPOSIT')), " +
             "balance DECIMAL(15,2) DEFAULT 0.00, " +

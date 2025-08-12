@@ -1,5 +1,8 @@
 package com.bank.dto;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+
 /**
  * Data Transfer Object for User information.
  * Used to transfer user data between layers without exposing entity details.
@@ -10,14 +13,14 @@ public class UserDTO {
     private String fullName;
     private String email;
     private String phone;
-    private String createdAt;
-    private String updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Default constructor
     public UserDTO() {}
 
     // Constructor with all fields
-    public UserDTO(Long id, String username, String fullName, String email, String phone, String createdAt, String updatedAt) {
+    public UserDTO(Long id, String username, String fullName, String email, String phone, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
@@ -68,19 +71,19 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public String getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 

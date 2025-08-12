@@ -1,28 +1,25 @@
 package com.bank.entity;
-import java.time.LocalDate;
+
+import java.sql.Timestamp;
+
 
 public class AccountEntity {
+    private int accId;
     private String account_number;
     private int User_id;
     private String account_type;
     private double balance;
     private boolean is_locked;
-    private LocalDate account_created;
-    private LocalDate account_updated;
+    private Timestamp account_created;
+    private Timestamp account_updated;
     private String type;
-    private float intrest;
+    private double interest;
 
 
-    public AccountEntity(String account_number, int user_id, String account_type, double balance, boolean is_locked, LocalDate account_created, LocalDate account_updated, String type, float intrest) {
-        this.account_number = account_number;
-        User_id = user_id;
-        this.account_type = account_type;
-        this.balance = balance;
-        this.is_locked = is_locked;
-        this.account_created = account_created;
-        this.account_updated = account_updated;
-        this.type = type;
-        this.intrest = intrest;
+
+
+    public AccountEntity() {
+
     }
 
 
@@ -32,6 +29,27 @@ public class AccountEntity {
 
     public void setAccount_number(String account_number) {
         this.account_number = account_number;
+    }
+
+    public AccountEntity(int accId, String account_number, int user_id, String account_type, double balance, boolean is_locked, Timestamp account_created, Timestamp account_updated, String type, double interest) {
+        this.accId = accId;
+        this.account_number = account_number;
+        User_id = user_id;
+        this.account_type = account_type;
+        this.balance = balance;
+        this.is_locked = is_locked;
+        this.account_created = account_created;
+        this.account_updated = account_updated;
+        this.type = type;
+        this.interest = interest;
+    }
+
+    public int getAccId() {
+        return accId;
+    }
+
+    public void setAccId(int accId) {
+        this.accId = accId;
     }
 
     public int getUser_id() {
@@ -66,19 +84,19 @@ public class AccountEntity {
         this.is_locked = is_locked;
     }
 
-    public LocalDate getAccount_created() {
+    public Timestamp getAccount_created() {
         return account_created;
     }
 
-    public void setAccount_created(LocalDate account_created) {
+    public void setAccount_created(Timestamp account_created) {
         this.account_created = account_created;
     }
 
-    public LocalDate getAccount_updated() {
+    public Timestamp getAccount_updated() {
         return account_updated;
     }
 
-    public void setAccount_updated(LocalDate account_updated) {
+    public void setAccount_updated(Timestamp account_updated) {
         this.account_updated = account_updated;
     }
 
@@ -90,12 +108,12 @@ public class AccountEntity {
         this.type = type;
     }
 
-    public float getIntrest() {
-        return intrest;
+    public double getInterest() {
+        return interest;
     }
 
-    public void setIntrest(float intrest) {
-        this.intrest = intrest;
+    public void setInterest(double intrest) {
+        this.interest = intrest;
     }
 
 

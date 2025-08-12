@@ -1,22 +1,24 @@
 package com.bank.entity;
 
+import com.bank.db.LogDAO;
+
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class LogEntity {
     private int id;
     private int user_id;
-    private String action;
+    private LogDAO.Action action;
     private String details;
     private String ip_address;
-    private String status;
+    private LogDAO.Status status;
     private Timestamp timestamp;
 
 
     public LogEntity(){}
 
 
-    public LogEntity(int id, int user_id, String action, String details, String ip_address, String status, Timestamp timestamp) {
+    public LogEntity(int id, int user_id, LogDAO.Action action, String details, String ip_address, LogDAO.Status status, Timestamp timestamp) {
         this.id = id;
         this.user_id = user_id;
         this.action = action;
@@ -42,11 +44,11 @@ public class LogEntity {
         this.user_id = user_id;
     }
 
-    public String getAction() {
+    public LogDAO.Action getAction() {
         return action;
     }
 
-    public void setAction(String action) {
+    public void setAction(LogDAO.Action action) {
         this.action = action;
     }
 
@@ -66,11 +68,11 @@ public class LogEntity {
         this.ip_address = ip_address;
     }
 
-    public String getStatus() {
+    public LogDAO.Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(LogDAO.Status status) {
         this.status = status;
     }
 
