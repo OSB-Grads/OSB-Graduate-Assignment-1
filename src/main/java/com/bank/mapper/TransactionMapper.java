@@ -3,6 +3,8 @@ package com.bank.mapper;
 import com.bank.entity.TransactionEntity;
 import com.bank.dto.TransactionDTO;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,19 @@ public class TransactionMapper {
         transaction.setCreatedAt(transactionDTO.getCreated_at());
 
         return transaction;
+    }
+
+    public static TransactionEntity mapResultSetToEntity(ResultSet rs) throws SQLException {
+        TransactionEntity ts = new TransactionEntity();
+        ts.setTransaction_id(rs.getInt("transaction_id"));
+        ts.setFrom_account_id(rs.getInt("from_account_id"));
+        ts.setTo_account_id(rs.getInt("to_account_id"));
+        ts.setTransaction_type(rs.getString("transaction_type"));
+        ts.setAmount(rs.getDouble("amount"));
+        ts.setDescription(rs.getString("description"));
+        ts.setStatus(rs.getString("status"));
+        ts.setCreatedAt(rs.getTimestamp("created_at"));
+        return ts;
     }
 
     public static List<TransactionEntity> mapToTransactionEntityList(List<Map<String, Object>> rows) {
