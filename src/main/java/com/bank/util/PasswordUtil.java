@@ -15,21 +15,4 @@ public class PasswordUtil {
     }
 
 
-    public static boolean VerifyPassword(String plainPassword ,String hashedPassword){
-        if(plainPassword==null || hashedPassword==null){
-            return false;
-        }
-        boolean isValid;
-         try {
-             isValid=BCrypt.checkpw(plainPassword,hashedPassword);
-
-         }catch(Exception e){
-             System.err.println("error occred dyuring the password verfication:"+e.getMessage());
-             return  false;
-         }
-         return isValid;
-
-    }
-
-
 }
