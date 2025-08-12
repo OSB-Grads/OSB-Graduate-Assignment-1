@@ -7,6 +7,8 @@ import com.bank.exception.AccountNotFoundException;
 import com.bank.exception.BankingException;
 import com.bank.db.AccountDAO;
 
+import java.sql.SQLException;
+
 
 public class TransactionService {
 
@@ -43,7 +45,15 @@ public class TransactionService {
 
         //create transaction record
         TransactionEntity transaction = new TransactionEntity();
-        transactionDAO.saveTransaction(transaction);
-    }
 
+
+
+        try {
+            transactionDAO.saveTransaction(transaction);
+            System.out.println("Transaction saved successfully!");
+        } catch (SQLException e) {
+            System.err.println("Error while saving transaction: " + e.getMessage());
+            e.printStackTrace(); // optional for debugging
+        }
+    }
 }
