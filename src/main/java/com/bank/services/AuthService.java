@@ -2,28 +2,31 @@ package com.bank.services;
 import com.bank.entity.UserEntity;
 import com.bank.db.userDao;
 import com.bank.dto.UserDTO;
+import com.bank.exception.InvalidCredentialsException;
+import com.bank.exception.UserNotfoundException;
 import com.bank.util.PasswordUtil;
+import com.bank.mapper.UserMapper;
 public class AuthService {
 
 private final userDao dao;
-private final PasswordUtil util;
-public AuthService(userDao dao,PasswordUtil util){
+private final PasswordUtil passwordUtil;
+private final UserMapper userMapper;
+public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper){
     this.dao=dao;
-    this.util=util;
+    this.passwordUtil=passwordUtil;
+    this.userMapper=userMapper;
 }
-    public UserDTO LoginUser(String user,String password) throws Exception{
+    public UserDTO validateUserCredentials(String user,String password) throws Exception,InvalidCredentialsException, UserNotfoundException {
        UserEntity userEntity=new UserEntity();
-       try{
+        String pass=userEntity.getPasswordHash();
            userEntity=dao.getUserByUsername(user);
-           if(userEntity!=null){
-               String pass=userEntity.getPasswordHash();
-
-
+           if(userEntity==null){
+               throw new UserNotfoundException();
            }
-       }
-       catch{
-
-       }
+          if(!passwordUtil.VerifyPassword(password,pass)){
+            throw new InvalidCredentialsException();
+        }
+        return userMapper.UserEnityToDto(userEntity);
    }
 
 }

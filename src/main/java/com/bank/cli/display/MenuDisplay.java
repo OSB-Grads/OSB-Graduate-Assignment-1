@@ -1,6 +1,8 @@
 package com.bank.cli.display;
 import Orchestrators.UserOrchestrator;
 import java.util.Scanner;
+import com.bank.dto.UserDTO;
+import com.bank.services.AuthService;
 
 /**
  * Handles all CLI menu display and user input.
@@ -9,10 +11,14 @@ import java.util.Scanner;
 public class MenuDisplay {
     private Scanner scanner;
     private final UserOrchestrator userOrchestrator;
+    private final UserDTO userDto;
+    private final AuthService authService;
 
-    public MenuDisplay(UserOrchestrator userOrchestrator) {
+    public MenuDisplay(UserOrchestrator userOrchestrator,UserDTO userDto,AuthService authService) {
         this.scanner = new Scanner(System.in);
         this.userOrchestrator = userOrchestrator;
+        this.userDto=userDto;
+        this.authService=authService;
 
     }
     
@@ -119,7 +125,9 @@ public class MenuDisplay {
 
         try {
             //this to be changed after creation of auth services
-            boolean valid = userOrchestrator.validateUserCredentials(username, password);
+           // boolean valid = userOrchestrator.validateUserCredentials(username, password);
+            UserDTO DTO=new UserDTO();
+            DTO=authService.validateUserCredentials(username,password);
             if (valid) {
                 showSuccess("Login successful!");
                 showUserMenu();
