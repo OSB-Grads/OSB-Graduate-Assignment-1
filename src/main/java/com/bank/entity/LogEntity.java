@@ -10,13 +10,13 @@ public class LogEntity {
     private String details;
     private String ip_address;
     private String status;
-    private LocalDate timestamp;
+    private Timestamp timestamp;
 
 
     public LogEntity(){}
 
 
-    public LogEntity(int id, int user_id, String action, String details, String ip_address, String status, LocalDate timestamp) {
+    public LogEntity(int id, int user_id, String action, String details, String ip_address, String status, Timestamp timestamp) {
         this.id = id;
         this.user_id = user_id;
         this.action = action;
@@ -74,7 +74,7 @@ public class LogEntity {
         this.status = status;
     }
 
-    public LocalDate getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
