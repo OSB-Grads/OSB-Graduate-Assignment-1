@@ -1,6 +1,6 @@
 package com.bank.dto;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 //import com.bank.entity.LogEntity;
 
@@ -23,6 +23,10 @@ public class LogDTO {
         this.status = status;
         this.type = type;
         this.createdAt = createdAt;
+    }
+
+    public LogDTO() {
+
     }
 
     public int getId() {
