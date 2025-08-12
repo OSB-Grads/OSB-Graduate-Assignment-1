@@ -1,7 +1,6 @@
 package com.bank.dto;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
 public class TransactionDTO {
 
@@ -45,6 +44,38 @@ public class TransactionDTO {
 
     public Timestamp getCreated_at() {
         return created_at;
+    }
+
+    public void setTransaction_id(int transaction_id) {
+        this.transaction_id = transaction_id;
+    }
+
+    public void setFrom_account_id(int from_account_id) {
+        this.from_account_id = from_account_id;
+    }
+
+    public void setTo_account_id(int to_account_id) {
+        this.to_account_id = to_account_id;
+    }
+
+    public void setTransaction_type(String transaction_type) {
+        this.transaction_type = transaction_type;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
     }
 
     public TransactionDTO(int transaction_id, int from_account_id, int to_account_id, String transaction_type, double amount, String description, String status, Timestamp created_at) {
