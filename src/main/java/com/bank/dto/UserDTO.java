@@ -1,5 +1,7 @@
 package com.bank.dto;
 
+import java.sql.Timestamp;
+
 /**
  * Data Transfer Object for User information.
  * Used to transfer user data between layers without exposing entity details.

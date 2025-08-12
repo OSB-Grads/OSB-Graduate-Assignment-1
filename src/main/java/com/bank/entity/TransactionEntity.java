@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 
 public class TransactionEntity {
 
-    /* Transaction Entity Properties */
+    /* =======================
+       Fields (Properties)
+       ======================= */
 
    private int transaction_id;
    private int from_account_id;
@@ -15,7 +17,9 @@ public class TransactionEntity {
    private String status;
    private Timestamp created_at;
 
-    /* Transaction Entity Constructor */
+    /* =======================
+       Constructors
+       ======================= */
 
     public TransactionEntity() { }
 
@@ -30,7 +34,11 @@ public class TransactionEntity {
         this.created_at = created_at;
     }
 
-    /* Transaction Entity Getters and Setters */
+
+   /* =======================
+       Getters and Setters
+       ======================= */
+
 
     public String getTransaction_type() {
         return transaction_type;
