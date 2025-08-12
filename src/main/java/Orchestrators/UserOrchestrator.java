@@ -48,7 +48,7 @@ public class UserOrchestrator {
 
         // Hash password with PasswordUtil
 
-        String passwordHash = PasswordUtil.hashPassword(password);
+//        String passwordHash = PasswordUtil.hashPassword(password);
 
         // Generate unique ID and current timestamps
 
@@ -64,13 +64,13 @@ public class UserOrchestrator {
         userDTO.setFullName(fullName);
         userDTO.setEmail(email);
         userDTO.setPhone(phone);
-        userDTO.setCreatedAt(String.valueOf(now));
-        userDTO.setUpdatedAt(String.valueOf(now));
+        userDTO.setCreatedAt(now);
+        userDTO.setUpdatedAt(now);
 
 
         // Convert UserDTO to UserEntity
 
-        UserEntity userEntity = UserMapper.UserDtoToUserEntity(userDTO);
+        UserEntity userEntity = UserMapper.UserDtoToUserEntity(userDTO,password);
 
 
         // Set password hash and timestamps on entity
