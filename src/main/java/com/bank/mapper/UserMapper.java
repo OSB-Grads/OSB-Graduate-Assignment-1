@@ -2,12 +2,14 @@ package com.bank.mapper;
 
 import com.bank.dto.UserDTO;
 import com.bank.entity.UserEntity;
+import com.bank.util.PasswordUtil;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 public class UserMapper {
 
@@ -48,12 +50,17 @@ public class UserMapper {
         return userDTO;
     }
 
-    public static UserEntity UserDtoToUserEntity(UserDTO userDto){
+    public static UserEntity UserDtoToUserEntity(UserDTO userDto,String plainPassword){
         if(userDto==null){
             return null;
         }
         UserEntity entity=new UserEntity();
-        //password add is needed
+        if(plainPassword!=null){
+            String hashedPassword= PasswordUtil.hashPassword(plainPassword);
+            entity.setPasswordHash(hashedPassword);
+        }
+
+
         entity.setId(userDto.getId());
         entity.setUsername(userDto.getUsername());
         entity.setFullName(userDto.getFullName());

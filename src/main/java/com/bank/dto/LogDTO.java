@@ -1,6 +1,6 @@
 package com.bank.dto;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 //import com.bank.entity.LogEntity;
 
