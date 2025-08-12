@@ -95,5 +95,4 @@ public class TransactionEntity {
     public void setCreatedAt(Timestamp createdAt) {
         this.created_at = createdAt;
     }
-
 }
