@@ -1,4 +1,5 @@
 package com.bank.entity;
+import java.security.Timestamp;
 import java.time.LocalDate;
 
 public class transactionEntity {
@@ -12,11 +13,11 @@ public class transactionEntity {
    private double amount;
    private String description;
    private String status;
-   private LocalDate created_at;
+   private Timestamp created_at;
 
     /* Transaction Entity Constructor */
 
-    public transactionEntity(int transaction_id,  int from_account_id, int to_account_id,String transaction_type, double amount, String description, String status, LocalDate created_at) {
+    public transactionEntity(int transaction_id,  int from_account_id, int to_account_id,String transaction_type, double amount, String description, String status, Timestamp created_at) {
         this.transaction_id = transaction_id;
         this.from_account_id = from_account_id;
         this.to_account_id = to_account_id;
@@ -85,11 +86,11 @@ public class transactionEntity {
         this.status = status;
     }
 
-    public LocalDate getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return created_at;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.created_at = createdAt;
     }
 }
