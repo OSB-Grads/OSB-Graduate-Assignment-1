@@ -33,7 +33,7 @@ public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper)
     public String[] SignInUser(String user,String password) throws Exception, UserAlreadyExist {
 
         UserEntity userEntity=dao.getUserByUsername(user);
-        if(userEntity!=null){
+        if(userEntity != null){
             throw new UserAlreadyExist();
         }
         String hash= passwordUtil.hashPassword(password);
