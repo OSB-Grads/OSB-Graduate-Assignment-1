@@ -13,9 +13,11 @@ public class AccountMapper {
 
 
 
-    public static AccountEntity mapToAccountEntity(Map<String,Object> row){
-        AccountEntity accountEntity=new AccountEntity();
-        accountEntity.setUser_id((int)row.get("user_id"));
+    public static AccountEntity mapToAccountEntity(Map<String, Object> row) {
+        if (row == null || row.isEmpty()) return null;
+
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setUser_id((int) row.get("user_id"));
         accountEntity.setAccount_number((String) row.get("account_number"));
         accountEntity.setAccount_created((Timestamp) row.get("account_created"));
         accountEntity.setAccount_updated((Timestamp) row.get("account_updated"));
@@ -28,8 +30,8 @@ public class AccountMapper {
 
     }
 
-    public static List<AccountEntity> mapToLogEntityList(List<Map<String, Object>> rows){
-        if(rows==null){
+    public static List<AccountEntity> mapToAccountEntityList(List<Map<String, Object>> rows) {
+        if (rows == null) {
             return new ArrayList<>();
         }
         return rows.stream()
@@ -37,15 +39,15 @@ public class AccountMapper {
                 .collect(Collectors.toList());
     }
 
-
-    public static AccountEntity dtoToEntity(AccountDTO accountDTO){
-        if(accountDTO==null)return null;
+    public static AccountEntity dtoToEntity(AccountDTO accountDTO) {
+        if (accountDTO == null) return null;
 
         double interest=accountDTO.isLocked()?0.05:0.03;
                 //fd ==0.05
                 //savings ==0.03
 
-        AccountEntity accountEntity=new AccountEntity(
+        return new AccountEntity(
+
                 accountDTO.getAccountNumber(),
                 accountDTO.getUserId(),
                 accountDTO.getAccountType(),
@@ -56,14 +58,12 @@ public class AccountMapper {
                 accountDTO.getAccountType(),
                 interest
         );
-        return accountEntity;
     }
 
+    public static AccountDTO entityToDTO(AccountEntity accountEntity) {
+        if (accountEntity == null) return null;
 
-    public static AccountDTO entityToDTO(AccountEntity accountEntity){
-        if(accountEntity==null)return null;
-
-        AccountDTO accountDTO=new AccountDTO(
+        return new AccountDTO(
                 accountEntity.getAccount_number(),
                 accountEntity.getUser_id(),
                 accountEntity.getAccount_type(),
@@ -72,7 +72,5 @@ public class AccountMapper {
                 accountEntity.getAccount_created(),
                 accountEntity.getAccount_updated()
         );
-
-        return accountDTO;
     }
 }

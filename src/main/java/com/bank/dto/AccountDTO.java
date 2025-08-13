@@ -1,6 +1,5 @@
 package com.bank.dto;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -8,6 +7,7 @@ import java.sql.Timestamp;
  * Used to transfer account data between layers.
  */
 public class AccountDTO {
+
     private String accountNumber;
     private int userId;
     private String accountType; // SAVINGS or FIXED_DEPOSIT
@@ -16,13 +16,18 @@ public class AccountDTO {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+
+
     // Default constructor
-    public AccountDTO() {}
+    public AccountDTO(String accountNumber, int userId, String accountType, double balance, boolean isLocked, Timestamp accountCreated, Timestamp accountUpdated) {}
+
+
 
     // Constructor with all fields
-    public AccountDTO( String accountNumber, int userId, String accountType,
-                     double balance, boolean isLocked, Timestamp createdAt, Timestamp updatedAt) {
+
+    public AccountDTO(String accountNumber, int accId, int userId, String accountType, double balance, boolean isLocked, Timestamp createdAt, Timestamp updatedAt) {
         this.accountNumber = accountNumber;
+
         this.userId = userId;
         this.accountType = accountType;
         this.balance = balance;
@@ -31,7 +36,15 @@ public class AccountDTO {
         this.updatedAt = updatedAt;
     }
 
+    public AccountDTO() {
+
+    }
+
+
     // Getters and Setters
+
+
+
 
     public String getAccountNumber() {
         return accountNumber;
