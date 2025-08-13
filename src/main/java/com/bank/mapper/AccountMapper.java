@@ -38,7 +38,7 @@ public class AccountMapper {
     }
 
 
-    public AccountEntity dtoToEntity(AccountDTO accountDTO){
+    public static AccountEntity dtoToEntity(AccountDTO accountDTO){
         if(accountDTO==null)return null;
 
         double interest=accountDTO.isLocked()?0.05:0.03;
@@ -60,7 +60,7 @@ public class AccountMapper {
     }
 
 
-    public AccountDTO entityToDTO(AccountEntity accountEntity){
+    public static AccountDTO entityToDTO(AccountEntity accountEntity){
         if(accountEntity==null)return null;
 
         AccountDTO accountDTO=new AccountDTO(
