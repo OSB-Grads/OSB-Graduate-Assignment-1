@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class LogService {
 
-    public static void logintoDB(int user_id, LogDAO.Action action, String details, String ip_address, LogDAO.Status status){
+    public static void logintoDB(Long user_id, LogDAO.Action action, String details, String ip_address, LogDAO.Status status){
         Map<String,Object> row=new HashMap<>();
         row.put("user_id", user_id);
         row.put("action",action);

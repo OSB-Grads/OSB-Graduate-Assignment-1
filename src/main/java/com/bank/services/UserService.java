@@ -7,6 +7,8 @@ import com.bank.mapper.UserMapper;
 import com.bank.util.PasswordUtil;
 import java.sql.Timestamp;
 
+import static com.bank.mapper.UserMapper.UserDtoToUserEntity;
+
 
 public class UserService {
 
@@ -41,11 +43,12 @@ public class UserService {
             userDTO.setPhone(phone);
             userDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             userDTO.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
             // Step 2: Map DTO to Entity with hashed password
-            UserEntity userEntity =UserMapper.UserDtoToUserEntity(userDTO);
-            userEntity.setPasswordHash(hashedPassword);
+            UserEntity userEntity = UserMapper.UserDtoToUserEntity(userDTO, hashedPassword);
             userEntity.setCreatedAt(userDTO.getCreatedAt());
             userEntity.setUpdatedAt(userDTO.getUpdatedAt());
+
             // Step 3: Save to DB
             return userDao.createUser(userEntity);
         } catch (Exception e) {

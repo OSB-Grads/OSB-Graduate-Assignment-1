@@ -1,7 +1,11 @@
 package com.bank.Orchestrators;
+import com.bank.db.LogDAO;
 import com.bank.dto.UserDTO;
-import com.bank.services.UserService; // Import your service layer
 import com.bank.services.AuthService;
+import com.bank.services.UserService;
+import com.bank.services.LogService;
+
+
 /**
  * Orchestrates user-related operations such as signup and profile updates.
  * Responsible for coordinating between services, mappers, and DAO layers.
@@ -30,9 +34,25 @@ public class UserOrchestrator {
      */
 
 
-    public void signup(String username, String password, String fullName, String email, String phone) throws Exception {
-       String [] results= authService.SignInUser(username, password);
-        userService.createUser(username, fullName, email, phone, results[1]);
+    public void signup(Long userId, String username, String password, String fullName, String email, String phone) throws Exception {
+
+        /* This Method Calls AuthService To Authenticate The UserName And Password */
+
+        String[] authResult = AuthService.SignInUser(username, password);
+
+        String hashedPassword = authResult[1];
+
+        userService.createUser(username, fullName, email, phone, hashedPassword);
+
+
+        LogService.logintoDB(
+                userId,
+                LogDAO.Action.PROFILE_MANAGEMENT,  // ← enum, not string
+                "Created user",
+                "LocalDesktop",
+                LogDAO.Status.SUCCESS               // ← enum, not string
+        );
+
     }
 
 
