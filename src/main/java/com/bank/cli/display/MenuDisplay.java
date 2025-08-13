@@ -1,16 +1,16 @@
 package com.bank.cli.display;
+import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
 import com.bank.dto.LogDTO;
 import com.bank.dto.UserDTO;
+import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
 import java.util.List;
 import java.util.Scanner;
-import com.bank.exception.InvalidCredentialsException;
-import com.bank.exception.UserAlreadyExist;
-import com.bank.exception.UserNotfoundException;
+
 import com.bank.services.AuthService;
 
 /**
@@ -23,13 +23,15 @@ public class MenuDisplay {
     private final AccountService accountService;
     private final AuthService authService;
     private final UserOrchestrator userOrchestrator;
+    private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
 
-    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator) {
+    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator,DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
         this.scanner = new Scanner(System.in);
         this.accountService=accountService;
         this.authService=authService;
 
         this.userOrchestrator = userOrchestrator;
+        this.depositAndWithdrawOrchestrator=depositAndWithdrawOrchestrator;
 
     }
 
@@ -224,16 +226,37 @@ public class MenuDisplay {
 
     }
     
-    private void handleDeposit() {
+    private void handleDeposit()  {
         System.out.println("\n=== DEPOSIT MONEY ===");
         // TODO: Show user's accounts, get account selection and amount
-        System.out.println("TODO: Implement deposit logic using TransactionOrchestrator");
+        //System.out.println("TODO: Implement deposit logic using TransactionOrchestrator");
+        if (UserId == 0) {
+            System.out.println("Please login first to deposit into account.");
+            return;
+        }
+        try {
+            depositAndWithdrawOrchestrator.handleDeposit(UserId);
+        }
+        catch(BankingException e){
+            System.out.println("Error While performing Deposit into Account"+e.getMessage());
+        }
     }
     
     private void handleWithdraw() {
         System.out.println("\n=== WITHDRAW MONEY ===");
         // TODO: Show user's savings accounts only, get account selection and amount
-        System.out.println("TODO: Implement withdrawal logic using TransactionOrchestrator");
+        //System.out.println("TODO: Implement withdrawal logic using TransactionOrchestrator");
+        if (UserId == 0) {
+            System.out.println("Please login first to withdraw from account.");
+            return;
+        }
+        try {
+            depositAndWithdrawOrchestrator.handleWithdraw(UserId);
+        }
+        catch (BankingException e){
+            System.out.println("Error While performing Withdrawal from Account"+e.getMessage());
+        }
+
     }
     
     private void handleTransfer() {
