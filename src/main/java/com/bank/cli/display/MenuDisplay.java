@@ -1,10 +1,12 @@
 package com.bank.cli.display;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
+import com.bank.dto.LogDTO;
 import com.bank.dto.UserDTO;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
+import java.util.List;
 import java.util.Scanner;
 import com.bank.exception.InvalidCredentialsException;
 import com.bank.exception.UserAlreadyExist;
@@ -242,7 +244,23 @@ public class MenuDisplay {
     
     private void handleViewAccounts() {
         System.out.println("\n=== YOUR ACCOUNTS ===");
-        // TODO: Call AccountService to get user's accounts and display them
+        System.out.println("Choose the option to display the accounts");
+
+
+        if(UserId==0){
+         System.out.println("pleae login first before ViewAccount");
+        }
+        List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
+
+        for(AccountDTO dto: accountDTOs){
+            System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Locked: %s%n",
+                    dto.getAccountNumber(),
+                    dto.getAccountType(),
+                    dto.getBalance(),
+                    dto.isLocked() ? "Yes" : "No"
+            );
+        }
+
         System.out.println("TODO: Implement account viewing using AccountService");
     }
     
