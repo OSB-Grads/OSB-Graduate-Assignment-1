@@ -60,7 +60,7 @@ public class AccountDAO {
 
 
     // Get account by ID
-    public AccountEntity getAccountById(int accountNumber) {
+    public AccountEntity getAccountById(String accountNumber) {
         AccountEntity account = new AccountEntity();
         String sql = "SELECT * FROM accounts WHERE id = " + accountNumber;
 
