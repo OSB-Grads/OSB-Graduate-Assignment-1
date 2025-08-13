@@ -1,37 +1,45 @@
 package com.bank.cli.display;
 import Orchestrators.UserOrchestrator;
 import java.util.Scanner;
+import com.bank.dto.UserDTO;
+import com.bank.services.AuthService;
 
 /**
  * Handles all CLI menu display and user input.
  * This class is responsible for showing menus and collecting user choices.
  */
+
 public class MenuDisplay {
     private Scanner scanner;
+   private long UserId;
     private final UserOrchestrator userOrchestrator;
 
-    public MenuDisplay(UserOrchestrator userOrchestrator) {
+    private final AuthService authService;
+
+    public MenuDisplay(UserOrchestrator userOrchestrator,AuthService authService) {
         this.scanner = new Scanner(System.in);
         this.userOrchestrator = userOrchestrator;
 
+        this.authService=authService;
+
     }
-    
+
     /**
      * Display the main menu and handle user navigation.
      */
     public void showMainMenu() {
         boolean running = true;
-        
+
         while (running) {
             System.out.println("\n=== MAIN MENU ===");
             System.out.println("1. Login");
             System.out.println("2. Create Customer Profile");
             System.out.println("3. Exit");
             System.out.print("Please select an option (1-3): ");
-            
+
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleLogin();
@@ -51,13 +59,13 @@ public class MenuDisplay {
             }
         }
     }
-    
+
     /**
      * Display the user menu after successful login.
      */
     public void showUserMenu() {
         boolean loggedIn = true;
-        
+
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
             System.out.println("1. Create Bank Account");
@@ -69,10 +77,10 @@ public class MenuDisplay {
             System.out.println("7. Update Profile Info");
             System.out.println("8. Logout");
             System.out.print("Please select an option (1-8): ");
-            
+
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -107,9 +115,9 @@ public class MenuDisplay {
             }
         }
     }
-    
+
     // TODO: Implement these methods by calling appropriate services/orchestrators
-    
+
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
@@ -119,7 +127,9 @@ public class MenuDisplay {
 
         try {
             //this to be changed after creation of auth services
-            boolean valid = userOrchestrator.validateUserCredentials(username, password);
+           // boolean valid = userOrchestrator.validateUserCredentials(username, password);
+            UserDTO DTO=authService.validateUserCredentials(username,password);
+            UserId=DTO.getId();
             if (valid) {
                 showSuccess("Login successful!");
                 showUserMenu();
