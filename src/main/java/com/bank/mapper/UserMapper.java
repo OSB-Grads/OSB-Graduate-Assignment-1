@@ -2,7 +2,9 @@ package com.bank.mapper;
 
 import com.bank.dto.UserDTO;
 import com.bank.entity.UserEntity;
+import com.bank.util.PasswordUtil;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,25 +37,30 @@ public class UserMapper {
         }
 
         UserDTO userDTO=new UserDTO();
-        userDTO.setId((long) user.getId());
+        userDTO.setId( user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setFullName(user.getFullName());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhone(user.getPhone());
-        userDTO.setCreatedAt(String.valueOf(user.getCreatedAt()));
-        userDTO.setUpdatedAt(String.valueOf(user.getUpdatedAt()));
+        userDTO.setCreatedAt(user.getCreatedAt());
+        userDTO.setUpdatedAt(user.getUpdatedAt());
 
 
 
         return userDTO;
     }
 
-    public static UserEntity UserDtoToUserEntity(UserDTO userDto){
+    public static UserEntity UserDtoToUserEntity(UserDTO userDto,String plainPassword){
         if(userDto==null){
             return null;
         }
         UserEntity entity=new UserEntity();
-        //password add is needed
+        if(plainPassword!=null){
+            String hashedPassword= PasswordUtil.hashPassword(plainPassword);
+            entity.setPasswordHash(hashedPassword);
+        }
+
+
         entity.setId(userDto.getId());
         entity.setUsername(userDto.getUsername());
         entity.setFullName(userDto.getFullName());
