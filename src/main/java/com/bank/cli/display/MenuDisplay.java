@@ -161,7 +161,7 @@ public class MenuDisplay {
         String phone = scanner.nextLine().trim();
 
         try {
-            userOrchestrator.signup(username, password, fullName, email, phone);  // <-- underlined change
+            userOrchestrator.signup(UserId, username, password, fullName, email, phone);  // <-- underlined change
             showSuccess("Profile created successfully!");
         } catch(UserAlreadyExist e) {
             showError(e.getMessage());
