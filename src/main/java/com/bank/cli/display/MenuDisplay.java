@@ -8,8 +8,10 @@ import com.bank.services.AuthService;
  * Handles all CLI menu display and user input.
  * This class is responsible for showing menus and collecting user choices.
  */
+
 public class MenuDisplay {
     private Scanner scanner;
+   private long UserId;
     private final UserOrchestrator userOrchestrator;
 
     private final AuthService authService;
@@ -127,7 +129,7 @@ public class MenuDisplay {
             //this to be changed after creation of auth services
            // boolean valid = userOrchestrator.validateUserCredentials(username, password);
             UserDTO DTO=authService.validateUserCredentials(username,password);
-
+            UserId=DTO.getId();
             if (valid) {
                 showSuccess("Login successful!");
                 showUserMenu();
