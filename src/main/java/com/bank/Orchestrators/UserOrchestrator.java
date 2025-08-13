@@ -14,9 +14,10 @@ import com.bank.services.LogService;
 public class UserOrchestrator {
 
     private final UserService userService;
-
-    public UserOrchestrator(UserService userService) {
+    private final AuthService authService;
+    public UserOrchestrator(UserService userService,AuthService authService) {
         this.userService = userService;
+        this.authService= authService;
     }
 
     /**

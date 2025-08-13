@@ -49,8 +49,6 @@ public class UserService {
             userEntity.setCreatedAt(userDTO.getCreatedAt());
             userEntity.setUpdatedAt(userDTO.getUpdatedAt());
 
-
-
             // Step 3: Save to DB
             return userDao.createUser(userEntity);
         } catch (Exception e) {
