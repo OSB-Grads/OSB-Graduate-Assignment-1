@@ -29,6 +29,7 @@ public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper,
                throw new UserNotfoundException();
            }
           if(!passwordUtil.VerifyPassword(password,pass)){
+              logService.logintoDB(-1L, LogDAO.Action.AUTHENTICATION,"Invalid Password","user_ip",LogDAO.Status.FAILURE);
             throw new InvalidCredentialsException();
         }
         logService.logintoDB(userEntity.getId(), LogDAO.Action.AUTHENTICATION,"Successfully LoggedIn","user_ip",LogDAO.Status.SUCCESS);
