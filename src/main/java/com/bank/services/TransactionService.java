@@ -36,7 +36,7 @@ public class TransactionService {
 
         AccountEntity account = accountDAO.getAccountById(accountNumber);
         if (account == null) {
-            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE);
+            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
             throw new AccountNotFoundException(accountNumber);
         }
 
@@ -46,14 +46,14 @@ public class TransactionService {
         accountDTO.setBalance(newBalance);
         account=AccountMapper.dtoToEntity(accountDTO);
         accountDAO.updateAccountDetails(account);
-        LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Amount has been debited from user account","USER IP",LogDAO.Status.SUCCESS);
+        LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Amount has been credited into User Account","USER IP",LogDAO.Status.SUCCESS);
     }
 
     public void debitFromAccount(String accountNumber,double debitAmount) throws BankingException {
 
         AccountEntity accountEntity=accountDAO.getAccountById(accountNumber);
         if(accountEntity==null){
-            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE);
+            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
             throw new AccountNotFoundException(accountNumber);
         }
         AccountDTO accountDTO=AccountMapper.entityToDTO(accountEntity);
