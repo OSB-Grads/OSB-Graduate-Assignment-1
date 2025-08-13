@@ -1,4 +1,5 @@
 package com.bank.mapper;
+import com.bank.db.LogDAO;
 import com.bank.dto.LogDTO;
 import com.bank.entity.LogEntity;
 import java.sql.Timestamp;
@@ -8,31 +9,30 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class LogMapper {
-    public static LogEntity mapTOLogEntity(Map<String,Object> row){
+    public static LogEntity mapTOLogEntity(Map<String, Object> row){
 
         LogEntity log=new LogEntity();
-        log.setId((int)row.get("id"));
+//        log.setId((int)row.get("id"));
         log.setUser_id((int)row.get("user_id"));
-        log.setAction((String)row.get("action"));
+        log.setAction((LogDAO.Action) row.get("action"));
         log.setDetails((String)row.get("details"));
         log.setIp_address((String)row.get("ip_address"));
-        log.setStatus((String)row.get("status"));
-        log.setTimestamp((Timestamp)row.get("created_at"));
+        log.setStatus((LogDAO.Status)row.get("status"));
 
         return log;
     }
 
-    public static LogDTO LogEntityTODTO(LogEntity log){
+    public LogDTO LogEntityTODTO(LogEntity log){
         if(log==null){
             return null;
         }
         LogDTO logDto=new LogDTO();
         logDto.setId((int)log.getId() );
         logDto.setUser_id((int)log.getUser_id());
-        logDto.setAction((String)log.getAction());
+        logDto.setAction((LogDAO.Action)log.getAction());
         logDto.setDetails((String)log.getDetails());
         logDto.setIpAddress((String) log.getIp_address());
-        logDto.setStatus((String) log.getStatus());
+        logDto.setStatus((LogDAO.Status) log.getStatus());
         logDto.setCreatedAt((Timestamp) log.getTimestamp());
 
         return logDto;
