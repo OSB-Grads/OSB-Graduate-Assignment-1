@@ -5,11 +5,13 @@ import com.bank.db.AccountDAO;
 import com.bank.db.DatabaseManager;
 import com.bank.cli.display.MenuDisplay;
 import com.bank.mapper.AccountMapper;
+import com.bank.mapper.UserMapper;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 import com.bank.services.LogService;
 import com.bank.db.userDao;
 import com.bank.services.UserService;
+import com.bank.util.PasswordUtil;
 
 /**
  * Main entry point for the CLI Banking Application.
@@ -40,8 +42,16 @@ public class Main {
                     accountMapper,
                     logService
             );
+
+
+            userDao userDao=new userDao(dbManager);
+            PasswordUtil passwordUtil=new PasswordUtil();
+            UserMapper userMapper=new UserMapper();
             AuthService authService = new AuthService(
-                    user
+                    userDao,
+                    passwordUtil,
+                    userMapper
+
             );
 
             System.out.println("Application initialized successfully!");
