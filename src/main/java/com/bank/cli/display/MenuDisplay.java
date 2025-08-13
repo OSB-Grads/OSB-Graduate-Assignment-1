@@ -1,5 +1,7 @@
 package com.bank.cli.display;
-import Orchestrators.UserOrchestrator;
+import com.bank.Orchestrators.UserOrchestrator;
+import com.bank.dto.UserDTO;
+
 import java.util.Scanner;
 
 /**
@@ -15,7 +17,8 @@ public class MenuDisplay {
         this.userOrchestrator = userOrchestrator;
 
     }
-    
+
+
     /**
      * Display the main menu and handle user navigation.
      */
@@ -118,14 +121,7 @@ public class MenuDisplay {
         String password = scanner.nextLine().trim();
 
         try {
-            //this to be changed after creation of auth services
-            boolean valid = userOrchestrator.validateUserCredentials(username, password);
-            if (valid) {
-                showSuccess("Login successful!");
-                showUserMenu();
-            } else {
-                showError("Invalid username or password.");
-            }
+
         } catch (Exception e) {
             showError("Login failed: " + e.getMessage());
         }
@@ -195,8 +191,40 @@ public class MenuDisplay {
     
     private void handleUpdateProfile() {
         System.out.println("\n=== UPDATE PROFILE ===");
-        // TODO: Allow user to update contact information
-        System.out.println("TODO: Implement profile update using UserService");
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            // Step 1: Get credentials
+            System.out.print("Enter your username: ");
+            String username = scanner.nextLine();
+
+            System.out.print("Enter your password: ");
+            String password = scanner.nextLine();
+
+            // Step 2: Get updated profile info
+            System.out.print("Enter new full name: ");
+            String fullName = scanner.nextLine();
+
+            System.out.print("Enter new email: ");
+            String email = scanner.nextLine();
+
+            System.out.print("Enter new phone number: ");
+            String phone = scanner.nextLine();
+
+            // Step 3: Create DTO with updated info
+            UserDTO updatedDTO = new UserDTO();
+            updatedDTO.setUsername(username); // Optional, in case needed elsewhere
+            updatedDTO.setFullName(fullName);
+            updatedDTO.setEmail(email);
+            updatedDTO.setPhone(phone);
+
+            // Step 4: Call orchestrator method
+            userOrchestrator.updateUserDetails(username, password, updatedDTO);
+
+            System.out.println("Profile updated successfully!");
+
+        } catch (Exception e) {
+            System.err.println("Failed to update profile: " + e.getMessage());
+        }
     }
     
     /**

@@ -3,6 +3,8 @@ package com.bank.mapper;
 import com.bank.entity.TransactionEntity;
 import com.bank.dto.TransactionDTO;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,9 @@ public class TransactionMapper {
             return null;
         }
         TransactionEntity transaction =new TransactionEntity();
-        transaction.setTransaction_id((int) row.get("id"));
-        transaction.setFrom_account_id((int) row.get("from_account_id"));
-        transaction.setTo_account_id((int) row.get("to_account_id"));
+        transaction.setTransaction_id((String) row.get("id"));
+        transaction.setFrom_account_id((String) row.get("from_account_id"));
+        transaction.setTo_account_id((String) row.get("to_account_id"));
         transaction.setTransaction_type((String) row.get("transaction_type"));
         transaction.setAmount((double) row.get("amount"));
         transaction.setStatus((String) row.get("status"));
@@ -31,9 +33,9 @@ public class TransactionMapper {
             return null;
         }
         TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setTransaction_id((int) transaction.getTransaction_id());
-        transactionDTO.setFrom_account_id((int) transaction.getFrom_account_id());
-        transactionDTO.setTo_account_id((int) transaction.getTo_account_id());
+        transactionDTO.setTransaction_id((String) transaction.getTransaction_id());
+        transactionDTO.setFrom_account_id((String) transaction.getFrom_account_id());
+        transactionDTO.setTo_account_id((String) transaction.getTo_account_id());
         transactionDTO.setTransaction_type((String) transaction.getTransaction_type());
         transactionDTO.setAmount((double) transaction.getAmount());
         transactionDTO.setStatus((String) transaction.getStatus());
@@ -57,6 +59,19 @@ public class TransactionMapper {
         transaction.setCreatedAt(transactionDTO.getCreated_at());
 
         return transaction;
+    }
+
+    public static TransactionEntity mapResultSetToEntity(ResultSet rs) throws SQLException {
+        TransactionEntity ts = new TransactionEntity();
+        ts.setTransaction_id(rs.getString("transaction_id"));
+        ts.setFrom_account_id(rs.getString("from_account_id"));
+        ts.setTo_account_id(rs.getString("to_account_id"));
+        ts.setTransaction_type(rs.getString("transaction_type"));
+        ts.setAmount(rs.getDouble("amount"));
+        ts.setDescription(rs.getString("description"));
+        ts.setStatus(rs.getString("status"));
+        ts.setCreatedAt(rs.getTimestamp("created_at"));
+        return ts;
     }
 
     public static List<TransactionEntity> mapToTransactionEntityList(List<Map<String, Object>> rows) {

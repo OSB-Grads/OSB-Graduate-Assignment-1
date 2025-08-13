@@ -31,22 +31,24 @@ public class LogDAO {
         this.lm=lm;
     }
 
-    public void insertlog(LogEntity logEntity,Action action,Status status) throws SQLException {
-        String act= action.name();
-        String st=status.name();
+    public void insertlog(LogEntity logEntity)  {
+//        String act= action.name();
+//        String st=status.name();
             String sql=String.format(
-                    "INSERT INTO LOGS (id,user_id,action,details,ip_address,status,created_at) VALUES ('%d','%d','%s','%s','%s','%s','%s')",
-                    logEntity.getId(),
+                    "INSERT INTO LOGS (user_id,action,details,ip_address,status) VALUES ('%d','%s','%s','%s','%s')",
+//                    logEntity.getId(),
                     logEntity.getUser_id(),
-                    act,
+                    logEntity.getAction(),
                     logEntity.getDetails(),
                     logEntity.getIp_address(),
-                    st,
-                    logEntity.getTimestamp()
+                    logEntity.getStatus()
             );
-            dm.query(sql);
-            logEntity.setAction(act);
-            logEntity.setStatus(st);
+            try {
+                dm.query(sql);
+            }
+            catch (Exception e){
+                System.out.println("[LogDAO]Error  while inserting into Database of Logs "+e.getMessage());
+            }
     }
     public List<LogEntity> getAllLogs() throws SQLException {
        List<LogEntity> log=new ArrayList<>();

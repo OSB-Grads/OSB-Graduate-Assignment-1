@@ -27,10 +27,11 @@ public class AccountDAO {
     public void insertAccountDetails(AccountEntity accountEntity) {
         try {
             String sql = String.format(
-                    "INSERT INTO accounts(account_number,user_id,account_type) VALUES('%s','%d','%s')",
+                    "INSERT INTO accounts(account_number,user_id,account_type,is_locked) VALUES('%s','%d','%s','%b')",
                     accountEntity.getAccount_number(),
                     accountEntity.getUser_id(),
-                    accountEntity.getAccount_type()
+                    accountEntity.getAccount_type(),
+                    accountEntity.isIs_locked()
             );
             db.query(sql);
         } catch (Exception e) {
@@ -60,7 +61,7 @@ public class AccountDAO {
 
 
     // Get account by ID
-    public AccountEntity getAccountById(int accountNumber) {
+    public AccountEntity getAccountById(String accountNumber) {
         AccountEntity account = new AccountEntity();
         String sql = "SELECT * FROM accounts WHERE id = " + accountNumber;
 
