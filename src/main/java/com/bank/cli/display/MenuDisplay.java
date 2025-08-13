@@ -12,7 +12,7 @@ import java.util.Scanner;
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
-    private int  UserId;
+    private long  UserId;
     private Scanner scanner;
     private final AccountService accountService;
     private final AuthService authService;
@@ -198,7 +198,7 @@ public class MenuDisplay {
 
 
             AccountDTO dto = new AccountDTO();
-            dto.setUserId(UserId);
+            dto.setUserId((int)UserId);
             dto.setAccountType(accountType);
             dto.setBalance(0.0);
             dto.setLocked(isLocked);
