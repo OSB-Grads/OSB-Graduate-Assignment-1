@@ -49,7 +49,7 @@ public class TransactionDAO {
     public void saveTransaction( TransactionEntity transaction) throws SQLException{
         String sql = String.format(
                 "INSERT INTO transactions (transaction_id, from_account_id, to_account_id, transaction_type, amount, description, status, created_at) " +
-                        "VALUES (%d, %d, %d, '%s', %f, '%s', '%s', '%s')",
+                        "VALUES (%s, %s, %s, '%s', %f, '%s', '%s', '%s')",
                 transaction.getTransaction_id(),
                 transaction.getFrom_account_id(),
                 transaction.getTo_account_id(),
@@ -61,6 +61,7 @@ public class TransactionDAO {
         );
         dm.query(sql);
     }
+
 
     // update status of a transaction
     public void updateStatus(String transactionId, String status) throws SQLException {

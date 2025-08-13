@@ -5,24 +5,24 @@ import java.sql.Timestamp;
 public class TransactionDTO {
 
 
-    private int transaction_id;
-    private int from_account_id;
-    private int to_account_id;
+    private String transaction_id;
+    private String from_account_id;
+    private String to_account_id;
     private String transaction_type;
     private double amount;
     private String description;
     private String status;
     private Timestamp  created_at;
 
-    public int getTransaction_id() {
+    public String getTransaction_id() {
         return transaction_id;
     }
 
-    public int getFrom_account_id() {
+    public String getFrom_account_id() {
         return from_account_id;
     }
 
-    public int getTo_account_id() {
+    public String getTo_account_id() {
         return to_account_id;
     }
 
@@ -46,15 +46,15 @@ public class TransactionDTO {
         return created_at;
     }
 
-    public void setTransaction_id(int transaction_id) {
+    public void setTransaction_id(String transaction_id) {
         this.transaction_id = transaction_id;
     }
 
-    public void setFrom_account_id(int from_account_id) {
+    public void setFrom_account_id(String from_account_id) {
         this.from_account_id = from_account_id;
     }
 
-    public void setTo_account_id(int to_account_id) {
+    public void setTo_account_id(String to_account_id) {
         this.to_account_id = to_account_id;
     }
 
@@ -78,7 +78,7 @@ public class TransactionDTO {
         this.created_at = created_at;
     }
 
-    public TransactionDTO(int transaction_id, int from_account_id, int to_account_id, String transaction_type, double amount, String description, String status, Timestamp created_at) {
+    public TransactionDTO(String transaction_id, String from_account_id, String to_account_id, String transaction_type, double amount, String description, String status, Timestamp created_at) {
         this.transaction_id = transaction_id;
         this.from_account_id = from_account_id;
         this.to_account_id = to_account_id;
