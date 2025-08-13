@@ -1,5 +1,4 @@
 package com.bank.cli.display;
-import Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
 import com.bank.services.AccountService;
 
@@ -191,7 +190,7 @@ public class MenuDisplay {
 //            }
 
 
-            AccountDTO dto = new AccountDTO();
+            AccountDTO dto = new AccountDTO(accountEntity.getAccount_number(), accountEntity.getUser_id(), accountEntity.getAccount_type(), accountEntity.getBalance(), accountEntity.isIs_locked(), accountEntity.getAccount_created(), accountEntity.getAccount_updated());
 //            dto.setUserId(currentUserId);
             dto.setAccountType(accountType);
             dto.setBalance(0.0);

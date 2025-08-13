@@ -47,7 +47,7 @@ public class AccountMapper {
         double interest = "FIXED_DEPOSIT".equalsIgnoreCase(accountDTO.getAccountType()) ? 0.05 : 0.03;
 
         return new AccountEntity(
-                accountDTO.getAccId(),
+
                 accountDTO.getAccountNumber(),
                 accountDTO.getUserId(),
                 accountDTO.getAccountType(),
@@ -64,9 +64,7 @@ public class AccountMapper {
         if (accountEntity == null) return null;
 
         return new AccountDTO(
-
                 accountEntity.getAccount_number(),
-                accountEntity.getAccId(),
                 accountEntity.getUser_id(),
                 accountEntity.getAccount_type(),
                 accountEntity.getBalance(),

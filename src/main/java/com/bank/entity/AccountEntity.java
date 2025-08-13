@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 
 public class AccountEntity {
-    private int accId;
+
     private String account_number;
     private int User_id;
     private String account_type;
@@ -31,8 +31,8 @@ public class AccountEntity {
         this.account_number = account_number;
     }
 
-    public AccountEntity(int accId, String account_number, int user_id, String account_type, double balance, boolean is_locked, Timestamp account_created, Timestamp account_updated, String type, double interest) {
-        this.accId = accId;
+    public AccountEntity( String account_number, int user_id, String account_type, double balance, boolean is_locked, Timestamp account_created, Timestamp account_updated, String type, double interest) {
+
         this.account_number = account_number;
         User_id = user_id;
         this.account_type = account_type;
@@ -44,13 +44,7 @@ public class AccountEntity {
         this.interest = interest;
     }
 
-    public int getAccId() {
-        return accId;
-    }
 
-    public void setAccId(int accId) {
-        this.accId = accId;
-    }
 
     public int getUser_id() {
         return User_id;
