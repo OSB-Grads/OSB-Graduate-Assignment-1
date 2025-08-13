@@ -12,6 +12,7 @@ import com.bank.services.LogService;
 import com.bank.db.userDao;
 import com.bank.services.UserService;
 import com.bank.util.PasswordUtil;
+import com.bank.services.LogService;
 
 /**
  * Main entry point for the CLI Banking Application.
@@ -48,10 +49,12 @@ public class Main {
             userDao userDao = new userDao(dbManager);
             PasswordUtil passwordUtil = new PasswordUtil();
             UserMapper userMapper = new UserMapper();
+
            AuthService authService = new AuthService(
                     userDao,
                     passwordUtil,
                     userMapper
+
 
             );
             UserOrchestrator userOrchestrator = new UserOrchestrator(userService, authService);
