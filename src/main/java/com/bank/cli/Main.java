@@ -27,7 +27,8 @@ public class Main {
             // Initialize database
             DatabaseManager dbManager = DatabaseManager.getInstance();
             UserService userService = new UserService(dbManager);
-            UserOrchestrator userOrchestrator = new UserOrchestrator(userService);
+
+
 
             if (!dbManager.isConnected()) {
                 System.err.println("Failed to connect to database. Exiting...");
@@ -44,24 +45,24 @@ public class Main {
             );
 
 
-            userDao userDao=new userDao(dbManager);
-            PasswordUtil passwordUtil=new PasswordUtil();
-            UserMapper userMapper=new UserMapper();
-            AuthService authService = new AuthService(
+            userDao userDao = new userDao(dbManager);
+            PasswordUtil passwordUtil = new PasswordUtil();
+            UserMapper userMapper = new UserMapper();
+           AuthService authService = new AuthService(
                     userDao,
                     passwordUtil,
                     userMapper
 
             );
-
+            UserOrchestrator userOrchestrator = new UserOrchestrator(userService, authService);
             System.out.println("Application initialized successfully!");
             System.out.println("==========================================");
-            
+
             // Start the main menu
 
             MenuDisplay menuDisplay = new MenuDisplay(accountService, authService, userOrchestrator);
             menuDisplay.showMainMenu();
-            
+
         } catch (Exception e) {
             System.err.println("Application failed to start: " + e.getMessage());
             e.printStackTrace();
