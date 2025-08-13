@@ -2,6 +2,7 @@ package com.bank.db;
 
 import com.bank.entity.AccountEntity;
 import com.bank.entity.LogEntity;
+import com.bank.mapper.AccountMapper;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -98,6 +99,19 @@ public class AccountDAO {
         } catch (Exception e) {
             System.out.println("Error while updating account details: " + e);
         }
+    }
+    public List<AccountEntity> getAccountsByUserId(long Userid){
+
+        String sql="Select * from accounts where userid="+Userid;
+        try {
+            List<Map<String, Object>> row = db.query(sql);
+            return AccountMapper.mapToAccountEntityList(row);
+
+        }catch (Exception e){
+            System.out.println("Error Retriving the userid");
+            return new ArrayList<>();
+        }
+
     }
 
 
