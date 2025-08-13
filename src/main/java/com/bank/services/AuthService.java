@@ -3,6 +3,7 @@ import com.bank.entity.UserEntity;
 import com.bank.db.userDao;
 import com.bank.dto.UserDTO;
 import com.bank.exception.InvalidCredentialsException;
+import com.bank.exception.UserAlreadyExist;
 import com.bank.exception.UserNotfoundException;
 import com.bank.util.PasswordUtil;
 import com.bank.mapper.UserMapper;
@@ -27,5 +28,18 @@ public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper)
         }
         return userMapper.UserEnityToDto(userEntity);
    }
+   public String[] SignInUser(String user,String password) throws Exception, UserAlreadyExist {
+    boolean is_present=false;
+    String hash;
+    UserEntity userEntity=dao.getUserByUsername(user);
+    if(userEntity!=null){
+        throw new UserAlreadyExist();
+    }
+   hash= passwordUtil.hashPassword(password);
+    return new String[]{user,hash};
+
+
+   }
+
 
 }
