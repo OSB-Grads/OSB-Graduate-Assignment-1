@@ -1,11 +1,16 @@
 package com.bank.services;
 
+import com.bank.db.LogDAO;
 import com.bank.db.TransactionDAO;
+import com.bank.dto.AccountDTO;
 import com.bank.entity.AccountEntity;
 import com.bank.entity.TransactionEntity;
 import com.bank.exception.AccountNotFoundException;
 import com.bank.exception.BankingException;
 import com.bank.db.AccountDAO;
+import com.bank.exception.InsufficientFundsException;
+import com.bank.mapper.AccountMapper;
+import com.bank.mapper.TransactionMapper;
 
 import java.sql.SQLException;
 
@@ -31,29 +36,44 @@ public class TransactionService {
 
         AccountEntity account = accountDAO.getAccountById(accountNumber);
         if (account == null) {
+            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
             throw new AccountNotFoundException(accountNumber);
         }
-// TODO : to be edited post creation of FD funding EndDate
-//        if("Fixed Deposit".equalsIgnoreCase(account.getAccount_type())){
-//            if (account.getFundingEndDate()!= null&& LocalDateTime.now().isAfter(account.getFundingEndDate())) {
-//                throw new BankingException("Cannot credit. FD funding period is over.");
-//        }
-//    }
-        double newBalance = account.getBalance() + amount;
-        account.setBalance(newBalance);
+
+        AccountDTO accountDTO=AccountMapper.entityToDTO(account);
+        double newBalance = accountDTO.getBalance() + amount;
+        int user_id=accountDTO.getUserId();
+        accountDTO.setBalance(newBalance);
+        account=AccountMapper.dtoToEntity(accountDTO);
         accountDAO.updateAccountDetails(account);
+        LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Amount has been credited into User Account","USER IP",LogDAO.Status.SUCCESS);
+    }
 
-        //create transaction record
-        TransactionEntity transaction = new TransactionEntity();
+    public void debitFromAccount(String accountNumber,double debitAmount) throws BankingException {
 
+        AccountEntity accountEntity=accountDAO.getAccountById(accountNumber);
+        if(accountEntity==null){
+            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
+            throw new AccountNotFoundException(accountNumber);
+        }
+        AccountDTO accountDTO=AccountMapper.entityToDTO(accountEntity);
+        double balance=accountDTO.getBalance();
+        int user_id=accountDTO.getUserId();
 
-
-        try {
-            transactionDAO.saveTransaction(transaction);
-            System.out.println("Transaction saved successfully!");
-        } catch (SQLException e) {
-            System.err.println("Error while saving transaction: " + e.getMessage());
-            e.printStackTrace(); // optional for debugging
+        if(balance<debitAmount){
+            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE);
+            throw new InsufficientFundsException(debitAmount+"Not available in the Account");
+        }
+        else if(!accountDTO.isLocked()){
+            accountDTO.setBalance(balance-debitAmount);
+            accountEntity=AccountMapper.dtoToEntity(accountDTO);
+            accountDAO.updateAccountDetails(accountEntity);
+            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Amount has been debited from user account","USER IP",LogDAO.Status.SUCCESS);
+        }
+        else{
+            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Cannot debit from FD(Fixed Deposit)","USER IP",LogDAO.Status.FAILURE);
+            throw new BankingException("Cannot debit from FD(Fixed Deposit)");
         }
     }
+
 }

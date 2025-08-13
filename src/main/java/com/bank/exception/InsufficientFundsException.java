@@ -20,7 +20,11 @@ public class InsufficientFundsException extends BankingException {
         this.requestedAmount = requestedAmount;
         this.availableBalance = availableBalance;
     }
-    
+
+    public InsufficientFundsException(String message) {
+        super(message);
+    }
+
     public BigDecimal getRequestedAmount() {
         return requestedAmount;
     }
