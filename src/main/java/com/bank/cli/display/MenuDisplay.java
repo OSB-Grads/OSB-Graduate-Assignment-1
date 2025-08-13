@@ -1,6 +1,8 @@
 package com.bank.cli.display;
 import com.bank.dto.AccountDTO;
+import com.bank.dto.UserDTO;
 import com.bank.services.AccountService;
+import com.bank.services.AuthService;
 
 import java.util.Scanner;
 
@@ -9,15 +11,15 @@ import java.util.Scanner;
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
+    private long UserId;
     private Scanner scanner;
     private final AccountService accountService;
+    private final AuthService authService;
 
-
-    public MenuDisplay(AccountService accountService) {
+    public MenuDisplay(AccountService accountService, AuthService authService) {
         this.scanner = new Scanner(System.in);
         this.accountService=accountService;
-
-
+        this.authService=authService;
 
     }
     
@@ -122,18 +124,17 @@ public class MenuDisplay {
         System.out.print("Password: ");
         String password = scanner.nextLine().trim();
 
-//        try {
-//            //this to be changed after creation of auth services
-//            boolean valid = userOrchestrator.validateUserCredentials(username, password);
-//            if (valid) {
-//                showSuccess("Login successful!");
-//                showUserMenu();
-//            } else {
-//                showError("Invalid username or password.");
-//            }
-//        } catch (Exception e) {
-//            showError("Login failed: " + e.getMessage());
-//        }
+        UserDTO DTO=authService.validateUserCredentials(username,password);
+        UserId=DTO.getId();
+        if (valid) {
+            showSuccess("Login successful!");
+            showUserMenu();
+        } else {
+            showError("Invalid username or password.");
+        }
+    } catch (Exception e) {
+        showError("Login failed: " + e.getMessage());
+    }
     }
 
     private void handleCreateProfile() {
