@@ -157,12 +157,12 @@ public class MenuDisplay {
         System.out.print("Phone: ");
         String phone = scanner.nextLine().trim();
 
-//        try {
-//            userOrchestrator.signup(username, password, fullName, email, phone);  // <-- underlined change
-//            showSuccess("Profile created successfully!");
-//        } catch (Exception e) {
-//            showError("Failed to create profile: " + e.getMessage());
-//        }
+        try {
+           userOrchestrator.signup(UserId,username, password, fullName, email, phone);  // <-- underlined change
+           showSuccess("Profile created successfully!");
+       } catch (Exception e) {
+           showError("Failed to create profile: " + e.getMessage());
+       }
     }
 
 
