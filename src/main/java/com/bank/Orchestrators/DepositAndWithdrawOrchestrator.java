@@ -23,7 +23,7 @@ public class DepositAndWithdrawOrchestrator {
     /**
      * Common method to display accounts for a user and get the selected account number.
      */
-    private String selectAccountNumber(Long userId) throws AccountNotFoundException {
+    private String selectAccountNumber(Long userId,boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
             throw new AccountNotFoundException("No Accounts found for user : " + userId);
@@ -31,7 +31,7 @@ public class DepositAndWithdrawOrchestrator {
 
         System.out.println("Available Accounts");
         for (int i = 0; i < listOfUsers.size(); i++) {
-            if(!listOfUsers.get(i).isIs_locked())
+            if(credit || !listOfUsers.get(i).isIs_locked())
             System.out.println((i + 1) + ". Account Number: " + listOfUsers.get(i).getAccount_number());
         }
 
@@ -48,7 +48,7 @@ public class DepositAndWithdrawOrchestrator {
 
     public void handleDeposit(Long userId) throws AccountNotFoundException {
         try {
-            String accountNumber = selectAccountNumber(userId);
+            String accountNumber = selectAccountNumber(userId,true);
 
             System.out.print("Enter Amount to Deposit: ");
             double depositAmount = sc.nextDouble();
@@ -64,7 +64,7 @@ public class DepositAndWithdrawOrchestrator {
 
     public void handleWithdraw(Long userId) throws AccountNotFoundException {
         try {
-            String accountNumber = selectAccountNumber(userId);
+            String accountNumber = selectAccountNumber(userId,false);
 
             System.out.print("Enter Amount to Withdraw: ");
             double withdrawAmount = sc.nextDouble();
