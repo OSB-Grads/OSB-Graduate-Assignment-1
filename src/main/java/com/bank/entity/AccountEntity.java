@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 
 public class AccountEntity {
+
     private String account_number;
     private int User_id;
     private String account_type;
@@ -15,17 +16,7 @@ public class AccountEntity {
     private double interest;
 
 
-    public AccountEntity(String account_number, int user_id, String account_type, double balance, boolean is_locked, Timestamp account_created, Timestamp account_updated, String type, double intrest) {
-        this.account_number = account_number;
-        User_id = user_id;
-        this.account_type = account_type;
-        this.balance = balance;
-        this.is_locked = is_locked;
-        this.account_created = account_created;
-        this.account_updated = account_updated;
-        this.type = type;
-        this.interest = intrest;
-    }
+
 
     public AccountEntity() {
 
@@ -39,6 +30,21 @@ public class AccountEntity {
     public void setAccount_number(String account_number) {
         this.account_number = account_number;
     }
+
+    public AccountEntity( String account_number, int user_id, String account_type, double balance, boolean is_locked, Timestamp account_created, Timestamp account_updated, String type, double interest) {
+
+        this.account_number = account_number;
+        User_id = user_id;
+        this.account_type = account_type;
+        this.balance = balance;
+        this.is_locked = is_locked;
+        this.account_created = account_created;
+        this.account_updated = account_updated;
+        this.type = type;
+        this.interest = interest;
+    }
+
+
 
     public int getUser_id() {
         return User_id;

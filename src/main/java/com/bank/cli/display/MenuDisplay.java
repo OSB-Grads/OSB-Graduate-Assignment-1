@@ -1,6 +1,9 @@
 package com.bank.cli.display;
 import com.bank.Orchestrators.UserOrchestrator;
+import com.bank.dto.AccountDTO;
 import com.bank.dto.UserDTO;
+import com.bank.services.AccountService;
+import com.bank.services.AuthService;
 
 import java.util.Scanner;
 
@@ -9,14 +12,21 @@ import java.util.Scanner;
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
+    private long  UserId;
     private Scanner scanner;
+    private final AccountService accountService;
+    private final AuthService authService;
     private final UserOrchestrator userOrchestrator;
 
-    public MenuDisplay(UserOrchestrator userOrchestrator) {
+    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator) {
         this.scanner = new Scanner(System.in);
+        this.accountService=accountService;
+        this.authService=authService;
+
         this.userOrchestrator = userOrchestrator;
 
     }
+
 
 
     /**
@@ -24,17 +34,17 @@ public class MenuDisplay {
      */
     public void showMainMenu() {
         boolean running = true;
-        
+
         while (running) {
             System.out.println("\n=== MAIN MENU ===");
             System.out.println("1. Login");
             System.out.println("2. Create Customer Profile");
             System.out.println("3. Exit");
             System.out.print("Please select an option (1-3): ");
-            
+
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleLogin();
@@ -54,13 +64,13 @@ public class MenuDisplay {
             }
         }
     }
-    
+
     /**
      * Display the user menu after successful login.
      */
     public void showUserMenu() {
         boolean loggedIn = true;
-        
+
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
             System.out.println("1. Create Bank Account");
@@ -72,10 +82,10 @@ public class MenuDisplay {
             System.out.println("7. Update Profile Info");
             System.out.println("8. Logout");
             System.out.print("Please select an option (1-8): ");
-            
+
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -110,18 +120,25 @@ public class MenuDisplay {
             }
         }
     }
-    
+
     // TODO: Implement these methods by calling appropriate services/orchestrators
-    
+
     private void handleLogin() {
-        System.out.println("\n=== LOGIN ===");
-        System.out.print("Username: ");
-        String username = scanner.nextLine().trim();
-        System.out.print("Password: ");
-        String password = scanner.nextLine().trim();
-
         try {
+            System.out.println("\n=== LOGIN ===");
+            System.out.print("Username: ");
+            String username = scanner.nextLine().trim();
+            System.out.print("Password: ");
+            String password = scanner.nextLine().trim();
 
+            UserDTO DTO=authService.validateUserCredentials(username,password);
+            UserId=DTO.getId();
+            if (valid) {
+                showSuccess("Login successful!");
+                showUserMenu();
+            } else {
+                showError("Invalid username or password.");
+            }
         } catch (Exception e) {
             showError("Login failed: " + e.getMessage());
         }
@@ -140,12 +157,12 @@ public class MenuDisplay {
         System.out.print("Phone: ");
         String phone = scanner.nextLine().trim();
 
-        try {
-            userOrchestrator.signup(username, password, fullName, email, phone);  // <-- underlined change
-            showSuccess("Profile created successfully!");
-        } catch (Exception e) {
-            showError("Failed to create profile: " + e.getMessage());
-        }
+//        try {
+//            userOrchestrator.signup(username, password, fullName, email, phone);  // <-- underlined change
+//            showSuccess("Profile created successfully!");
+//        } catch (Exception e) {
+//            showError("Failed to create profile: " + e.getMessage());
+//        }
     }
 
 
@@ -154,9 +171,49 @@ public class MenuDisplay {
         System.out.println("1. Savings Account");
         System.out.println("2. Fixed Deposit Account");
         System.out.print("Select account type (1-2): ");
-        
-        // TODO: Implement account creation logic
-        System.out.println("TODO: Implement account creation using AccountService");
+
+        try {
+            int choice = Integer.parseInt(scanner.nextLine().trim());
+            String accountType;
+            boolean isLocked;
+
+            switch (choice) {
+                case 1:
+                    accountType = "SAVINGS";
+                    isLocked = false;
+                    break;
+                case 2:
+                    accountType = "FIXED_DEPOSIT";
+                    isLocked = true;
+                    break;
+                default:
+                    System.out.println("Invalid account type selected.");
+                    return;
+            }
+
+            if (UserId == 0) {
+            System.out.println("Please login first to create an account.");
+             return;
+             }
+
+
+            AccountDTO dto = new AccountDTO();
+            dto.setUserId((int)UserId);
+            dto.setAccountType(accountType);
+            dto.setBalance(0.0);
+            dto.setLocked(isLocked);
+
+            // Call service to create account
+            accountService.createAccount(dto);
+
+            System.out.println("Account creation request completed.");
+
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a number.");
+        } catch (Exception e) {
+            System.out.println("Error creating account: " + e.getMessage());
+        }
+
     }
     
     private void handleDeposit() {
