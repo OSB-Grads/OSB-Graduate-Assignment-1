@@ -1,6 +1,9 @@
 package com.bank.cli.display;
 import com.bank.Orchestrators.UserOrchestrator;
+import com.bank.dto.AccountDTO;
 import com.bank.dto.UserDTO;
+import com.bank.services.AccountService;
+import com.bank.services.AuthService;
 
 import java.util.Scanner;
 import com.bank.exception.InvalidCredentialsException;
@@ -13,15 +16,21 @@ import com.bank.services.AuthService;
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
+    private long  UserId;
     private Scanner scanner;
-    private long UserId;
+    private final AccountService accountService;
+    private final AuthService authService;
     private final UserOrchestrator userOrchestrator;
-    private AuthService authService;
-    public MenuDisplay(UserOrchestrator userOrchestrator ,AuthService authService) {
+
+    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator) {
         this.scanner = new Scanner(System.in);
-        this.userOrchestrator = userOrchestrator;
+        this.accountService=accountService;
         this.authService=authService;
+
+        this.userOrchestrator = userOrchestrator;
+
     }
+
 
 
     /**
@@ -59,13 +68,13 @@ public class MenuDisplay {
             }
         }
     }
-
+    
     /**
      * Display the user menu after successful login.
      */
     public void showUserMenu() {
         boolean loggedIn = true;
-
+        
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
             System.out.println("1. Create Bank Account");
@@ -77,10 +86,10 @@ public class MenuDisplay {
             System.out.println("7. Update Profile Info");
             System.out.println("8. Logout");
             System.out.print("Please select an option (1-8): ");
-
+            
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-
+                
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -115,9 +124,9 @@ public class MenuDisplay {
             }
         }
     }
-
+    
     // TODO: Implement these methods by calling appropriate services/orchestrators
-
+    
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
@@ -168,9 +177,49 @@ public class MenuDisplay {
         System.out.println("1. Savings Account");
         System.out.println("2. Fixed Deposit Account");
         System.out.print("Select account type (1-2): ");
-        
-        // TODO: Implement account creation logic
-        System.out.println("TODO: Implement account creation using AccountService");
+
+        try {
+            int choice = Integer.parseInt(scanner.nextLine().trim());
+            String accountType;
+            boolean isLocked;
+
+            switch (choice) {
+                case 1:
+                    accountType = "SAVINGS";
+                    isLocked = false;
+                    break;
+                case 2:
+                    accountType = "FIXED_DEPOSIT";
+                    isLocked = true;
+                    break;
+                default:
+                    System.out.println("Invalid account type selected.");
+                    return;
+            }
+
+            if (UserId == 0) {
+            System.out.println("Please login first to create an account.");
+             return;
+             }
+
+
+            AccountDTO dto = new AccountDTO();
+            dto.setUserId((int)UserId);
+            dto.setAccountType(accountType);
+            dto.setBalance(0.0);
+            dto.setLocked(isLocked);
+
+            // Call service to create account
+            accountService.createAccount(dto);
+
+            System.out.println("Account creation request completed.");
+
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a number.");
+        } catch (Exception e) {
+            System.out.println("Error creating account: " + e.getMessage());
+        }
+
     }
     
     private void handleDeposit() {
