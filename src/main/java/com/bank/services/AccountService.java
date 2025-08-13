@@ -3,11 +3,16 @@ package com.bank.services;
 import com.bank.db.AccountDAO;
 import com.bank.db.LogDAO;
 import com.bank.dto.AccountDTO;
+import com.bank.dto.UserDTO;
 import com.bank.entity.AccountEntity;
+import com.bank.entity.UserEntity;
 import com.bank.mapper.AccountMapper;
 
+import java.security.PublicKey;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -64,6 +69,17 @@ public class AccountService {
 
     private String generateUniqueAccountNumberUUID() {
         return String.valueOf(Math.abs(UUID.randomUUID().getMostSignificantBits())).substring(0, 10);
+    }
+    public List<AccountDTO> getAccountsByUserId(long userid){
+
+        List<AccountDTO>accounts=new ArrayList<>();
+        List<AccountEntity> acc=accountDAO.getAccountsByUserId(userid);
+
+        for(AccountEntity entity:acc){
+            accounts.add(AccountMapper.entityToDTO(entity));
+        }
+        return accounts;
+
     }
 
 }

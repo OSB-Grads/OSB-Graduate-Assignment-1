@@ -108,8 +108,8 @@ public class DatabaseManager {
             
             // Accounts table
             "CREATE TABLE IF NOT EXISTS accounts (" +
-             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-             "account_number VARCHAR(20) UNIQUE NOT NULL, " +
+            //"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "account_number VARCHAR(20) PRIMARY KEY, " +
             "user_id INTEGER NOT NULL, " +
             "account_type VARCHAR(20) NOT NULL CHECK (account_type IN ('SAVINGS', 'FIXED_DEPOSIT')), " +
             "balance DECIMAL(15,2) DEFAULT 0.00, " +
@@ -121,17 +121,17 @@ public class DatabaseManager {
             
             // Transactions table
             "CREATE TABLE IF NOT EXISTS transactions (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "transaction_id VARCHAR(50) UNIQUE NOT NULL, " +
-            "from_account_id INTEGER, " +
-            "to_account_id INTEGER, " +
+            //"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "transaction_id VARCHAR(20) PRIMARY KEY, " +
+            "from_account_id VARCHAR(20), " +
+            "to_account_id VARCHAR(20), " +
             "transaction_type VARCHAR(20) NOT NULL CHECK (transaction_type IN ('DEPOSIT', 'WITHDRAWAL', 'TRANSFER')), " +
             "amount DECIMAL(15,2) NOT NULL, " +
             "description TEXT, " +
             "status VARCHAR(20) DEFAULT 'COMPLETED' CHECK (status IN ('PENDING', 'COMPLETED', 'FAILED')), " +
             "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-            "FOREIGN KEY (from_account_id) REFERENCES accounts(id), " +
-            "FOREIGN KEY (to_account_id) REFERENCES accounts(id)" +
+            "FOREIGN KEY (from_account_id) REFERENCES accounts(account_number), " +
+            "FOREIGN KEY (to_account_id) REFERENCES accounts(account_number)" +
             ")",
             
             // Logs table

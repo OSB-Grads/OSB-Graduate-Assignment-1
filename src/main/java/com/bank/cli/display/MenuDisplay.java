@@ -1,10 +1,12 @@
 package com.bank.cli.display;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
+import com.bank.dto.LogDTO;
 import com.bank.dto.UserDTO;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Scanner;
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
-    private int  UserId;
+    private long  UserId;
     private Scanner scanner;
     private final AccountService accountService;
     private final AuthService authService;
@@ -198,7 +200,7 @@ public class MenuDisplay {
 
 
             AccountDTO dto = new AccountDTO();
-            dto.setUserId(UserId);
+            dto.setUserId((int)UserId);
             dto.setAccountType(accountType);
             dto.setBalance(0.0);
             dto.setLocked(isLocked);
@@ -236,7 +238,23 @@ public class MenuDisplay {
     
     private void handleViewAccounts() {
         System.out.println("\n=== YOUR ACCOUNTS ===");
-        // TODO: Call AccountService to get user's accounts and display them
+        System.out.println("Choose the option to display the accounts");
+
+
+        if(UserId==0){
+         System.out.println("pleae login first before ViewAccount");
+        }
+        List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
+
+        for(AccountDTO dto: accountDTOs){
+            System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Locked: %s%n",
+                    dto.getAccountNumber(),
+                    dto.getAccountType(),
+                    dto.getBalance(),
+                    dto.isLocked() ? "Yes" : "No"
+            );
+        }
+
         System.out.println("TODO: Implement account viewing using AccountService");
     }
     
