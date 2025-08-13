@@ -1,45 +1,40 @@
 package com.bank.cli.display;
-import Orchestrators.UserOrchestrator;
-import java.util.Scanner;
+import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.UserDTO;
-import com.bank.services.AuthService;
+
+import java.util.Scanner;
 
 /**
  * Handles all CLI menu display and user input.
  * This class is responsible for showing menus and collecting user choices.
  */
-
 public class MenuDisplay {
     private Scanner scanner;
-   private long UserId;
     private final UserOrchestrator userOrchestrator;
 
-    private final AuthService authService;
-
-    public MenuDisplay(UserOrchestrator userOrchestrator,AuthService authService) {
+    public MenuDisplay(UserOrchestrator userOrchestrator) {
         this.scanner = new Scanner(System.in);
         this.userOrchestrator = userOrchestrator;
 
-        this.authService=authService;
-
     }
+
 
     /**
      * Display the main menu and handle user navigation.
      */
     public void showMainMenu() {
         boolean running = true;
-
+        
         while (running) {
             System.out.println("\n=== MAIN MENU ===");
             System.out.println("1. Login");
             System.out.println("2. Create Customer Profile");
             System.out.println("3. Exit");
             System.out.print("Please select an option (1-3): ");
-
+            
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-
+                
                 switch (choice) {
                     case 1:
                         handleLogin();
@@ -59,13 +54,13 @@ public class MenuDisplay {
             }
         }
     }
-
+    
     /**
      * Display the user menu after successful login.
      */
     public void showUserMenu() {
         boolean loggedIn = true;
-
+        
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
             System.out.println("1. Create Bank Account");
@@ -77,10 +72,10 @@ public class MenuDisplay {
             System.out.println("7. Update Profile Info");
             System.out.println("8. Logout");
             System.out.print("Please select an option (1-8): ");
-
+            
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-
+                
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -115,9 +110,9 @@ public class MenuDisplay {
             }
         }
     }
-
+    
     // TODO: Implement these methods by calling appropriate services/orchestrators
-
+    
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
@@ -126,16 +121,7 @@ public class MenuDisplay {
         String password = scanner.nextLine().trim();
 
         try {
-            //this to be changed after creation of auth services
-           // boolean valid = userOrchestrator.validateUserCredentials(username, password);
-            UserDTO DTO=authService.validateUserCredentials(username,password);
-            UserId=DTO.getId();
-            if (valid) {
-                showSuccess("Login successful!");
-                showUserMenu();
-            } else {
-                showError("Invalid username or password.");
-            }
+
         } catch (Exception e) {
             showError("Login failed: " + e.getMessage());
         }
@@ -205,8 +191,40 @@ public class MenuDisplay {
     
     private void handleUpdateProfile() {
         System.out.println("\n=== UPDATE PROFILE ===");
-        // TODO: Allow user to update contact information
-        System.out.println("TODO: Implement profile update using UserService");
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            // Step 1: Get credentials
+            System.out.print("Enter your username: ");
+            String username = scanner.nextLine();
+
+            System.out.print("Enter your password: ");
+            String password = scanner.nextLine();
+
+            // Step 2: Get updated profile info
+            System.out.print("Enter new full name: ");
+            String fullName = scanner.nextLine();
+
+            System.out.print("Enter new email: ");
+            String email = scanner.nextLine();
+
+            System.out.print("Enter new phone number: ");
+            String phone = scanner.nextLine();
+
+            // Step 3: Create DTO with updated info
+            UserDTO updatedDTO = new UserDTO();
+            updatedDTO.setUsername(username); // Optional, in case needed elsewhere
+            updatedDTO.setFullName(fullName);
+            updatedDTO.setEmail(email);
+            updatedDTO.setPhone(phone);
+
+            // Step 4: Call orchestrator method
+            userOrchestrator.updateUserDetails(username, password, updatedDTO);
+
+            System.out.println("Profile updated successfully!");
+
+        } catch (Exception e) {
+            System.err.println("Failed to update profile: " + e.getMessage());
+        }
     }
     
     /**

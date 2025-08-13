@@ -1,7 +1,10 @@
 package com.bank.cli;
 
+import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.db.DatabaseManager;
 import com.bank.cli.display.MenuDisplay;
+import com.bank.db.userDao;
+import com.bank.services.UserService;
 
 /**
  * Main entry point for the CLI Banking Application.
@@ -16,6 +19,8 @@ public class Main {
         try {
             // Initialize database
             DatabaseManager dbManager = DatabaseManager.getInstance();
+            UserService userService = new UserService(dbManager);
+            UserOrchestrator userOrchestrator = new UserOrchestrator(userService);
             
             if (!dbManager.isConnected()) {
                 System.err.println("Failed to connect to database. Exiting...");
@@ -26,7 +31,8 @@ public class Main {
             System.out.println("==========================================");
             
             // Start the main menu
-            MenuDisplay menuDisplay = new MenuDisplay();
+
+            MenuDisplay menuDisplay = new MenuDisplay(userOrchestrator);
             menuDisplay.showMainMenu();
             
         } catch (Exception e) {
