@@ -28,18 +28,18 @@ public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper)
         }
         return userMapper.UserEnityToDto(userEntity);
    }
-   public String[] SignInUser(String user,String password) throws Exception, UserAlreadyExist {
-    boolean is_present=false;
-    String hash;
-    UserEntity userEntity=dao.getUserByUsername(user);
-    if(userEntity!=null){
-        throw new UserAlreadyExist();
+
+
+    public String[] SignInUser(String user,String password) throws Exception, UserAlreadyExist {
+        boolean is_present=false;
+        String hash;
+        UserEntity userEntity=dao.getUserByUsername(user);
+        if(userEntity!=null){
+            throw new UserAlreadyExist();
+        }
+        hash= passwordUtil.hashPassword(password);
+        return new String[]{user,hash};
+
+
     }
-   hash= passwordUtil.hashPassword(password);
-    return new String[]{user,hash};
-
-
-   }
-
-
 }
