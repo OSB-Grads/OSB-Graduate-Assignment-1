@@ -2,10 +2,10 @@ package com.bank.db;
 import com.bank.entity.TransactionEntity;
 import com.bank.mapper.TransactionMapper;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TransactionDAO {
     public enum TransactionType {
@@ -19,38 +19,50 @@ public class TransactionDAO {
     public TransactionDAO(DatabaseManager dm) {
         this.dm = dm;
     }
+    //get all transactions
     public List<TransactionEntity> getAllAccounts() throws SQLException {
         List<TransactionEntity> list = new ArrayList<>();
         String sql = "SELECT * FROM transactions";
-        try (ResultSet rs = (ResultSet) dm.query(sql)) {
-            while (rs.next()) {
-                TransactionEntity ts = TransactionMapper.mapResultSetToEntity(rs);
-                list.add(ts);
-            }
-        }
-        return list;
+        List<Map<String, Object>> rows = dm.query(sql);
+        return TransactionMapper.mapToTransactionEntityList(rows);
     }
 
+    // get transaction by Id
     public TransactionEntity getAccountById(String accountId) throws SQLException {
         String sql = "SELECT * FROM transactions WHERE transaction_id = '" + accountId + "'";
-        try (ResultSet rs = (ResultSet) dm.query(sql)) {
-            if (rs.next()) {
-                return TransactionMapper.mapResultSetToEntity(rs);
-            }
+        List<Map<String, Object>> rows = dm.query(sql);
+
+        if (!rows.isEmpty()) {
+            return TransactionMapper.mapToTransactionEntity(rows.get(0));
         }
         return null;
     }
 
+    //get all transactions by User Id
     public List<TransactionEntity> getAccountsByUserID(int userId) throws SQLException {
         List<TransactionEntity> list = new ArrayList<>();
         String sql = "SELECT * FROM transactions WHERE from_account_id = " + userId + " OR to_account_id = " + userId;
-        try (ResultSet rs = (ResultSet) dm.query(sql)) {
-            while (rs.next()) {
-                TransactionEntity tx = TransactionMapper.mapResultSetToEntity(rs);
-                list.add(tx);
-            }
-        }
-        return list;
+        List<Map<String, Object>> rows = dm.query(sql);
+        return TransactionMapper.mapToTransactionEntityList(rows);
+    }
+
+    public void saveTransaction( TransactionEntity transaction) throws SQLException{
+        String sql = String.format(
+                "INSERT INTO transactions (transaction_id, from_account_id, to_account_id, transaction_type, amount, description, status, created_at) " +
+                        "VALUES (%d, %d, %d, '%s', %f, '%s', '%s', '%s')",
+                transaction.getTransaction_id(),
+                transaction.getFrom_account_id(),
+                transaction.getTo_account_id(),
+                transaction.getTransaction_type(),
+                transaction.getAmount(),
+                transaction.getDescription(),
+                transaction.getStatus(),
+                transaction.getCreatedAt().toString()
+        );
+        dm.query(sql);
+    }
+
+    public void saveTransaction( TransactionEntity transaction){
     }
 
     // update status of a transaction

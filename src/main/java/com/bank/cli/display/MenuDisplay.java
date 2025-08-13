@@ -188,7 +188,7 @@ public class MenuDisplay {
         // TODO: Show user's accounts, let them select one, then show transaction history
         System.out.println("TODO: Implement transaction history using TransactionService");
     }
-
+    
     private void handleUpdateProfile() {
         System.out.println("\n=== UPDATE PROFILE ===");
 
@@ -226,8 +226,7 @@ public class MenuDisplay {
             System.err.println("Failed to update profile: " + e.getMessage());
         }
     }
-
-
+    
     /**
      * Utility method to get user input with prompt.
      */
