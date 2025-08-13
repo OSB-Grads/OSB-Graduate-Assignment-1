@@ -1,7 +1,7 @@
 package com.bank.Orchestrators;
 import com.bank.dto.UserDTO;
 import com.bank.services.UserService; // Import your service layer
-
+import com.bank.services.AuthService;
 /**
  * Orchestrates user-related operations such as signup and profile updates.
  * Responsible for coordinating between services, mappers, and DAO layers.
@@ -10,9 +10,10 @@ import com.bank.services.UserService; // Import your service layer
 public class UserOrchestrator {
 
     private final UserService userService;
-
-    public UserOrchestrator(UserService userService) {
+    private final AuthService authService;
+    public UserOrchestrator(UserService userService,AuthService authService) {
         this.userService = userService;
+        this.authService= authService;
     }
 
     /**
@@ -30,9 +31,8 @@ public class UserOrchestrator {
 
 
     public void signup(String username, String password, String fullName, String email, String phone) throws Exception {
-
-
-        userService.createUser(username, fullName, email, phone, password);
+       String [] results= authService.SignInUser(username, password);
+        userService.createUser(username, fullName, email, phone, results[1]);
     }
 
 

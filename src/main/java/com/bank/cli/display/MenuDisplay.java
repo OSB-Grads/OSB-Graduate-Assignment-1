@@ -6,6 +6,10 @@ import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
 import java.util.Scanner;
+import com.bank.exception.InvalidCredentialsException;
+import com.bank.exception.UserAlreadyExist;
+import com.bank.exception.UserNotfoundException;
+import com.bank.services.AuthService;
 
 /**
  * Handles all CLI menu display and user input.
@@ -64,13 +68,13 @@ public class MenuDisplay {
             }
         }
     }
-
+    
     /**
      * Display the user menu after successful login.
      */
     public void showUserMenu() {
         boolean loggedIn = true;
-
+        
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
             System.out.println("1. Create Bank Account");
@@ -82,10 +86,10 @@ public class MenuDisplay {
             System.out.println("7. Update Profile Info");
             System.out.println("8. Logout");
             System.out.print("Please select an option (1-8): ");
-
+            
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-
+                
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -120,28 +124,27 @@ public class MenuDisplay {
             }
         }
     }
-
+    
     // TODO: Implement these methods by calling appropriate services/orchestrators
-
+    
     private void handleLogin() {
-        try {
-            System.out.println("\n=== LOGIN ===");
-            System.out.print("Username: ");
-            String username = scanner.nextLine().trim();
-            System.out.print("Password: ");
-            String password = scanner.nextLine().trim();
+        System.out.println("\n=== LOGIN ===");
+        System.out.print("Username: ");
+        String username = scanner.nextLine().trim();
+        System.out.print("Password: ");
+        String password = scanner.nextLine().trim();
 
-            UserDTO DTO=authService.validateUserCredentials(username,password);
-            UserId=DTO.getId();
-            if (valid) {
-                showSuccess("Login successful!");
-                showUserMenu();
-            } else {
-                showError("Invalid username or password.");
-            }
+        UserDTO DTO= null;
+        try {
+            DTO = authService.validateUserCredentials(username,password);
+            showUserMenu();
+        } catch (InvalidCredentialsException e) {
+            showError(e.getMessage());
+
         } catch (Exception e) {
-            showError("Login failed: " + e.getMessage());
+            showError("Exception has occured during Login Operation..!"+e.getMessage());
         }
+        UserId=DTO.getId();
     }
 
     private void handleCreateProfile() {
@@ -157,12 +160,15 @@ public class MenuDisplay {
         System.out.print("Phone: ");
         String phone = scanner.nextLine().trim();
 
-//        try {
-//            userOrchestrator.signup(username, password, fullName, email, phone);  // <-- underlined change
-//            showSuccess("Profile created successfully!");
-//        } catch (Exception e) {
-//            showError("Failed to create profile: " + e.getMessage());
-//        }
+        try {
+            userOrchestrator.signup(username, password, fullName, email, phone);  // <-- underlined change
+            showSuccess("Profile created successfully!");
+        } catch(UserAlreadyExist e) {
+            showError(e.getMessage());
+        }
+        catch (Exception e) {
+            showError("Failed to create profile: " + e.getMessage());
+        }
     }
 
 

@@ -21,7 +21,7 @@ public class UserService {
      * Creates a new user after validating input and hashing password.
      */
 
-    public boolean createUser(String username, String fullName, String email, String phone, String plainPassword) throws Exception {
+    public boolean createUser(String username, String fullName, String email, String phone, String hashedPassword) throws Exception {
         if (username == null || username.trim().isEmpty()) {
             System.err.println("Username cannot be empty.");
             return false;
@@ -41,12 +41,11 @@ public class UserService {
             userDTO.setPhone(phone);
             userDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             userDTO.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-
             // Step 2: Map DTO to Entity with hashed password
-            UserEntity userEntity = UserMapper.UserDtoToUserEntity(userDTO, plainPassword);
+            UserEntity userEntity =UserMapper.UserDtoToUserEntity(userDTO);
+            userEntity.setPasswordHash(hashedPassword);
             userEntity.setCreatedAt(userDTO.getCreatedAt());
             userEntity.setUpdatedAt(userDTO.getUpdatedAt());
-
             // Step 3: Save to DB
             return userDao.createUser(userEntity);
         } catch (Exception e) {
