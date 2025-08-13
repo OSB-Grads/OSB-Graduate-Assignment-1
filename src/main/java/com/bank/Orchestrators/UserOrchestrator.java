@@ -1,5 +1,6 @@
 package com.bank.Orchestrators;
 import com.bank.dto.UserDTO;
+import com.bank.services.AuthService;
 import com.bank.services.UserService; // Import your service layer
 
 /**
@@ -31,8 +32,13 @@ public class UserOrchestrator {
 
     public void signup(String username, String password, String fullName, String email, String phone) throws Exception {
 
+        /* This Method Calls AuthService To Authenticate The UserName And Password */
 
-        userService.createUser(username, fullName, email, phone, password);
+        String[] authResult = AuthService.SignInUser(username, password);
+
+        String hashedPassword = authResult[1];
+
+        userService.createUser(username, fullName, email, phone, hashedPassword);
     }
 
 

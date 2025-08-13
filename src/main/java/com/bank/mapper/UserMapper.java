@@ -51,15 +51,15 @@ public class UserMapper {
         return userDTO;
     }
 
-    public static UserEntity UserDtoToUserEntity(UserDTO userDto,String plainPassword){
+    public static UserEntity UserDtoToUserEntity(UserDTO userDto,String hashedPassword){
         if(userDto==null){
             return null;
         }
         UserEntity entity=new UserEntity();
-        if(plainPassword!=null){
+        /*if(plainPassword!=null){
             String hashedPassword= PasswordUtil.hashPassword(plainPassword);
-            entity.setPasswordHash(hashedPassword);
-        }
+            entity.setPasswordHash(plainPassword);
+        }*/
 
 
         entity.setId(userDto.getId());
@@ -67,6 +67,7 @@ public class UserMapper {
         entity.setFullName(userDto.getFullName());
         entity.setEmail(userDto.getEmail());
         entity.setPhone(userDto.getPhone());
+        entity.setPasswordHash(hashedPassword);
 
 
         return entity;

@@ -9,8 +9,8 @@ import com.bank.util.PasswordUtil;
 import com.bank.mapper.UserMapper;
 public class AuthService {
 
-private final userDao dao;
-private final PasswordUtil passwordUtil;
+private static  userDao dao;
+private static  PasswordUtil passwordUtil;
 private final UserMapper userMapper;
 public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper){
     this.dao=dao;
@@ -30,7 +30,7 @@ public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper)
    }
 
 
-    public String[] SignInUser(String user,String password) throws Exception, UserAlreadyExist {
+    public static String[] SignInUser(String user, String password) throws Exception, UserAlreadyExist {
 
         UserEntity userEntity=dao.getUserByUsername(user);
         if(userEntity!=null){
