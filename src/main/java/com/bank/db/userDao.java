@@ -22,11 +22,15 @@ public class userDao {
      *
      * @param dm DatabaseManager instance for executing queries
      */
-    private final DatabaseManager dm;
 
-    public userDao(DatabaseManager dm) {
+
+    public userDao(DatabaseManager dm){
         this.dm = dm;
     }
+
+    private final DatabaseManager dm;
+
+
 
 
 
@@ -38,7 +42,7 @@ public class userDao {
      */
 
 
-    public void createUser(UserEntity user) throws Exception {
+    public boolean createUser(UserEntity user) throws Exception {
         String sql = String.format(
                 "INSERT INTO USERS (id, username, password_hash, full_name, email, phone, created_at, updated_at) " +
                         "VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
@@ -52,6 +56,7 @@ public class userDao {
                 user.getUpdatedAt()
         );
         dm.query(sql);
+        return true;
     }
 
 
@@ -122,7 +127,7 @@ public class userDao {
      */
 
 
-    public void updateUser(UserEntity user) throws Exception {
+    public boolean updateUser(UserEntity user) throws Exception {
         String sql = String.format(
                 "UPDATE USERS SET username = '%s', password_hash = '%s', full_name = '%s', email = '%s', phone = '%s', updated_at = '%s' " +
                         "WHERE id = '%d'",
@@ -135,6 +140,7 @@ public class userDao {
                 user.getId()
         );
         dm.query(sql);
+        return true;
     }
 
 

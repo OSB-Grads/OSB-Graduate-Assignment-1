@@ -62,6 +62,9 @@ public class TransactionDAO {
         dm.query(sql);
     }
 
+    public void saveTransaction( TransactionEntity transaction){
+    }
+
     // update status of a transaction
     public void updateStatus(String transactionId, String status) throws SQLException {
         String sql = "UPDATE transactions SET status = '" + status + "' WHERE transaction_id = '" + transactionId + "'";

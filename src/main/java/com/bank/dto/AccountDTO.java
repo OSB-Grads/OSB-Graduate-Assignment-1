@@ -36,6 +36,10 @@ public class AccountDTO {
         this.updatedAt = updatedAt;
     }
 
+    public AccountDTO() {
+
+    }
+
 
     // Getters and Setters
 
