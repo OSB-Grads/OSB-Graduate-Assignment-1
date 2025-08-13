@@ -48,7 +48,7 @@ public class TransactionDAO {
 
     public void saveTransaction( TransactionEntity transaction) throws SQLException{
         String sql = String.format(
-                "INSERT INTO transactions (account_id, from_account_id, to_account_id, transaction_type, amount, description, status, created_at) " +
+                "INSERT INTO transactions (transaction_id, from_account_id, to_account_id, transaction_type, amount, description, status, created_at) " +
                         "VALUES (%d, %d, %d, '%s', %f, '%s', '%s', '%s')",
                 transaction.getTransaction_id(),
                 transaction.getFrom_account_id(),
