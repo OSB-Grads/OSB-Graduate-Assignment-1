@@ -19,6 +19,7 @@ public class TransactionDAO {
     public TransactionDAO(DatabaseManager dm) {
         this.dm = dm;
     }
+
     //get all transactions
     public List<TransactionEntity> getAllAccounts() throws SQLException {
         List<TransactionEntity> list = new ArrayList<>();
