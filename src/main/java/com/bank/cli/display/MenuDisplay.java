@@ -2,7 +2,7 @@ package com.bank.cli.display;
 
 import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
 import com.bank.Orchestrators.TransactOrchestrator;
-import com.bank.Orchestrators.TransferOrchestration;
+import com.bank.Orchestrators.TransferOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
 import com.bank.dto.TransactionDTO;
@@ -24,7 +24,7 @@ import java.util.Scanner;
  */
 public class MenuDisplay {
 
-    private int  UserId;
+    private int  UserId = -1;
     private String currentUsername;
     private Scanner scanner;
     private final AccountService accountService;
@@ -32,7 +32,7 @@ public class MenuDisplay {
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
     private final TransactOrchestrator transactOrchestrator;
-    private TransferOrchestration transferOrchestration;
+    private TransferOrchestrator transferOrchestrator;
 
     public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator, DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator, TransactOrchestrator transactOrchestrator) {
         this.scanner = new Scanner(System.in);
@@ -131,6 +131,7 @@ public class MenuDisplay {
                         break;
                     case 9:
                         System.out.println("Logging out...");
+                        UserId =-1;
                         loggedIn = false;
                         break;
                     default:
@@ -297,7 +298,8 @@ public class MenuDisplay {
                 System.out.println("Please login first to withdraw from account.");
                 return;
             }try {
-                transferOrchestration.transfer(UserId);
+                transferOrchestrator.transfer(UserId);
+                System.out.println("Transaction Successful :)");
             } catch (BankingException e) {
                 System.out.println("Problem with transactions");
             } catch (SQLException e) {
@@ -311,6 +313,7 @@ public class MenuDisplay {
                 }
                 try {
                     transactOrchestrator.transactAmountBetweenUsers(UserId);
+                    System.out.println("Transaction Successful :)");
                 } catch (BankingException e) {
                     System.out.println("Problem with transactions");
                 } catch (SQLException e) {

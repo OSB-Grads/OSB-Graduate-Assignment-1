@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-public class TransferOrchestration {
+public class TransferOrchestrator {
     private final Scanner sc = new Scanner(System.in);
     private final DatabaseManager dbManager = DatabaseManager.getInstance();
     private final AccountDAO accountDAO = new AccountDAO(dbManager);
