@@ -26,7 +26,7 @@ public class TransactOrchestrator {
     /**
      * Common method to display accounts for a user and get the selected account number.
      */
-    private String selectAccountNumber(Long userId, boolean credit) throws AccountNotFoundException {
+    private String selectAccountNumber(int userId, boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
             throw new AccountNotFoundException("No Accounts found for user : " + userId);
@@ -50,7 +50,7 @@ public class TransactOrchestrator {
     }
 
 
-    public void transactAmountBetweenUsers(Long userId) throws BankingException, SQLException {
+    public void transactAmountBetweenUsers(int userId) throws BankingException, SQLException {
         System.out.println("Select From Account Number");
         String fromAccountNumber = selectAccountNumber(userId, false);
         System.out.println("Enter To Account Number ");
