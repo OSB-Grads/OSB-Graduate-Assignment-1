@@ -127,9 +127,9 @@ public class userDao {
      */
 
 
-    public boolean updateUserProfile(UserEntity user) throws Exception {
+    public boolean updateUser(UserEntity user) throws Exception {
         String sql = String.format(
-                "UPDATE USERS SET full_name = '%s', email = '%s', phone = '%s', updated_at = '%s' " +
+                "UPDATE USERS SET  full_name = '%s', email = '%s', phone = '%s', updated_at = '%s' " +
                         "WHERE id = '%d'",
                 user.getFullName(),
                 user.getEmail(),
@@ -140,7 +140,6 @@ public class userDao {
         dm.query(sql);
         return true;
     }
-
 
 
     /**

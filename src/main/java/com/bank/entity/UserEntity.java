@@ -9,7 +9,7 @@ public class UserEntity {
     private String fullName;
     private String email;
     private String phone;
-    private String  createdAt;
+    private String createdAt;
     private String updatedAt;
 
     public String getUpdatedAt() {

@@ -15,6 +15,7 @@ import com.bank.db.userDao;
 import com.bank.services.UserService;
 import com.bank.util.PasswordUtil;
 import com.bank.services.LogService;
+import com.bank.services.UserService;
 
 /**
  * Main entry point for the CLI Banking Application.
