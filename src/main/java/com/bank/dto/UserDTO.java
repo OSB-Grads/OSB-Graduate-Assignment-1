@@ -8,19 +8,19 @@ import java.sql.Timestamp;
  * Used to transfer user data between layers without exposing entity details.
  */
 public class UserDTO {
-    private Long id;
+    private int id;
     private String username;
     private String fullName;
     private String email;
     private String phone;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
     // Default constructor
     public UserDTO() {}
 
     // Constructor with all fields
-    public UserDTO(Long id, String username, String fullName, String email, String phone, Timestamp createdAt, Timestamp updatedAt) {
+    public UserDTO(int id, String username, String fullName, String email, String phone, String createdAt, String updatedAt) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
@@ -31,11 +31,11 @@ public class UserDTO {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -71,19 +71,19 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public Timestamp getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 

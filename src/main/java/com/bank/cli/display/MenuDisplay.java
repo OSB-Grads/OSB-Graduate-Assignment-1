@@ -18,7 +18,7 @@ import com.bank.services.AuthService;
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
-    private long  UserId;
+    private int  UserId;
     private Scanner scanner;
     private final AccountService accountService;
     private final AuthService authService;
@@ -139,6 +139,7 @@ public class MenuDisplay {
         UserDTO DTO= null;
         try {
             DTO = authService.validateUserCredentials(username,password);
+            UserId=DTO.getId();
             showUserMenu();
         } catch (InvalidCredentialsException e) {
             showError(e.getMessage());
@@ -146,7 +147,7 @@ public class MenuDisplay {
         } catch (Exception e) {
             showError("Exception has occured during Login Operation..!"+e.getMessage());
         }
-        UserId=DTO.getId();
+
     }
 
     private void handleCreateProfile() {

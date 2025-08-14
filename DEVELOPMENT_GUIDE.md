@@ -36,7 +36,7 @@ java -jar target/cli-banking-app-1.0.0.jar
 **Key Methods:**
 ```java
 public UserDTO login(String username, String password) throws InvalidCredentialsException
-public void logout(Long userId)
+public void logout(int userId)
 public String hashPassword(String password)
 public boolean verifyPassword(String password, String hashedPassword)
 ```
