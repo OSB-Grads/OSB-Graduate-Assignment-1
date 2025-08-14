@@ -41,13 +41,13 @@ public class UserService {
             userDTO.setFullName(fullName);
             userDTO.setEmail(email);
             userDTO.setPhone(phone);
-            userDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            userDTO.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+//            userDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+//            userDTO.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             // Step 2: Map DTO to Entity with hashed password
             UserEntity userEntity = UserMapper.UserDtoToUserEntity(userDTO, hashedPassword);
-            userEntity.setCreatedAt(userDTO.getCreatedAt());
-            userEntity.setUpdatedAt(userDTO.getUpdatedAt());
+//            userEntity.setCreatedAt(userDTO.getCreatedAt());
+//            userEntity.setUpdatedAt(userDTO.getUpdatedAt());
 
             // Step 3: Save to DB
             return userDao.createUser(userEntity);
@@ -64,20 +64,17 @@ public class UserService {
      */
 
 
-    public void displayProfile(String username) throws Exception {
-        UserEntity user = userDao.getUserByUsername(username);
+    public void displayProfile(int user_id) throws Exception {
+        UserEntity user = userDao.getUserById(user_id);
         if (user == null) {
             System.err.println("User not found.");
             return;
         }
 
         System.out.println("===== User Profile =====");
-        System.out.println("Username: " + user.getUsername());
         System.out.println("Full Name: " + user.getFullName());
         System.out.println("Email: " + user.getEmail());
         System.out.println("Phone: " + user.getPhone());
-        System.out.println("Created At: " + user.getCreatedAt());
-        System.out.println("Updated At: " + user.getUpdatedAt());
         System.out.println("========================");
     }
 
@@ -87,21 +84,14 @@ public class UserService {
      */
 
 
-    public boolean verifyAndUpdateUser(String username, String plainPassword, String newFullName, String newEmail, String newPhone) throws Exception {
-        UserEntity existingUser = userDao.getUserByUsername(username);
-
-        if (existingUser == null) {
-            System.err.println("User not found.");
-            return false;
-        }
-
+    public boolean updateUserProfile(int id, String newFullName, String newEmail, String newPhone) throws Exception {
+        UserEntity existingUser = userDao.getUserById(id);
 
         existingUser.setFullName(newFullName);
         existingUser.setEmail(newEmail);
-        existingUser.setPasswordHash(PasswordUtil.hashPassword(plainPassword));
         existingUser.setPhone(newPhone);
-        existingUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        existingUser.setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
-        return userDao.updateUser(existingUser);
+        return userDao.updateUserProfile(existingUser);
     }
 }

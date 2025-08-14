@@ -3,16 +3,16 @@ package com.bank.entity;
 import java.sql.Timestamp;
 
 public class UserEntity {
-    private Long id;
+    private int id;
     private String username;
     private String passwordHash;
     private String fullName;
     private String email;
     private String phone;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
-    public Timestamp getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
@@ -36,7 +36,7 @@ public class UserEntity {
         return username;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -60,23 +60,23 @@ public class UserEntity {
         this.phone = phone;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(String  createdAt) {
         this.createdAt = createdAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public Timestamp getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public UserEntity(Long id, String username, String passwordHash, String fullName, String email, String phone, Timestamp createdAt, Timestamp updatedAt) {
+    public UserEntity(int id, String username, String passwordHash, String fullName, String email, String phone, String createdAt, String updatedAt) {
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;

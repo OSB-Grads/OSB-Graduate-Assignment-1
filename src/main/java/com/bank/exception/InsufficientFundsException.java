@@ -6,8 +6,8 @@ import java.math.BigDecimal;
  * Exception thrown when attempting to withdraw or transfer more money than available.
  */
 public class InsufficientFundsException extends BankingException {
-    private final BigDecimal requestedAmount;
-    private final BigDecimal availableBalance;
+    private static BigDecimal requestedAmount;
+    private static BigDecimal availableBalance;
     
     public InsufficientFundsException(String message, BigDecimal requestedAmount, BigDecimal availableBalance) {
         super(message);

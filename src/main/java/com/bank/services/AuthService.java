@@ -25,11 +25,11 @@ public AuthService(userDao dao,PasswordUtil passwordUtil ,UserMapper userMapper)
        UserEntity userEntity=dao.getUserByUsername(user);
         String pass=userEntity.getPasswordHash();
            if(userEntity==null){
-               LogService.logintoDB(-1L, LogDAO.Action.AUTHENTICATION,"Failed authentication as userDetails is not present in the DB","user_ip",LogDAO.Status.FAILURE);
+               LogService.logintoDB(-1, LogDAO.Action.AUTHENTICATION,"Failed authentication as userDetails is not present in the DB","user_ip",LogDAO.Status.FAILURE);
                throw new UserNotfoundException();
            }
           if(!passwordUtil.VerifyPassword(password,pass)){
-              LogService.logintoDB(-1L, LogDAO.Action.AUTHENTICATION,"Invalid Password","user_ip",LogDAO.Status.FAILURE);
+              LogService.logintoDB(-1, LogDAO.Action.AUTHENTICATION,"Invalid Password","user_ip",LogDAO.Status.FAILURE);
             throw new InvalidCredentialsException();
         }
         LogService.logintoDB(userEntity.getId(), LogDAO.Action.AUTHENTICATION,"Successfully LoggedIn","user_ip",LogDAO.Status.SUCCESS);

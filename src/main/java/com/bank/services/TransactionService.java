@@ -39,7 +39,7 @@ public class TransactionService {
 
         AccountEntity account = accountDAO.getAccountById(accountNumber);
         if (account == null) {
-            LogService.logintoDB((long)-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
+            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
             throw new AccountNotFoundException(accountNumber);
         }
 
@@ -50,7 +50,7 @@ public class TransactionService {
         accountDTO.setBalance(newBalance);
         AccountEntity updatedAccount=AccountMapper.dtoToEntity(accountDTO);
         accountDAO.updateAccountDetails(updatedAccount);
-        LogService.logintoDB((long) user_id, LogDAO.Action.TRANSACTIONS,"Amount has been credited into User Account","USER IP",LogDAO.Status.SUCCESS);
+        LogService.logintoDB( user_id, LogDAO.Action.TRANSACTIONS,"Amount has been credited into User Account","USER IP",LogDAO.Status.SUCCESS);
 
         TransactionEntity transaction = new TransactionEntity();
         transaction.setFrom_account_id(null); // Since it's a deposit
@@ -68,7 +68,7 @@ public class TransactionService {
 
         AccountEntity accountEntity=accountDAO.getAccountById(accountNumber);
         if(accountEntity==null){
-            LogService.logintoDB((long)-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
+            LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
             throw new AccountNotFoundException(accountNumber);
         }
         AccountDTO accountDTO=AccountMapper.entityToDTO(accountEntity);
@@ -76,17 +76,17 @@ public class TransactionService {
         int user_id=accountDTO.getUserId();
 
         if(balance<debitAmount){
-            LogService.logintoDB((long)user_id, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE);
+            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE);
             throw new InsufficientFundsException(debitAmount+"Not available in the Account");
         }
         else if(!accountDTO.isLocked()){
             accountDTO.setBalance(balance-debitAmount);
             accountEntity=AccountMapper.dtoToEntity(accountDTO);
             accountDAO.updateAccountDetails(accountEntity);
-            LogService.logintoDB((long)user_id, LogDAO.Action.TRANSACTIONS,"Amount has been debited from user account","USER IP",LogDAO.Status.SUCCESS);
+            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Amount has been debited from user account","USER IP",LogDAO.Status.SUCCESS);
         }
         else{
-            LogService.logintoDB((long)user_id, LogDAO.Action.TRANSACTIONS,"Cannot debit from FD(Fixed Deposit)","USER IP",LogDAO.Status.FAILURE);
+            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Cannot debit from FD(Fixed Deposit)","USER IP",LogDAO.Status.FAILURE);
             throw new BankingException("Cannot debit from FD(Fixed Deposit)");
         }
 
@@ -102,7 +102,7 @@ public class TransactionService {
         return transaction;
     }
 
-    public List<TransactionDTO> getTransactionHistoryById( Long user_id) throws BankingException, SQLException {
+    public List<TransactionDTO> getTransactionHistoryById(int user_id) throws BankingException, SQLException {
         List<TransactionEntity> resultTransaction = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         // get all accounts by user_id

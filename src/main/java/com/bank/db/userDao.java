@@ -44,16 +44,16 @@ public class userDao {
 
     public boolean createUser(UserEntity user) throws Exception {
         String sql = String.format(
-                "INSERT INTO USERS (id, username, password_hash, full_name, email, phone, created_at, updated_at) " +
-                        "VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-                user.getId(),
+                "INSERT INTO users (username, password_hash, full_name, email, phone) " +
+                        "VALUES ( '%s', '%s', '%s', '%s', '%s')",
+//                user.getId(),
                 user.getUsername(),
                 user.getPasswordHash(),
                 user.getFullName(),
                 user.getEmail(),
-                user.getPhone(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getPhone()
+//                user.getCreatedAt(),
+//                user.getUpdatedAt()
         );
         dm.query(sql);
         return true;
@@ -69,9 +69,9 @@ public class userDao {
      */
 
 
-    public UserEntity getUserById(String id) throws Exception {
+    public UserEntity getUserById(int id) throws Exception {
         String sql = String.format(
-                "SELECT id, username, password_hash, full_name, email, phone, created_at, updated_at FROM USERS WHERE id = '%s'",
+                "SELECT * FROM USERS WHERE id = '%d'",
                 id
         );
 
@@ -129,10 +129,8 @@ public class userDao {
 
     public boolean updateUser(UserEntity user) throws Exception {
         String sql = String.format(
-                "UPDATE USERS SET username = '%s', password_hash = '%s', full_name = '%s', email = '%s', phone = '%s', updated_at = '%s' " +
+                "UPDATE USERS SET  full_name = '%s', email = '%s', phone = '%s', updated_at = '%s' " +
                         "WHERE id = '%d'",
-                user.getUsername(),
-                user.getPasswordHash(),
                 user.getFullName(),
                 user.getEmail(),
                 user.getPhone(),
