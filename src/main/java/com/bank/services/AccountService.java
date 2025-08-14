@@ -70,7 +70,7 @@ public class AccountService {
     private String generateUniqueAccountNumberUUID() {
         return String.valueOf(Math.abs(UUID.randomUUID().getMostSignificantBits())).substring(0, 10);
     }
-    public List<AccountDTO> getAccountsByUserId(long userid){
+    public List<AccountDTO> getAccountsByUserId(int userid){
 
         List<AccountDTO>accounts=new ArrayList<>();
         List<AccountEntity> acc=accountDAO.getAccountsByUserId(userid);

@@ -80,14 +80,12 @@ public class UserOrchestrator {
      */
 
 
-    public void updateUserDetails(String username, String password, UserDTO updatedDTO) throws Exception {
-        userService.verifyAndUpdateUser(
-                username,
-                password,
+    public void updateUserDetails(int id, UserDTO updatedDTO) throws Exception {
+        userService.updateUserProfile(
+                id,
                 updatedDTO.getFullName(),
                 updatedDTO.getEmail(),
                 updatedDTO.getPhone()
         );
-
     }
 }
