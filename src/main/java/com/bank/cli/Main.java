@@ -66,7 +66,7 @@ public class Main {
 
             // Start the main menu
 
-            MenuDisplay menuDisplay = new MenuDisplay(accountService, userService,authService, userOrchestrator,depositAndWithdrawOrchestrator);
+            MenuDisplay menuDisplay = new MenuDisplay(accountService,authService, userOrchestrator,depositAndWithdrawOrchestrator);
             menuDisplay.showMainMenu();
 
         } catch (Exception e) {

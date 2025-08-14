@@ -24,13 +24,12 @@ public class MenuDisplay {
     private final AuthService authService;
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
-    private final UserService userService;
 
-    public MenuDisplay(AccountService accountService,UserService userService, AuthService authService, UserOrchestrator userOrchestrator,DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
+
+    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator,DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
         this.scanner = new Scanner(System.in);
         this.accountService=accountService;
         this.authService=authService;
-        this.userService=userService;
         this.userOrchestrator = userOrchestrator;
         this.depositAndWithdrawOrchestrator=depositAndWithdrawOrchestrator;
 
