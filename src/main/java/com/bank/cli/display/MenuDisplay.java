@@ -1,14 +1,17 @@
 package com.bank.cli.display;
+
 import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
 import com.bank.dto.LogDTO;
+import com.bank.dto.TransactionDTO;
 import com.bank.dto.UserDTO;
 import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,23 +23,22 @@ import com.bank.services.TransactionService;
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
-    private long  UserId;
+    private long UserId;
     private Scanner scanner;
     private final AccountService accountService;
     private final AuthService authService;
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
 
-    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator,DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
+    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator, DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
         this.scanner = new Scanner(System.in);
-        this.accountService=accountService;
-        this.authService=authService;
+        this.accountService = accountService;
+        this.authService = authService;
 
         this.userOrchestrator = userOrchestrator;
-        this.depositAndWithdrawOrchestrator=depositAndWithdrawOrchestrator;
+        this.depositAndWithdrawOrchestrator = depositAndWithdrawOrchestrator;
 
     }
-
 
 
     /**
@@ -74,13 +76,13 @@ public class MenuDisplay {
             }
         }
     }
-    
+
     /**
      * Display the user menu after successful login.
      */
     public void showUserMenu() {
         boolean loggedIn = true;
-        
+
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
             System.out.println("1. Create Bank Account");
@@ -92,10 +94,10 @@ public class MenuDisplay {
             System.out.println("7. Update Profile Info");
             System.out.println("8. Logout");
             System.out.print("Please select an option (1-8): ");
-            
+
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -130,9 +132,9 @@ public class MenuDisplay {
             }
         }
     }
-    
+
     // TODO: Implement these methods by calling appropriate services/orchestrators
-    
+
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
@@ -140,17 +142,17 @@ public class MenuDisplay {
         System.out.print("Password: ");
         String password = scanner.nextLine().trim();
 
-        UserDTO DTO= null;
+        UserDTO DTO = null;
         try {
-            DTO = authService.validateUserCredentials(username,password);
+            DTO = authService.validateUserCredentials(username, password);
             showUserMenu();
         } catch (InvalidCredentialsException e) {
             showError(e.getMessage());
 
         } catch (Exception e) {
-            showError("Exception has occured during Login Operation..!"+e.getMessage());
+            showError("Exception has occured during Login Operation..!" + e.getMessage());
         }
-        UserId=DTO.getId();
+        UserId = DTO.getId();
     }
 
     private void handleCreateProfile() {
@@ -169,10 +171,9 @@ public class MenuDisplay {
         try {
             userOrchestrator.signup(UserId, username, password, fullName, email, phone);  // <-- underlined change
             showSuccess("Profile created successfully!");
-        } catch(UserAlreadyExist e) {
+        } catch (UserAlreadyExist e) {
             showError(e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             showError("Failed to create profile: " + e.getMessage());
         }
     }
@@ -204,13 +205,13 @@ public class MenuDisplay {
             }
 
             if (UserId == 0) {
-            System.out.println("Please login first to create an account.");
-             return;
-             }
+                System.out.println("Please login first to create an account.");
+                return;
+            }
 
 
             AccountDTO dto = new AccountDTO();
-            dto.setUserId((int)UserId);
+            dto.setUserId((int) UserId);
             dto.setAccountType(accountType);
             dto.setBalance(0.0);
             dto.setLocked(isLocked);
@@ -227,8 +228,8 @@ public class MenuDisplay {
         }
 
     }
-    
-    private void handleDeposit()  {
+
+    private void handleDeposit() {
         System.out.println("\n=== DEPOSIT MONEY ===");
         // TODO: Show user's accounts, get account selection and amount
         //System.out.println("TODO: Implement deposit logic using DepositAndWithDrawOrchestrator");
@@ -238,12 +239,11 @@ public class MenuDisplay {
         }
         try {
             depositAndWithdrawOrchestrator.handleDeposit(UserId);
-        }
-        catch(BankingException e){
-            System.out.println("Error While performing Deposit into Account"+e.getMessage());
+        } catch (BankingException e) {
+            System.out.println("Error While performing Deposit into Account" + e.getMessage());
         }
     }
-    
+
     private void handleWithdraw() {
         System.out.println("\n=== WITHDRAW MONEY ===");
         // TODO: Show user's savings accounts only, get account selection and amount
@@ -254,30 +254,29 @@ public class MenuDisplay {
         }
         try {
             depositAndWithdrawOrchestrator.handleWithdraw(UserId);
-        }
-        catch (BankingException e){
-            System.out.println("Error While performing Withdrawal from Account"+e.getMessage());
+        } catch (BankingException e) {
+            System.out.println("Error While performing Withdrawal from Account" + e.getMessage());
         }
 
     }
-    
+
     private void handleTransfer() {
         System.out.println("\n=== TRANSFER MONEY ===");
         // TODO: Show transfer options (Savings to Savings, Savings to FD)
         System.out.println("TODO: Implement transfer logic using appropriate Orchestrator");
     }
-    
+
     private void handleViewAccounts() {
         System.out.println("\n=== YOUR ACCOUNTS ===");
         System.out.println("Choose the option to display the accounts");
 
 
-        if(UserId==0){
-         System.out.println("please login first before ViewAccount");
+        if (UserId == 0) {
+            System.out.println("please login first before ViewAccount");
         }
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
 
-        for(AccountDTO dto: accountDTOs){
+        for (AccountDTO dto : accountDTOs) {
             System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Locked: %s%n",
                     dto.getAccountNumber(),
                     dto.getAccountType(),
@@ -288,78 +287,99 @@ public class MenuDisplay {
 
         System.out.println("TODO: Implement account viewing using AccountService");
     }
-    
+
     private void handleViewTransactionHistory() {
         System.out.println("\n === TRANSACTION HISTORY ===");
         // TODO: Show user's accounts, let them select one, then show transaction history
         System.out.println("TODO: Implement transaction history using TransactionService");
         TransactionService transactionService = new TransactionService();
         try {
-            transactionService.getTransactionHistoryById(UserId);
+            List<TransactionDTO> listOfTransactions = transactionService.getTransactionHistoryById(UserId);
+
+            if (listOfTransactions == null || listOfTransactions.isEmpty()) {
+                System.out.println("No transactions found.");
+                return;
+            }
+            // Table Header
+            System.out.printf("%-15s %-12s %-12s %-20s %-15s %-15s %-10s%n",
+                    "Transaction ID", "Type", "Amount", "Date", "From Account", "To Account", "Status");
+            System.out.println("-----------------------------------------------------------------------------------------------");
+
+            // Table Rows
+            for (TransactionDTO t : listOfTransactions) {
+                System.out.printf("%-15s %-12s %-12.2f %-20s %-15s %-15s %-10s%n",
+                        t.getTransaction_id(),
+                        t.getTransaction_type(),
+                        t.getAmount(),
+                        t.getCreated_at(),
+                        t.getFrom_account_id(),
+                        t.getTo_account_id(),
+                        t.getStatus());
+            }
         } catch (BankingException e) {
-           showError(e.getMessage());
-        }catch (SQLException e) {
+            showError(e.getMessage());
+        } catch (SQLException e) {
             showError(e.getMessage());
         }
     }
-    
-    private void handleUpdateProfile() {
-        System.out.println("\n=== UPDATE PROFILE ===");
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            // Step 1: Get credentials
-            System.out.print("Enter your username: ");
-            String username = scanner.nextLine();
+            private void handleUpdateProfile () {
+                System.out.println("\n=== UPDATE PROFILE ===");
 
-            System.out.print("Enter your password: ");
-            String password = scanner.nextLine();
+                try (Scanner scanner = new Scanner(System.in)) {
+                    // Step 1: Get credentials
+                    System.out.print("Enter your username: ");
+                    String username = scanner.nextLine();
 
-            // Step 2: Get updated profile info
-            System.out.print("Enter new full name: ");
-            String fullName = scanner.nextLine();
+                    System.out.print("Enter your password: ");
+                    String password = scanner.nextLine();
 
-            System.out.print("Enter new email: ");
-            String email = scanner.nextLine();
+                    // Step 2: Get updated profile info
+                    System.out.print("Enter new full name: ");
+                    String fullName = scanner.nextLine();
 
-            System.out.print("Enter new phone number: ");
-            String phone = scanner.nextLine();
+                    System.out.print("Enter new email: ");
+                    String email = scanner.nextLine();
 
-            // Step 3: Create DTO with updated info
-            UserDTO updatedDTO = new UserDTO();
-            updatedDTO.setUsername(username); // Optional, in case needed elsewhere
-            updatedDTO.setFullName(fullName);
-            updatedDTO.setEmail(email);
-            updatedDTO.setPhone(phone);
+                    System.out.print("Enter new phone number: ");
+                    String phone = scanner.nextLine();
 
-            // Step 4: Call orchestrator method
-            userOrchestrator.updateUserDetails(username, password, updatedDTO);
+                    // Step 3: Create DTO with updated info
+                    UserDTO updatedDTO = new UserDTO();
+                    updatedDTO.setUsername(username); // Optional, in case needed elsewhere
+                    updatedDTO.setFullName(fullName);
+                    updatedDTO.setEmail(email);
+                    updatedDTO.setPhone(phone);
 
-            System.out.println("Profile updated successfully!");
+                    // Step 4: Call orchestrator method
+                    userOrchestrator.updateUserDetails(username, password, updatedDTO);
 
-        } catch (Exception e) {
-            System.err.println("Failed to update profile: " + e.getMessage());
+                    System.out.println("Profile updated successfully!");
+
+                } catch (Exception e) {
+                    System.err.println("Failed to update profile: " + e.getMessage());
+                }
+            }
+
+            /**
+             * Utility method to get user input with prompt.
+             */
+            public String getInput (String prompt){
+                System.out.print(prompt);
+                return scanner.nextLine().trim();
+            }
+
+            /**
+             * Utility method to display error messages.
+             */
+            public void showError(String message){
+                System.err.println("ERROR: " + message);
+            }
+
+            /**
+             * Utility method to display success messages.
+             */
+            public void showSuccess(String message){
+                System.out.println("SUCCESS: " + message);
+            }
         }
-    }
-    
-    /**
-     * Utility method to get user input with prompt.
-     */
-    public String getInput(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
-    }
-    
-    /**
-     * Utility method to display error messages.
-     */
-    public void showError(String message) {
-        System.err.println("ERROR: " + message);
-    }
-    
-    /**
-     * Utility method to display success messages.
-     */
-    public void showSuccess(String message) {
-        System.out.println("SUCCESS: " + message);
-    }
-}
