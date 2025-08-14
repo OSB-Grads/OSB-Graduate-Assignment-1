@@ -100,7 +100,7 @@ public class AccountDAO {
             System.out.println("Error while updating account details: " + e);
         }
     }
-    public List<AccountEntity> getAccountsByUserId(long Userid){
+    public List<AccountEntity> getAccountsByUserId(int Userid){
 
         String sql="Select * from accounts where userid="+Userid;
         try {

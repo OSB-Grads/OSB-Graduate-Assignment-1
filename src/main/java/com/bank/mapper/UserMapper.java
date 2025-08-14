@@ -19,14 +19,14 @@ public class UserMapper {
             return null;
         }
         UserEntity user=new UserEntity();
-        user.setId((Long) row.get("id"));
+        user.setId((int) row.get("id"));
         user.setUsername((String) row.get("username"));
         user.setPasswordHash((String)row.get("password_hash"));
         user.setFullName((String) row.get("full_name"));
         user.setEmail((String) row.get("email"));
         user.setPhone((String)row.get("phone"));
-        user.setCreatedAt((Timestamp) row.get("created_at"));
-        user.setUpdatedAt((Timestamp) row.get("updated_at"));
+        user.setCreatedAt((String) row.get("created_at"));
+        user.setUpdatedAt( (String) row.get("updated_at"));
 
         return user;
     }
@@ -43,8 +43,8 @@ public class UserMapper {
         userDTO.setFullName(user.getFullName());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhone(user.getPhone());
-        userDTO.setCreatedAt(user.getCreatedAt());
-        userDTO.setUpdatedAt(user.getUpdatedAt());
+//        userDTO.setCreatedAt(user.getCreatedAt());
+//        userDTO.setUpdatedAt(user.getUpdatedAt());
 
 
 
