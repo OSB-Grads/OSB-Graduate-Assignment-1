@@ -6,9 +6,7 @@ import com.bank.dto.TransactionDTO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TransactionMapper {
@@ -72,6 +70,27 @@ public class TransactionMapper {
         ts.setStatus(rs.getString("status"));
         ts.setCreatedAt(rs.getTimestamp("created_at"));
         return ts;
+    }
+    public static List<TransactionDTO> mapToTransactionDtoList(List<TransactionEntity> entities) {
+        List<TransactionDTO> ls = new ArrayList<>();
+
+        if (entities != null) {
+            for (TransactionEntity entity : entities) {
+                if (entity != null) {
+                    TransactionDTO dto = new TransactionDTO();
+                    dto.setTransaction_id(entity.getTransaction_id());
+                    dto.setFrom_account_id(entity.getFrom_account_id());
+                    dto.setTo_account_id(entity.getTransaction_id());
+                    dto.setAmount(entity.getAmount());
+                    dto.setTransaction_type(entity.getTransaction_type());
+                    dto.setStatus(entity.getStatus());
+                    dto.setCreated_at(entity.getCreatedAt());
+                    ls.add(dto);
+                }
+            }
+        }
+
+        return ls;
     }
 
     public static List<TransactionEntity> mapToTransactionEntityList(List<Map<String, Object>> rows) {
