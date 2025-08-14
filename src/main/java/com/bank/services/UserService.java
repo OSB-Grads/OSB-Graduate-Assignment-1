@@ -92,6 +92,6 @@ public class UserService {
         existingUser.setPhone(newPhone);
         existingUser.setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
-        return userDao.updateUserProfile(existingUser);
+        return userDao.updateUser(existingUser);
     }
 }
