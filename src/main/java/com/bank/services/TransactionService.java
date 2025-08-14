@@ -64,7 +64,7 @@ public class TransactionService {
         transaction.setAmount(amount);
         transaction.setTransaction_type(TransactionDAO.TransactionType.DEPOSIT.name()); // Convert enum to String
         transaction.setDescription("Deposit of " + amount);
-        transaction.setStatus(TransactionDAO.Status.SUCCESS.name()); // Convert enum to String
+        transaction.setStatus(TransactionDAO.Status.COMPLETED.name()); // Convert enum to String
         transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return transaction;
@@ -100,9 +100,9 @@ public class TransactionService {
         transaction.setFrom_account_id(accountNumber); // Since money is debited from this account
         transaction.setTo_account_id(null); // No target account for direct withdrawal
         transaction.setAmount(debitAmount);
-        transaction.setTransaction_type(TransactionDAO.TransactionType.WITHDRAW.name()); // Enum to String
+        transaction.setTransaction_type(TransactionDAO.TransactionType.WITHDRAWAL.name()); // Enum to String
         transaction.setDescription("Withdrawal of ₹" + debitAmount);
-        transaction.setStatus(TransactionDAO.Status.SUCCESS.name()); // Enum to String
+        transaction.setStatus(TransactionDAO.Status.COMPLETED.name()); // Enum to String
         transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return transaction;
