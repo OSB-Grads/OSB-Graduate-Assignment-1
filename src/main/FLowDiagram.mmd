@@ -1,0 +1,34 @@
+---
+config:
+  layout: dagre
+---
+flowchart TD
+    Start(["Start"]) --> ShowMainMenu["showMainMenu() - Display Main Menu"]
+    ShowMainMenu --> Choice1["Select 1: Login"] & Choice2["Select 2: Create Customer Profile"] & Choice3["Select 3: Exit"] & InvalidMain["Invalid Input (not 1–3)"]
+    Choice1 --> HandleLogin["handleLogin()"]
+    HandleLogin --> ShowUserMenu["showUserMenu()"]
+    Choice2 --> HandleCreateProfile["handleCreateProfile()"]
+    HandleCreateProfile --> ShowMainMenu
+    Choice3 --> ExitMsg["Print Exit Message"]
+    ExitMsg --> End(["End"])
+    InvalidMain --> ShowMainMenu
+    ShowUserMenu --> DisplayUser["showUserMenu() - Display User Menu"]
+    DisplayUser --> UC1["1: Create Bank Account"] & UC2["2: Deposit Money"] & UC3["3: Withdraw Money"] & UC4["4: Transfer Money"] & UC5["5: View Account Details"] & UC6["6: View Transaction History"] & UC7["7: Update Profile Info"] & UC8["8: Logout"] & InvalidUser["Invalid Input (not 1–8)"]
+    UC1 --> HandleCreateAccount["handleCreateAccount()"]
+    HandleCreateAccount --> DisplayUser
+    UC2 --> HandleDeposit["handleDeposit()"]
+    HandleDeposit --> DisplayUser
+    UC3 --> HandleWithdraw["handleWithdraw()"]
+    HandleWithdraw --> DisplayUser
+    UC4 --> HandleTransfer["handleTransfer()"]
+    HandleTransfer --> DisplayUser
+    UC5 --> HandleViewAccounts["handleViewAccounts()"]
+    HandleViewAccounts --> DisplayUser
+    UC6 --> HandleTransactionHistory["handleViewTransactionHistory()"]
+    HandleTransactionHistory --> DisplayUser
+    UC7 --> HandleUpdateProfile["handleUpdateProfile(currentUsername)"]
+    HandleUpdateProfile --> DisplayUser
+    UC8 --> LogoutMsg@{ label: "Print 'Logging out...'" }
+    LogoutMsg --> ShowMainMenu
+    InvalidUser --> DisplayUser
+    LogoutMsg@{ shape: rect}
