@@ -6,6 +6,7 @@ import com.bank.entity.UserEntity;
 import com.bank.mapper.UserMapper;
 import com.bank.util.PasswordUtil;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import static com.bank.mapper.UserMapper.UserDtoToUserEntity;
 
@@ -90,7 +91,10 @@ public class UserService {
         existingUser.setFullName(newFullName);
         existingUser.setEmail(newEmail);
         existingUser.setPhone(newPhone);
-        existingUser.setUpdatedAt(String.valueOf(System.currentTimeMillis()));
+        Timestamp ts=new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
+        String formatted=sdf.format(ts);
+        existingUser.setUpdatedAt(formatted);
 
         return userDao.updateUser(existingUser);
     }
