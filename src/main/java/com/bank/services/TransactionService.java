@@ -121,7 +121,7 @@ public class TransactionService {
         }
         String TransactionAccountNumber = accounts.get(index).getAccount_number();
         resultTransaction = transactionDAO.getTransactionsByAccountNumber(TransactionAccountNumber);
-        return TransactionMapper.mapToTransactionDtoList(resultTransaction);
+        return TransactionMapper.entityToTransactionDtoList(resultTransaction);
     }
 
 }
