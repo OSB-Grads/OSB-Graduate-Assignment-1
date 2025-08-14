@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class TransactionDAO {
     public enum TransactionType {
-        DEPOSIT, WITHDRAW, TRANSFER, TRANSACT
+        DEPOSIT, WITHDRAWAL, TRANSFER
     }
     public enum Status{
-        SUCCESS, FAILURE, ERROR
+        COMPLETED, FAILED, PENDING
     }
 
     private final DatabaseManager dm;

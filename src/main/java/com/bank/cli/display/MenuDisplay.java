@@ -282,7 +282,32 @@ public class MenuDisplay {
     private void handleTransfer() {
         System.out.println("\n=== TRANSFER MONEY ===");
         // TODO: Show transfer options (Savings to Savings, Savings to FD)
-        System.out.println("TODO: Implement transfer logic using appropriate Orchestrator");
+        //System.out.println("TODO: Implement transfer logic using appropriate Orchestrator");
+        System.out.println("Select type of Transaction");
+        System.out.println("1. Self Transaction");
+        System.out.println("2. User Transaction");
+        int input = scanner.nextInt();
+        switch (input) {
+            case 1:
+                break;
+
+            case 2:
+                if (UserId == 0) {
+                    System.out.println("Please login first to withdraw from account.");
+                    return;
+                }
+                try {
+                    transactOrchestrator.transactAmountBetweenUsers(UserId);
+                } catch (BankingException e) {
+                    System.out.println("Problem with transactions");
+                } catch (SQLException e) {
+                    System.out.println("SQL Error has Occurred");
+                }
+                break;
+            default:
+                System.out.println("Please Select Correct Option");
+                break;
+        }
     }
     
     private void handleViewAccounts() {

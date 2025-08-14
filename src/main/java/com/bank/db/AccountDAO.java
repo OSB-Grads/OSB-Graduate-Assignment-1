@@ -64,7 +64,7 @@ public class AccountDAO {
     // Get account by ID
     public AccountEntity getAccountById(String accountNumber) {
         AccountEntity account = new AccountEntity();
-        String sql = "SELECT * FROM accounts WHERE id = " + accountNumber;
+        String sql = "SELECT * FROM accounts WHERE account_number = " + accountNumber;
 
         try {
             List<Map<String, Object>> rows = db.query(sql);
@@ -73,6 +73,10 @@ public class AccountDAO {
                 account.setAccount_number((String) row.get("account_number"));
                 account.setUser_id((Integer) row.get("user_id"));
                 account.setAccount_type(String.valueOf(AccountType.valueOf((String) row.get("account_type"))));
+                account.setBalance(((Number) row.get("balance")).doubleValue());
+                account.setIs_locked(row.get("is_locked")=="true");
+                account.setAccount_created((String)row.get("created_at") );
+                account.setAccount_updated((String) row.get("updated_id"));
             }
         } catch (Exception e) {
             System.out.println("Error retrieving account by ID: " + e);
@@ -86,12 +90,13 @@ public class AccountDAO {
     public void updateAccountDetails(AccountEntity accountEntity) {
         String sql = String.format(
                 "UPDATE accounts SET " +
-                        "balance = '%f', " +
+                        "balance = '%.2f', " +
                         "is_locked = '%b', " +
                         "updated_at = CURRENT_TIMESTAMP " + // Automatically update the timestamp
-                        "WHERE id = '%d'",
+                        "WHERE account_number = '%s'",
                 accountEntity.getBalance(),
-                accountEntity.isIs_locked()
+                accountEntity.isIs_locked(),
+                accountEntity.getAccount_number()
         );
 
         try {
