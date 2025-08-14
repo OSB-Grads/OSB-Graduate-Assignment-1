@@ -24,7 +24,7 @@ import java.util.Scanner;
  */
 public class MenuDisplay {
 
-    private int  UserId = -1;
+    private int  UserId = 0;
     private String currentUsername;
     private Scanner scanner;
     private final AccountService accountService;
@@ -131,7 +131,7 @@ public class MenuDisplay {
                         break;
                     case 9:
                         System.out.println("Logging out...");
-                        UserId =-1;
+                        UserId =0;
                         loggedIn = false;
                         break;
                     default:
