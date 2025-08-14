@@ -28,21 +28,22 @@ public class TransactionDAO {
         return TransactionMapper.mapToTransactionEntityList(rows);
     }
 
+
     // get transaction by Id
-    public TransactionEntity getAccountById(String accountId) throws SQLException {
-        String sql = "SELECT * FROM transactions WHERE transaction_id = '" + accountId + "'";
-        List<Map<String, Object>> rows = dm.query(sql);
+//    public TransactionEntity getTransaction(String accountId) throws SQLException {
+//        String sql = "SELECT * FROM transactions WHERE transaction_id = '" + accountId + "'";
+//        List<Map<String, Object>> rows = dm.query(sql);
+//
+//        if (!rows.isEmpty()) {
+//            return TransactionMapper.mapToTransactionEntity(rows.get(0));
+//        }
+//        return null;
+//    }
 
-        if (!rows.isEmpty()) {
-            return TransactionMapper.mapToTransactionEntity(rows.get(0));
-        }
-        return null;
-    }
-
-    //get all transactions by User Id
-    public List<TransactionEntity> getAccountsByUserID(int userId) throws SQLException {
+    //get all transactions by Account Id
+    public List<TransactionEntity> getTransactionsByAccountNumber(String account_number) throws SQLException {
         List<TransactionEntity> list = new ArrayList<>();
-        String sql = "SELECT * FROM transactions WHERE from_account_id = " + userId + " OR to_account_id = " + userId;
+        String sql = "SELECT * FROM transactions WHERE from_account_number = " + account_number + " OR to_account_id = " + account_number;
         List<Map<String, Object>> rows = dm.query(sql);
         return TransactionMapper.mapToTransactionEntityList(rows);
     }

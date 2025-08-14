@@ -3,6 +3,7 @@ package com.bank.services;
 import com.bank.db.LogDAO;
 import com.bank.db.TransactionDAO;
 import com.bank.dto.AccountDTO;
+import com.bank.dto.TransactionDTO;
 import com.bank.entity.AccountEntity;
 import com.bank.entity.TransactionEntity;
 import com.bank.exception.AccountNotFoundException;
@@ -10,18 +11,25 @@ import com.bank.exception.BankingException;
 import com.bank.db.AccountDAO;
 import com.bank.exception.InsufficientFundsException;
 import com.bank.mapper.AccountMapper;
+import com.bank.mapper.TransactionMapper;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class TransactionService {
 
-    private final AccountDAO accountDAO;
-    private final TransactionDAO transactionDAO;
+    private static AccountDAO accountDAO;
+    private static TransactionDAO transactionDAO;
 
     public TransactionService(AccountDAO accountDAO, TransactionDAO transactionDAO) {
         this.accountDAO = accountDAO;
         this.transactionDAO = transactionDAO;
+    }
+
+    public TransactionService() {
     }
 
     public TransactionEntity creditToAccount(String accountNumber, double amount) throws AccountNotFoundException {
@@ -92,6 +100,28 @@ public class TransactionService {
         transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return transaction;
+    }
+
+    public List<TransactionDTO> getTransactionHistoryById(int user_id) throws BankingException, SQLException {
+        List<TransactionEntity> resultTransaction = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        // get all accounts by user_id
+        List<AccountEntity>  accounts = accountDAO.getAccountsByUserId(user_id);
+
+        for (int i = 0; i < accounts.size(); i++) {
+            System.out.println((i + 1) + ". Account Number: " + accounts.get(i).getAccount_number());
+        }
+        System.out.println("Choose account number (1 to " + accounts.size() + "):");
+        int index = -1;
+        while (index < 0 || index >= accounts.size()) {
+            index = sc.nextInt() - 1;
+            if (index < 0 || index >= accounts.size()) {
+                System.out.println("Invalid choice :( Try Again");
+            }
+        }
+        String TransactionAccountNumber = accounts.get(index).getAccount_number();
+        resultTransaction = transactionDAO.getTransactionsByAccountNumber(TransactionAccountNumber);
+        return TransactionMapper.mapToTransactionDtoList(resultTransaction);
     }
 
 }

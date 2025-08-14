@@ -4,25 +4,27 @@ import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
 import com.bank.Orchestrators.TransactOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
-import com.bank.dto.LogDTO;
+import com.bank.dto.TransactionDTO;
 import com.bank.dto.UserDTO;
 import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
+import com.bank.services.TransactionService;
 
 import java.sql.SQLException;
-import com.bank.services.UserService;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import com.bank.services.AuthService;
+
+
+
 /**
  * Handles all CLI menu display and user input.
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
+
     private int  UserId;
+    private String currentUsername;
     private Scanner scanner;
     private final AccountService accountService;
     private final AuthService authService;
@@ -57,6 +59,7 @@ public class MenuDisplay {
             System.out.print("Please select an option (1-3): ");
 
             try {
+
                 int choice = Integer.parseInt(scanner.nextLine().trim());
 
                 switch (choice) {
@@ -146,7 +149,7 @@ public class MenuDisplay {
 
 
     // TODO: Implement these methods by calling appropriate services/orchestrators
-    
+
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
@@ -158,6 +161,7 @@ public class MenuDisplay {
         try {
             DTO = authService.validateUserCredentials(username,password);
             UserId=DTO.getId();
+            currentUsername=DTO.getUsername();
             showUserMenu();
         } catch (InvalidCredentialsException e) {
             showError(e.getMessage());
@@ -283,9 +287,11 @@ public class MenuDisplay {
     
     private void handleViewAccounts() {
         System.out.println("\n=== YOUR ACCOUNTS ===");
+        System.out.println("Choose the option to display the accounts");
 
-        if(UserId==0){
-         System.out.println("pleae login first before ViewAccount");
+
+        if (UserId == 0) {
+            System.out.println("please login first before ViewAccount");
         }
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
 
@@ -306,8 +312,35 @@ public class MenuDisplay {
         System.out.println("\n=== TRANSACTION HISTORY ===");
         // TODO: Show user's accounts, let them select one, then show transaction history
         System.out.println("TODO: Implement transaction history using TransactionService");
+        TransactionService transactionService = new TransactionService();
+        try {
+            List<TransactionDTO> listOfTransactions = transactionService.getTransactionHistoryById(UserId);
+
+            if (listOfTransactions == null || listOfTransactions.isEmpty()) {
+                System.out.println("No transactions found.");
+                return;
+            }
+            // Table Header
+            System.out.printf("%-15s %-12s %-12s %-20s %-15s %-15s %-10s%n",
+                    "Transaction ID", "Type", "Amount", "Date", "From Account", "To Account", "Status");
+            System.out.println("-----------------------------------------------------------------------------------------------");
+
+            // Table Rows
+            for (TransactionDTO t : listOfTransactions) {
+                System.out.printf("%-15s %-12s %-12.2f %-20s %-15s %-15s %-10s%n",
+                        t.getTransaction_id(),
+                        t.getTransaction_type(),
+                        t.getAmount(),
+                        t.getCreated_at(),
+                        t.getFrom_account_id(),
+                        t.getTo_account_id(),
+                        t.getStatus());
+            }
+        } catch (BankingException | SQLException e) {
+            showError(e.getMessage());
+        }
     }
-    
+
     private void handleUpdateProfile() {
         System.out.println("\n=== UPDATE PROFILE ===");
 
@@ -327,6 +360,7 @@ public class MenuDisplay {
             updatedDTO.setFullName(fullName);
             updatedDTO.setEmail(email);
             updatedDTO.setPhone(phone);
+            System.out.println(currentUsername);
 
             userOrchestrator.updateUserDetails(UserId, updatedDTO);
 
