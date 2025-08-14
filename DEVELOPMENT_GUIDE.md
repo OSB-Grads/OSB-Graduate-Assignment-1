@@ -52,8 +52,8 @@ public boolean verifyPassword(String password, String hashedPassword)
 **Key Methods:**
 ```java
 public UserDTO createUser(String username, String password, String fullName, String email, String phone)
-public UserDTO getUserById(Long userId)
-public UserDTO updateUserProfile(Long userId, String email, String phone)
+public UserDTO getUserById(int userId)
+public UserDTO updateUserProfile(int userId, String email, String phone)
 ```
 
 #### 2.3 Implement AccountService
@@ -61,10 +61,10 @@ public UserDTO updateUserProfile(Long userId, String email, String phone)
 
 **Key Methods:**
 ```java
-public AccountDTO createAccount(Long userId, String accountType)
-public List<AccountDTO> getUserAccounts(Long userId)
-public AccountDTO getAccountByNumber(String accountNumber)
-public void updateAccountBalance(Long accountId, BigDecimal newBalance)
+public AccountDTO createAccount(int userId, String accountType);
+public List<AccountDTO> getUserAccounts(int userId);
+public AccountDTO getAccountByNumber(String accountNumber);
+public void updateAccountBalance(int accountId, BigDecimal newBalance);
 ```
 
 #### 2.4 Implement TransactionService
@@ -72,8 +72,8 @@ public void updateAccountBalance(Long accountId, BigDecimal newBalance)
 
 **Key Methods:**
 ```java
-public void recordTransaction(String transactionId, Long fromAccountId, Long toAccountId, String type, BigDecimal amount, String description)
-public List<TransactionDTO> getAccountTransactions(Long accountId)
+public void recordTransaction(String transactionId, int fromAccountId, int toAccountId, String type, BigDecimal amount, String description);
+public List<TransactionDTO> getAccountTransactions(int accountId);
 ```
 
 ### Phase 3: Database Access Layer

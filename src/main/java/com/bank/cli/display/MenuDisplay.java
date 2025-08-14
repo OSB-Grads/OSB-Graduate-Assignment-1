@@ -1,5 +1,7 @@
 package com.bank.cli.display;
+
 import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
+import com.bank.Orchestrators.TransactOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
 import com.bank.dto.LogDTO;
@@ -8,13 +10,13 @@ import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
+import java.sql.SQLException;
+import com.bank.services.UserService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
 import com.bank.services.AuthService;
-
 /**
  * Handles all CLI menu display and user input.
  * This class is responsible for showing menus and collecting user choices.
@@ -26,14 +28,16 @@ public class MenuDisplay {
     private final AuthService authService;
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
+    private final TransactOrchestrator transactOrchestrator;
 
-    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator,DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
+    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator, DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator, TransactOrchestrator transactOrchestrator) {
         this.scanner = new Scanner(System.in);
-        this.accountService=accountService;
-        this.authService=authService;
+        this.accountService = accountService;
+        this.authService = authService;
 
         this.userOrchestrator = userOrchestrator;
-        this.depositAndWithdrawOrchestrator=depositAndWithdrawOrchestrator;
+        this.depositAndWithdrawOrchestrator = depositAndWithdrawOrchestrator;
+        this.transactOrchestrator = transactOrchestrator;
 
     }
 
@@ -130,7 +134,17 @@ public class MenuDisplay {
             }
         }
     }
-    
+
+    private void viewUserProfile()  {
+        try {
+            userOrchestrator.displayProfile(UserId);
+        }
+        catch(Exception e){
+            showError(e.getMessage());
+        }
+    }
+
+
     // TODO: Implement these methods by calling appropriate services/orchestrators
     
     private void handleLogin() {
@@ -140,14 +154,13 @@ public class MenuDisplay {
         System.out.print("Password: ");
         String password = scanner.nextLine().trim();
 
-        UserDTO DTO= null;
+        UserDTO DTO = null;
         try {
             DTO = authService.validateUserCredentials(username,password);
             UserId=DTO.getId();
             showUserMenu();
         } catch (InvalidCredentialsException e) {
             showError(e.getMessage());
-
         } catch (Exception e) {
             showError("Exception has occured during Login Operation..!"+e.getMessage());
         }
@@ -240,7 +253,7 @@ public class MenuDisplay {
         try {
             depositAndWithdrawOrchestrator.handleDeposit(UserId);
         }
-        catch(BankingException e){
+        catch(BankingException | SQLException e){
             System.out.println("Error While performing Deposit into Account"+e.getMessage());
         }
     }
@@ -256,7 +269,7 @@ public class MenuDisplay {
         try {
             depositAndWithdrawOrchestrator.handleWithdraw(UserId);
         }
-        catch (BankingException e){
+        catch (BankingException | SQLException e){
             System.out.println("Error While performing Withdrawal from Account"+e.getMessage());
         }
 
@@ -298,15 +311,9 @@ public class MenuDisplay {
     private void handleUpdateProfile() {
         System.out.println("\n=== UPDATE PROFILE ===");
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            // Step 1: Get credentials
-            System.out.print("Enter your username: ");
-            String username = scanner.nextLine();
+        try {
+            // No username input needed
 
-            System.out.print("Enter your password: ");
-            String password = scanner.nextLine();
-
-            // Step 2: Get updated profile info
             System.out.print("Enter new full name: ");
             String fullName = scanner.nextLine();
 
@@ -316,15 +323,12 @@ public class MenuDisplay {
             System.out.print("Enter new phone number: ");
             String phone = scanner.nextLine();
 
-            // Step 3: Create DTO with updated info
             UserDTO updatedDTO = new UserDTO();
-            updatedDTO.setUsername(username); // Optional, in case needed elsewhere
             updatedDTO.setFullName(fullName);
             updatedDTO.setEmail(email);
             updatedDTO.setPhone(phone);
 
-            // Step 4: Call orchestrator method
-            userOrchestrator.updateUserDetails(username, password, updatedDTO);
+            userOrchestrator.updateUserDetails(UserId, updatedDTO);
 
             System.out.println("Profile updated successfully!");
 
@@ -332,7 +336,9 @@ public class MenuDisplay {
             System.err.println("Failed to update profile: " + e.getMessage());
         }
     }
-    
+
+
+
     /**
      * Utility method to get user input with prompt.
      */
