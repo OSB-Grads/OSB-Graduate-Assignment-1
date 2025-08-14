@@ -71,7 +71,7 @@ public class TransactionMapper {
         ts.setCreatedAt(rs.getTimestamp("created_at"));
         return ts;
     }
-    public static List<TransactionDTO> mapToTransactionDtoList(List<TransactionEntity> entities) {
+    public static List<TransactionDTO> entityToTransactionDtoList(List<TransactionEntity> entities) {
         List<TransactionDTO> ls = new ArrayList<>();
 
         if (entities != null) {
@@ -80,7 +80,7 @@ public class TransactionMapper {
                     TransactionDTO dto = new TransactionDTO();
                     dto.setTransaction_id(entity.getTransaction_id());
                     dto.setFrom_account_id(entity.getFrom_account_id());
-                    dto.setTo_account_id(entity.getTransaction_id());
+                    dto.setTo_account_id(entity.getTo_account_id());
                     dto.setAmount(entity.getAmount());
                     dto.setTransaction_type(entity.getTransaction_type());
                     dto.setStatus(entity.getStatus());
