@@ -71,7 +71,7 @@ public class userDao {
 
     public UserEntity getUserById(int id) throws Exception {
         String sql = String.format(
-                "SELECT id, username, password_hash, full_name, email, phone, created_at, updated_at FROM USERS WHERE id = '%d'",
+                "SELECT * FROM USERS WHERE id = '%d'",
                 id
         );
 

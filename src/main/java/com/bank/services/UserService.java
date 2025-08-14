@@ -84,21 +84,14 @@ public class UserService {
      */
 
 
-    public boolean verifyAndUpdateUser(String username, String plainPassword, String newFullName, String newEmail, String newPhone) throws Exception {
-        UserEntity existingUser = userDao.getUserByUsername(username);
-
-        if (existingUser == null) {
-            System.err.println("User not found.");
-            return false;
-        }
-
+    public boolean updateUserProfile(int id, String newFullName, String newEmail, String newPhone) throws Exception {
+        UserEntity existingUser = userDao.getUserById(id);
 
         existingUser.setFullName(newFullName);
         existingUser.setEmail(newEmail);
-        existingUser.setPasswordHash(PasswordUtil.hashPassword(plainPassword));
         existingUser.setPhone(newPhone);
         existingUser.setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
-        return userDao.updateUser(existingUser);
+        return userDao.updateUserProfile(existingUser);
     }
 }
