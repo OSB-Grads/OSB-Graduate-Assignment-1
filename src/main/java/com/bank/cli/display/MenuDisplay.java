@@ -2,6 +2,7 @@ package com.bank.cli.display;
 
 import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
 import com.bank.Orchestrators.TransactOrchestrator;
+import com.bank.Orchestrators.TransferOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
 import com.bank.dto.TransactionDTO;
@@ -23,7 +24,7 @@ import java.util.Scanner;
  */
 public class MenuDisplay {
 
-    private int  UserId;
+    private int  UserId = 0;
     private String currentUsername;
     private Scanner scanner;
     private final AccountService accountService;
@@ -31,6 +32,7 @@ public class MenuDisplay {
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
     private final TransactOrchestrator transactOrchestrator;
+    private TransferOrchestrator transferOrchestrator;
 
     public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator, DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator, TransactOrchestrator transactOrchestrator) {
         this.scanner = new Scanner(System.in);
@@ -42,8 +44,6 @@ public class MenuDisplay {
         this.transactOrchestrator = transactOrchestrator;
 
     }
-
-
 
     /**
      * Display the main menu and handle user navigation.
@@ -131,6 +131,7 @@ public class MenuDisplay {
                         break;
                     case 9:
                         System.out.println("Logging out...");
+                        UserId =0;
                         loggedIn = false;
                         break;
                     default:
@@ -293,7 +294,17 @@ public class MenuDisplay {
         System.out.println("3. Exit ");
         int input = Integer.parseInt(scanner.nextLine().trim());
         switch (input) {
-            case 1:
+            case 1:if (UserId == 0) {
+                System.out.println("Please login first to withdraw from account.");
+                return;
+            }try {
+                transferOrchestrator.transfer(UserId);
+                System.out.println("Transaction Successful :)");
+            } catch (BankingException e) {
+                System.out.println("Problem with transactions");
+            } catch (SQLException e) {
+                System.out.println("SQL Error has Occurred");
+            }
                 break;
             case 2:
                 if (UserId == 0) {
@@ -302,6 +313,7 @@ public class MenuDisplay {
                 }
                 try {
                     transactOrchestrator.transactAmountBetweenUsers(UserId);
+                    System.out.println("Transaction Successful :)");
                 } catch (BankingException e) {
                     System.out.println("Problem with transactions");
                 } catch (SQLException e) {
@@ -343,7 +355,7 @@ public class MenuDisplay {
     private void handleViewTransactionHistory() {
         System.out.println("\n=== TRANSACTION HISTORY ===");
         // TODO: Show user's accounts, let them select one, then show transaction history
-        System.out.println("TODO: Implement transaction history using TransactionService");
+        //System.out.println("TODO: Implement transaction history using TransactionService");
         TransactionService transactionService = new TransactionService();
         try {
             List<TransactionDTO> listOfTransactions = transactionService.getTransactionHistoryById(UserId);
