@@ -30,7 +30,7 @@ public class AccountService {
     public void createAccount(AccountDTO accountDTO) throws SQLException {
         boolean created = false;
         int attempts = 0;
-        Timestamp now = new Timestamp(System.currentTimeMillis());
+        String now = (new Timestamp(System.currentTimeMillis())).toString();
         accountDTO.setCreatedAt(now);
         accountDTO.setUpdatedAt(now);
 
@@ -70,7 +70,7 @@ public class AccountService {
     private String generateUniqueAccountNumberUUID() {
         return String.valueOf(Math.abs(UUID.randomUUID().getMostSignificantBits())).substring(0, 10);
     }
-    public List<AccountDTO> getAccountsByUserId(long userid){
+    public List<AccountDTO> getAccountsByUserId(int userid){
 
         List<AccountDTO>accounts=new ArrayList<>();
         List<AccountEntity> acc=accountDAO.getAccountsByUserId(userid);

@@ -10,8 +10,8 @@ public class AccountEntity {
     private String account_type;
     private double balance;
     private boolean is_locked;
-    private Timestamp account_created;
-    private Timestamp account_updated;
+    private String account_created;
+    private String account_updated;
     private String type;
     private double interest;
 
@@ -31,7 +31,7 @@ public class AccountEntity {
         this.account_number = account_number;
     }
 
-    public AccountEntity( String account_number, int user_id, String account_type, double balance, boolean is_locked, Timestamp account_created, Timestamp account_updated, String type, double interest) {
+    public AccountEntity( String account_number, int user_id, String account_type, double balance, boolean is_locked, String account_created, String account_updated, String type, double interest) {
 
         this.account_number = account_number;
         User_id = user_id;
@@ -78,19 +78,19 @@ public class AccountEntity {
         this.is_locked = is_locked;
     }
 
-    public Timestamp getAccount_created() {
+    public String getAccount_created() {
         return account_created;
     }
 
-    public void setAccount_created(Timestamp account_created) {
+    public void setAccount_created(String account_created) {
         this.account_created = account_created;
     }
 
-    public Timestamp getAccount_updated() {
+    public String getAccount_updated() {
         return account_updated;
     }
 
-    public void setAccount_updated(Timestamp account_updated) {
+    public void setAccount_updated(String account_updated) {
         this.account_updated = account_updated;
     }
 

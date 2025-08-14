@@ -8,6 +8,8 @@ import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -268,8 +270,6 @@ public class MenuDisplay {
     
     private void handleViewAccounts() {
         System.out.println("\n=== YOUR ACCOUNTS ===");
-        System.out.println("Choose the option to display the accounts");
-
 
         if(UserId==0){
          System.out.println("pleae login first before ViewAccount");
@@ -277,11 +277,12 @@ public class MenuDisplay {
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
 
         for(AccountDTO dto: accountDTOs){
-            System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Locked: %s%n",
+            System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Interest: %f | createdAt:%s %n",
                     dto.getAccountNumber(),
                     dto.getAccountType(),
                     dto.getBalance(),
-                    dto.isLocked() ? "Yes" : "No"
+                    dto.getInterest(),
+                    dto.getCreatedAt()
             );
         }
 

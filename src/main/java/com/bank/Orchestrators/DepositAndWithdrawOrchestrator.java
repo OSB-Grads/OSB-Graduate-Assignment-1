@@ -23,7 +23,7 @@ public class DepositAndWithdrawOrchestrator {
     /**
      * Common method to display accounts for a user and get the selected account number.
      */
-    private String selectAccountNumber(Long userId,boolean credit) throws AccountNotFoundException {
+    private String selectAccountNumber(int  userId,boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
             throw new AccountNotFoundException("No Accounts found for user : " + userId);
@@ -46,7 +46,7 @@ public class DepositAndWithdrawOrchestrator {
         return listOfUsers.get(index).getAccount_number();
     }
 
-    public void handleDeposit(Long userId) throws AccountNotFoundException {
+    public void handleDeposit(int userId) throws AccountNotFoundException {
         try {
             String accountNumber = selectAccountNumber(userId,true);
 
@@ -62,7 +62,7 @@ public class DepositAndWithdrawOrchestrator {
         }
     }
 
-    public void handleWithdraw(Long userId) throws AccountNotFoundException {
+    public void handleWithdraw(int userId) throws AccountNotFoundException {
         try {
             String accountNumber = selectAccountNumber(userId,false);
 
