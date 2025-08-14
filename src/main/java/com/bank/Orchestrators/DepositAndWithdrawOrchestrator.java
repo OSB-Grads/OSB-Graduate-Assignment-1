@@ -46,8 +46,8 @@ public class DepositAndWithdrawOrchestrator {
         return listOfUsers.get(index).getAccount_number();
     }
 
-    public void handleDeposit(Long userId) throws AccountNotFoundException {
-        try {
+    public void handleDeposit(Long userId) throws BankingException, SQLException {
+//        try {
             String accountNumber = selectAccountNumber(userId,true);
 
             System.out.print("Enter Amount to Deposit: ");
@@ -57,13 +57,13 @@ public class DepositAndWithdrawOrchestrator {
             transactionDAO.saveTransaction(transaction);
 
             System.out.println("Deposit successful for account: " + accountNumber);
-        } catch (BankingException | SQLException e) {
-            System.out.println("Error during deposit: " + e.getMessage());
-        }
+//        } catch (BankingException | SQLException e) {
+//            System.out.println("Error during deposit: " + e.getMessage());
+//        }
     }
 
-    public void handleWithdraw(Long userId) throws AccountNotFoundException {
-        try {
+    public void handleWithdraw(Long userId) throws BankingException, SQLException {
+//        try {
             String accountNumber = selectAccountNumber(userId,false);
 
             System.out.print("Enter Amount to Withdraw: ");
@@ -73,8 +73,8 @@ public class DepositAndWithdrawOrchestrator {
             transactionDAO.saveTransaction(transaction);
 
             System.out.println("Withdrawal of " + withdrawAmount + " is successful from: " + accountNumber);
-        } catch (BankingException | SQLException e) {
-            System.out.println("Error during withdrawal: " + e.getMessage());
-        }
+//        } catch (BankingException | SQLException e) {
+//            System.out.println("Error during withdrawal: " + e.getMessage());
+//        }
     }
 }
