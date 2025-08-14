@@ -7,7 +7,7 @@ import com.bank.dto.UserDTO;
 import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
-
+import com.bank.services.UserService;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,16 +26,15 @@ public class MenuDisplay {
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
 
+
     public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator,DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
         this.scanner = new Scanner(System.in);
         this.accountService=accountService;
         this.authService=authService;
-
         this.userOrchestrator = userOrchestrator;
         this.depositAndWithdrawOrchestrator=depositAndWithdrawOrchestrator;
 
     }
-
 
 
     /**
@@ -90,7 +89,8 @@ public class MenuDisplay {
             System.out.println("5. View Account Details");
             System.out.println("6. View Transaction History");
             System.out.println("7. Update Profile Info");
-            System.out.println("8. Logout");
+            System.out.println("8. View Profile");
+            System.out.println("9. Logout");
             System.out.print("Please select an option (1-8): ");
             
             try {
@@ -119,6 +119,9 @@ public class MenuDisplay {
                         handleUpdateProfile(currentUsername);
                         break;
                     case 8:
+                        viewUserProfile();
+                        break;
+                    case 9:
                         System.out.println("Logging out...");
                         loggedIn = false;
                         break;
@@ -130,7 +133,16 @@ public class MenuDisplay {
             }
         }
     }
-    
+
+    private void viewUserProfile()  {
+        try {
+            userOrchestrator.displayProfile(UserId);
+        }
+        catch(Exception e){
+            showError(e.getMessage());
+        }
+    }
+
     // TODO: Implement these methods by calling appropriate services/orchestrators
     
     private void handleLogin() {
