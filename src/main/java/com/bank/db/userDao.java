@@ -44,16 +44,16 @@ public class userDao {
 
     public boolean createUser(UserEntity user) throws Exception {
         String sql = String.format(
-                "INSERT INTO USERS (id, username, password_hash, full_name, email, phone, created_at, updated_at) " +
-                        "VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-                user.getId(),
+                "INSERT INTO users (username, password_hash, full_name, email, phone) " +
+                        "VALUES ( '%s', '%s', '%s', '%s', '%s')",
+//                user.getId(),
                 user.getUsername(),
                 user.getPasswordHash(),
                 user.getFullName(),
                 user.getEmail(),
-                user.getPhone(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getPhone()
+//                user.getCreatedAt(),
+//                user.getUpdatedAt()
         );
         dm.query(sql);
         return true;

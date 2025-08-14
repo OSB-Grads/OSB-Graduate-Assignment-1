@@ -41,13 +41,13 @@ public class UserService {
             userDTO.setFullName(fullName);
             userDTO.setEmail(email);
             userDTO.setPhone(phone);
-            userDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            userDTO.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+//            userDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+//            userDTO.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             // Step 2: Map DTO to Entity with hashed password
             UserEntity userEntity = UserMapper.UserDtoToUserEntity(userDTO, hashedPassword);
-            userEntity.setCreatedAt(userDTO.getCreatedAt());
-            userEntity.setUpdatedAt(userDTO.getUpdatedAt());
+//            userEntity.setCreatedAt(userDTO.getCreatedAt());
+//            userEntity.setUpdatedAt(userDTO.getUpdatedAt());
 
             // Step 3: Save to DB
             return userDao.createUser(userEntity);
@@ -100,7 +100,7 @@ public class UserService {
         existingUser.setEmail(newEmail);
         existingUser.setPasswordHash(PasswordUtil.hashPassword(plainPassword));
         existingUser.setPhone(newPhone);
-        existingUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        existingUser.setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
         return userDao.updateUser(existingUser);
     }

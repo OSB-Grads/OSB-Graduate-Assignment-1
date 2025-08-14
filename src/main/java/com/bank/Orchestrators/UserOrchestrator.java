@@ -34,7 +34,7 @@ public class UserOrchestrator {
      */
 
 
-    public void signup(Long userId, String username, String password, String fullName, String email, String phone) throws Exception {
+    public void signup(int userId, String username, String password, String fullName, String email, String phone) throws Exception {
 
         /* This Method Calls AuthService To Authenticate The UserName And Password */
 
