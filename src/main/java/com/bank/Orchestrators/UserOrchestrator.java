@@ -64,8 +64,8 @@ public class UserOrchestrator {
      */
 
 
-    public void displayProfile(String username) throws Exception {
-        userService.displayProfile(username);
+    public void displayProfile(int UserId) throws Exception {
+        userService.displayProfile(UserId);
     }
 
 

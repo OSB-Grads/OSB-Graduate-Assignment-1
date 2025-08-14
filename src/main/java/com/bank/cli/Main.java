@@ -14,6 +14,7 @@ import com.bank.db.userDao;
 import com.bank.services.UserService;
 import com.bank.util.PasswordUtil;
 import com.bank.services.LogService;
+import com.bank.services.UserService;
 
 /**
  * Main entry point for the CLI Banking Application.
@@ -65,7 +66,7 @@ public class Main {
 
             // Start the main menu
 
-            MenuDisplay menuDisplay = new MenuDisplay(accountService, authService, userOrchestrator,depositAndWithdrawOrchestrator);
+            MenuDisplay menuDisplay = new MenuDisplay(accountService, userService,authService, userOrchestrator,depositAndWithdrawOrchestrator);
             menuDisplay.showMainMenu();
 
         } catch (Exception e) {

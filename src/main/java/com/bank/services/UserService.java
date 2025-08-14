@@ -64,20 +64,17 @@ public class UserService {
      */
 
 
-    public void displayProfile(String username) throws Exception {
-        UserEntity user = userDao.getUserByUsername(username);
+    public void displayProfile(int user_id) throws Exception {
+        UserEntity user = userDao.getUserById(user_id);
         if (user == null) {
             System.err.println("User not found.");
             return;
         }
 
         System.out.println("===== User Profile =====");
-        System.out.println("Username: " + user.getUsername());
         System.out.println("Full Name: " + user.getFullName());
         System.out.println("Email: " + user.getEmail());
         System.out.println("Phone: " + user.getPhone());
-        System.out.println("Created At: " + user.getCreatedAt());
-        System.out.println("Updated At: " + user.getUpdatedAt());
         System.out.println("========================");
     }
 
