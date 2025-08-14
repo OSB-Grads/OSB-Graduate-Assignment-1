@@ -4,22 +4,18 @@ import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
 import com.bank.Orchestrators.TransactOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
-import com.bank.dto.LogDTO;
 import com.bank.dto.TransactionDTO;
 import com.bank.dto.UserDTO;
 import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
+import com.bank.services.TransactionService;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.sql.SQLException;
-import com.bank.services.UserService;
 import java.util.List;
 import java.util.Scanner;
 
-import com.bank.services.AuthService;
-import com.bank.services.TransactionService;
+
 
 /**
  * Handles all CLI menu display and user input.
@@ -44,6 +40,7 @@ public class MenuDisplay {
         this.userOrchestrator = userOrchestrator;
         this.depositAndWithdrawOrchestrator = depositAndWithdrawOrchestrator;
         this.transactOrchestrator = transactOrchestrator;
+
     }
 
 
@@ -62,6 +59,7 @@ public class MenuDisplay {
             System.out.print("Please select an option (1-3): ");
 
             try {
+
                 int choice = Integer.parseInt(scanner.nextLine().trim());
 
                 switch (choice) {
@@ -151,7 +149,7 @@ public class MenuDisplay {
 
 
     // TODO: Implement these methods by calling appropriate services/orchestrators
-    
+
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
@@ -167,7 +165,6 @@ public class MenuDisplay {
             showUserMenu();
         } catch (InvalidCredentialsException e) {
             showError(e.getMessage());
-
         } catch (Exception e) {
             showError("Exception has occured during Login Operation..!"+e.getMessage());
         }
@@ -259,10 +256,9 @@ public class MenuDisplay {
         }
         try {
             depositAndWithdrawOrchestrator.handleDeposit(UserId);
-        } catch (BankingException e) {
-            System.out.println("Error While performing Deposit into Account" + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("Error While performing Deposit into Account" + e.getMessage());
+        }
+        catch(BankingException | SQLException e){
+            System.out.println("Error While performing Deposit into Account"+e.getMessage());
         }
     }
     
@@ -276,10 +272,9 @@ public class MenuDisplay {
         }
         try {
             depositAndWithdrawOrchestrator.handleWithdraw(UserId);
-        } catch (BankingException e) {
-            System.out.println("Error While performing Withdrawal from Account" + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("Error While performing Withdrawal from Account" + e.getMessage());
+        }
+        catch (BankingException | SQLException e){
+            System.out.println("Error While performing Withdrawal from Account"+e.getMessage());
         }
 
     }
@@ -300,12 +295,13 @@ public class MenuDisplay {
         }
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
 
-        for (AccountDTO dto : accountDTOs) {
-            System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Locked: %s%n",
+        for(AccountDTO dto: accountDTOs){
+            System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Interest: %f | createdAt:%s %n",
                     dto.getAccountNumber(),
                     dto.getAccountType(),
                     dto.getBalance(),
-                    dto.isLocked() ? "Yes" : "No"
+                    dto.getInterest(),
+                    dto.getCreatedAt()
             );
         }
 
@@ -340,9 +336,7 @@ public class MenuDisplay {
                         t.getTo_account_id(),
                         t.getStatus());
             }
-        } catch (BankingException e) {
-            showError(e.getMessage());
-        } catch (SQLException e) {
+        } catch (BankingException | SQLException e) {
             showError(e.getMessage());
         }
     }
@@ -366,6 +360,7 @@ public class MenuDisplay {
             updatedDTO.setFullName(fullName);
             updatedDTO.setEmail(email);
             updatedDTO.setPhone(phone);
+            System.out.println(currentUsername);
 
             userOrchestrator.updateUserDetails(UserId, updatedDTO);
 

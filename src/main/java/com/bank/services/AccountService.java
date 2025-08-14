@@ -30,7 +30,7 @@ public class AccountService {
     public void createAccount(AccountDTO accountDTO) throws SQLException {
         boolean created = false;
         int attempts = 0;
-        Timestamp now = new Timestamp(System.currentTimeMillis());
+        String now = (new Timestamp(System.currentTimeMillis())).toString();
         accountDTO.setCreatedAt(now);
         accountDTO.setUpdatedAt(now);
 

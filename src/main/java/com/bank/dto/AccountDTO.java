@@ -13,21 +13,32 @@ public class AccountDTO {
     private String accountType; // SAVINGS or FIXED_DEPOSIT
     private double balance;
     private boolean isLocked;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private double interest;
+    private String createdAt;
+    private String updatedAt;
+
+
+    public double getInterest() {
+        return interest;
+    }
+
+    public void setInterest(double interest) {
+        this.interest = interest;
+    }
+
 
 
 
     // Default constructor
-    public AccountDTO(String accountNumber, int userId, String accountType, double balance, boolean isLocked, Timestamp accountCreated, Timestamp accountUpdated) {}
+    public AccountDTO() {}
 
 
 
     // Constructor with all fields
 
-    public AccountDTO(String accountNumber, int accId, int userId, String accountType, double balance, boolean isLocked, Timestamp createdAt, Timestamp updatedAt) {
+    public AccountDTO(String accountNumber, int userId, String accountType, double balance, boolean isLocked, String createdAt, String updatedAt,double interest) {
         this.accountNumber = accountNumber;
-
+        this.interest=interest;
         this.userId = userId;
         this.accountType = accountType;
         this.balance = balance;
@@ -35,11 +46,6 @@ public class AccountDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    public AccountDTO() {
-
-    }
-
 
     // Getters and Setters
 
@@ -86,19 +92,19 @@ public class AccountDTO {
         isLocked = locked;
     }
 
-    public Timestamp getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 

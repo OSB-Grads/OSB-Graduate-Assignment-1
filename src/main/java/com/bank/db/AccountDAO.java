@@ -100,13 +100,12 @@ public class AccountDAO {
             System.out.println("Error while updating account details: " + e);
         }
     }
-    public List<AccountEntity> getAccountsByUserId(int Userid){
+    public List<AccountEntity> getAccountsByUserId(int  Userid){
 
-        String sql="Select * from accounts where userid="+Userid;
+        String sql="Select * from accounts where user_id="+Userid;
         try {
-            List<Map<String, Object>> row = db.query(sql);
-            return AccountMapper.mapToAccountEntityList(row);
-
+            List<Map<String, Object>> rows = db.query(sql);
+            return AccountMapper.mapToAccountEntityList(rows);
         }catch (Exception e){
             System.out.println("Error Retriving the userid");
             return new ArrayList<>();

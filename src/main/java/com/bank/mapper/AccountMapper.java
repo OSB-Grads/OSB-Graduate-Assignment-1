@@ -4,6 +4,12 @@ import com.bank.dto.AccountDTO;
 import com.bank.entity.AccountEntity;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +25,17 @@ public class AccountMapper {
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setUser_id((int) row.get("user_id"));
         accountEntity.setAccount_number((String) row.get("account_number"));
-        accountEntity.setAccount_created((Timestamp) row.get("account_created"));
-        accountEntity.setAccount_updated((Timestamp) row.get("account_updated"));
-        accountEntity.setAccount_type((String) row.get("type"));
-        accountEntity.setIs_locked((boolean) row.get("is_locked"));
-        accountEntity.setBalance((double)row.get("balance"));
-        double interest=(boolean)row.get("is_locked")?0.05:0.03;
+        accountEntity.setAccount_created((String) row.get("created_at"));
+        accountEntity.setAccount_updated((String) row.get("updated_at"));
+        accountEntity.setAccount_type((String) row.get("account_type"));
+        accountEntity.setType((String) row.get("account_type"));
+        accountEntity.setIs_locked(row.get("is_locked")=="true");
+        accountEntity.setBalance(((Number)row.get("balance")).doubleValue());
+
+        double interest= (row.get("is_locked")=="true")?0.05:0.03;
+
         accountEntity.setInterest(interest);
-        return  accountEntity;
+        return accountEntity;
 
     }
 
@@ -65,12 +74,16 @@ public class AccountMapper {
 
         return new AccountDTO(
                 accountEntity.getAccount_number(),
+
                 accountEntity.getUser_id(),
                 accountEntity.getAccount_type(),
                 accountEntity.getBalance(),
                 accountEntity.isIs_locked(),
+
                 accountEntity.getAccount_created(),
-                accountEntity.getAccount_updated()
+                accountEntity.getAccount_updated(),
+                accountEntity.getInterest()
+
         );
     }
 }
