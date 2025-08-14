@@ -59,7 +59,7 @@ public class UserOrchestrator {
     /**
      * Displays the user profile.
      *
-     * @param username username of the user to display
+     *  username of the user to display
      * @throws Exception if user not found
      */
 
@@ -73,8 +73,8 @@ public class UserOrchestrator {
     /**
      * Updates the user's details after verifying credentials.
      *
-     * @param username existing username
-     * @param password plain text password for verification
+     *  existing username
+     *  plain text password for verification
      * @param updatedDTO updated details
      * @throws Exception if verification fails
      */
