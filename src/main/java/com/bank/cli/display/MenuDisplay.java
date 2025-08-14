@@ -97,7 +97,8 @@ public class MenuDisplay {
             System.out.println("5. View Account Details");
             System.out.println("6. View Transaction History");
             System.out.println("7. Update Profile Info");
-            System.out.println("8. Logout");
+            System.out.println("8. View User Profile");
+            System.out.println("9. Logout");
             System.out.print("Please select an option (1-8): ");
             
             try {
@@ -126,6 +127,9 @@ public class MenuDisplay {
                         handleUpdateProfile();
                         break;
                     case 8:
+                        viewUserProfile();
+                        break;
+                    case 9:
                         System.out.println("Logging out...");
                         loggedIn = false;
                         break;
