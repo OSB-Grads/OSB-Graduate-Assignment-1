@@ -13,7 +13,13 @@ import com.bank.exception.InsufficientFundsException;
 import com.bank.mapper.AccountMapper;
 import com.bank.mapper.TransactionMapper;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +77,7 @@ public class TransactionService {
             LogService.logintoDB(-1, LogDAO.Action.TRANSACTIONS,"Account is not available with bank","USER IP",LogDAO.Status.FAILURE);
             throw new AccountNotFoundException(accountNumber);
         }
-        AccountDTO accountDTO=AccountMapper.entityToDTO(accountEntity);
+        AccountDTO accountDTO= AccountMapper.entityToDTO(accountEntity);
         double balance=accountDTO.getBalance();
         int user_id=accountDTO.getUserId();
 
@@ -106,7 +112,7 @@ public class TransactionService {
         List<TransactionEntity> resultTransaction = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         // get all accounts by user_id
-        List<AccountEntity>  accounts = accountDAO.getAccountsByUserId(user_id);
+        List<AccountEntity> accounts = accountDAO.getAccountsByUserId(user_id);
 
         for (int i = 0; i < accounts.size(); i++) {
             System.out.println((i + 1) + ". Account Number: " + accounts.get(i).getAccount_number());
@@ -121,7 +127,7 @@ public class TransactionService {
         }
         String TransactionAccountNumber = accounts.get(index).getAccount_number();
         resultTransaction = transactionDAO.getTransactionsByAccountNumber(TransactionAccountNumber);
-        return TransactionMapper.mapToTransactionDtoList(resultTransaction);
+        return TransactionMapper.entityToTransactionDtoList(resultTransaction);
     }
 
 }

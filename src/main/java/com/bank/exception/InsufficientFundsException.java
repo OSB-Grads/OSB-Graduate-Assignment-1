@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 public class InsufficientFundsException extends BankingException {
     private static BigDecimal requestedAmount;
     private static BigDecimal availableBalance;
-    
+
+
     public InsufficientFundsException(String message, BigDecimal requestedAmount, BigDecimal availableBalance) {
         super(message);
         this.requestedAmount = requestedAmount;
