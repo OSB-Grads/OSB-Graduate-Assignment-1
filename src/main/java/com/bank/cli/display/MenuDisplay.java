@@ -19,6 +19,7 @@ import com.bank.services.AuthService;
  */
 public class MenuDisplay {
     private int  UserId;
+    private String currentUsername;
     private Scanner scanner;
     private final AccountService accountService;
     private final AuthService authService;
@@ -51,6 +52,7 @@ public class MenuDisplay {
             System.out.print("Please select an option (1-3): ");
 
             try {
+
                 int choice = Integer.parseInt(scanner.nextLine().trim());
 
                 switch (choice) {
@@ -114,7 +116,7 @@ public class MenuDisplay {
                         handleViewTransactionHistory();
                         break;
                     case 7:
-                        handleUpdateProfile();
+                        handleUpdateProfile(currentUsername);
                         break;
                     case 8:
                         System.out.println("Logging out...");
@@ -142,10 +144,10 @@ public class MenuDisplay {
         try {
             DTO = authService.validateUserCredentials(username,password);
             UserId=DTO.getId();
+            currentUsername=DTO.getUsername();
             showUserMenu();
         } catch (InvalidCredentialsException e) {
             showError(e.getMessage());
-
         } catch (Exception e) {
             showError("Exception has occured during Login Operation..!"+e.getMessage());
         }
@@ -293,19 +295,13 @@ public class MenuDisplay {
         // TODO: Show user's accounts, let them select one, then show transaction history
         System.out.println("TODO: Implement transaction history using TransactionService");
     }
-    
-    private void handleUpdateProfile() {
+
+    private void handleUpdateProfile(String currentUsername) {
         System.out.println("\n=== UPDATE PROFILE ===");
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            // Step 1: Get credentials
-            System.out.print("Enter your username: ");
-            String username = scanner.nextLine();
+        try {
+            // No username input needed
 
-            System.out.print("Enter your password: ");
-            String password = scanner.nextLine();
-
-            // Step 2: Get updated profile info
             System.out.print("Enter new full name: ");
             String fullName = scanner.nextLine();
 
@@ -315,15 +311,13 @@ public class MenuDisplay {
             System.out.print("Enter new phone number: ");
             String phone = scanner.nextLine();
 
-            // Step 3: Create DTO with updated info
             UserDTO updatedDTO = new UserDTO();
-            updatedDTO.setUsername(username); // Optional, in case needed elsewhere
             updatedDTO.setFullName(fullName);
             updatedDTO.setEmail(email);
             updatedDTO.setPhone(phone);
+            System.out.println(currentUsername);
 
-            // Step 4: Call orchestrator method
-            userOrchestrator.updateUserDetails(username, password, updatedDTO);
+            userOrchestrator.updateUserDetails(UserId, updatedDTO);
 
             System.out.println("Profile updated successfully!");
 
@@ -331,7 +325,9 @@ public class MenuDisplay {
             System.err.println("Failed to update profile: " + e.getMessage());
         }
     }
-    
+
+
+
     /**
      * Utility method to get user input with prompt.
      */
