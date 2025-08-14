@@ -1,5 +1,7 @@
 package com.bank.cli.display;
+
 import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
+import com.bank.Orchestrators.TransactOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.dto.AccountDTO;
 import com.bank.dto.LogDTO;
@@ -7,17 +9,18 @@ import com.bank.dto.UserDTO;
 import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
+
+import java.sql.SQLException;
 import com.bank.services.UserService;
 import java.util.List;
 import java.util.Scanner;
-
 import com.bank.services.AuthService;
-
 /**
  * Handles all CLI menu display and user input.
  * This class is responsible for showing menus and collecting user choices.
  */
 public class MenuDisplay {
+
     private int  UserId;
     private String currentUsername;
     private Scanner scanner;
@@ -25,16 +28,19 @@ public class MenuDisplay {
     private final AuthService authService;
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
+    private final TransactOrchestrator transactOrchestrator;
 
-
-    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator,DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator) {
+    public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator, DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator, TransactOrchestrator transactOrchestrator) {
         this.scanner = new Scanner(System.in);
-        this.accountService=accountService;
-        this.authService=authService;
+        this.accountService = accountService;
+        this.authService = authService;
+
         this.userOrchestrator = userOrchestrator;
-        this.depositAndWithdrawOrchestrator=depositAndWithdrawOrchestrator;
+        this.depositAndWithdrawOrchestrator = depositAndWithdrawOrchestrator;
+        this.transactOrchestrator = transactOrchestrator;
 
     }
+
 
 
     /**
@@ -89,8 +95,7 @@ public class MenuDisplay {
             System.out.println("5. View Account Details");
             System.out.println("6. View Transaction History");
             System.out.println("7. Update Profile Info");
-            System.out.println("8. View Profile");
-            System.out.println("9. Logout");
+            System.out.println("8. Logout");
             System.out.print("Please select an option (1-8): ");
             
             try {
@@ -119,9 +124,6 @@ public class MenuDisplay {
                         handleUpdateProfile(currentUsername);
                         break;
                     case 8:
-                        viewUserProfile();
-                        break;
-                    case 9:
                         System.out.println("Logging out...");
                         loggedIn = false;
                         break;
@@ -143,8 +145,9 @@ public class MenuDisplay {
         }
     }
 
+
     // TODO: Implement these methods by calling appropriate services/orchestrators
-    
+
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
@@ -152,7 +155,7 @@ public class MenuDisplay {
         System.out.print("Password: ");
         String password = scanner.nextLine().trim();
 
-        UserDTO DTO= null;
+        UserDTO DTO = null;
         try {
             DTO = authService.validateUserCredentials(username,password);
             UserId=DTO.getId();

@@ -1,6 +1,7 @@
 package com.bank.cli;
 
 import com.bank.Orchestrators.DepositAndWithdrawOrchestrator;
+import com.bank.Orchestrators.TransactOrchestrator;
 import com.bank.Orchestrators.UserOrchestrator;
 import com.bank.db.AccountDAO;
 import com.bank.db.DatabaseManager;
@@ -61,12 +62,13 @@ public class Main {
             );
             UserOrchestrator userOrchestrator = new UserOrchestrator(userService, authService);
             DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator=new DepositAndWithdrawOrchestrator();
+            TransactOrchestrator transactOrchestrator=new TransactOrchestrator();
             System.out.println("Application initialized successfully!");
             System.out.println("==========================================");
 
             // Start the main menu
 
-            MenuDisplay menuDisplay = new MenuDisplay(accountService,authService, userOrchestrator,depositAndWithdrawOrchestrator);
+            MenuDisplay menuDisplay = new MenuDisplay(accountService, authService, userOrchestrator,depositAndWithdrawOrchestrator,transactOrchestrator);
             menuDisplay.showMainMenu();
 
         } catch (Exception e) {
