@@ -70,13 +70,7 @@ public class AccountDAO {
             List<Map<String, Object>> rows = db.query(sql);
             if (!rows.isEmpty()) {
                 Map<String, Object> row = rows.get(0); // Since account IDs are unique, we expect a single row
-                account.setAccount_number((String) row.get("account_number"));
-                account.setUser_id((Integer) row.get("user_id"));
-                account.setAccount_type(String.valueOf(AccountType.valueOf((String) row.get("account_type"))));
-                account.setBalance(((Number) row.get("balance")).doubleValue());
-                account.setIs_locked(row.get("is_locked")=="true");
-                account.setAccount_created((String)row.get("created_at") );
-                account.setAccount_updated((String) row.get("updated_id"));
+                account=AccountMapper.mapToAccountEntity(row);
             }
         } catch (Exception e) {
             System.out.println("Error retrieving account by ID: " + e);

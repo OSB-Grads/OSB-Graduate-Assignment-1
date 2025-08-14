@@ -286,11 +286,11 @@ public class MenuDisplay {
         System.out.println("Select type of Transaction");
         System.out.println("1. Self Transaction");
         System.out.println("2. User Transaction");
-        int input = scanner.nextInt();
+        System.out.println("3. Exit ");
+        int input = Integer.parseInt(scanner.nextLine().trim());
         switch (input) {
             case 1:
                 break;
-
             case 2:
                 if (UserId == 0) {
                     System.out.println("Please login first to withdraw from account.");
@@ -303,6 +303,9 @@ public class MenuDisplay {
                 } catch (SQLException e) {
                     System.out.println("SQL Error has Occurred");
                 }
+                break;
+            case 3:
+                showUserMenu();
                 break;
             default:
                 System.out.println("Please Select Correct Option");
@@ -330,7 +333,7 @@ public class MenuDisplay {
             );
         }
 
-        System.out.println("TODO: Implement account viewing using AccountService");
+       // System.out.println("TODO: Implement account viewing using AccountService");
     }
     
     private void handleViewTransactionHistory() {
