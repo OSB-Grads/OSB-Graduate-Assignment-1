@@ -8,10 +8,12 @@ import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 import com.bank.services.AuthService;
+import com.bank.services.TransactionService;
 
 /**
  * Handles all CLI menu display and user input.
@@ -229,7 +231,7 @@ public class MenuDisplay {
     private void handleDeposit()  {
         System.out.println("\n=== DEPOSIT MONEY ===");
         // TODO: Show user's accounts, get account selection and amount
-        //System.out.println("TODO: Implement deposit logic using TransactionOrchestrator");
+        //System.out.println("TODO: Implement deposit logic using DepositAndWithDrawOrchestrator");
         if (UserId == 0) {
             System.out.println("Please login first to deposit into account.");
             return;
@@ -245,7 +247,7 @@ public class MenuDisplay {
     private void handleWithdraw() {
         System.out.println("\n=== WITHDRAW MONEY ===");
         // TODO: Show user's savings accounts only, get account selection and amount
-        //System.out.println("TODO: Implement withdrawal logic using TransactionOrchestrator");
+        //System.out.println("TODO: Implement withdrawal logic using DepositAndWithDrawOrchestrator");
         if (UserId == 0) {
             System.out.println("Please login first to withdraw from account.");
             return;
@@ -271,7 +273,7 @@ public class MenuDisplay {
 
 
         if(UserId==0){
-         System.out.println("pleae login first before ViewAccount");
+         System.out.println("please login first before ViewAccount");
         }
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
 
@@ -288,9 +290,17 @@ public class MenuDisplay {
     }
     
     private void handleViewTransactionHistory() {
-        System.out.println("\n=== TRANSACTION HISTORY ===");
+        System.out.println("\n === TRANSACTION HISTORY ===");
         // TODO: Show user's accounts, let them select one, then show transaction history
         System.out.println("TODO: Implement transaction history using TransactionService");
+        TransactionService transactionService = new TransactionService();
+        try {
+            transactionService.getTransactionHistoryById(UserId);
+        } catch (BankingException e) {
+           showError(e.getMessage());
+        }catch (SQLException e) {
+            showError(e.getMessage());
+        }
     }
     
     private void handleUpdateProfile() {
