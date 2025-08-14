@@ -129,10 +129,8 @@ public class userDao {
 
     public boolean updateUser(UserEntity user) throws Exception {
         String sql = String.format(
-                "UPDATE USERS SET username = '%s', password_hash = '%s', full_name = '%s', email = '%s', phone = '%s', updated_at = '%s' " +
+                "UPDATE USERS SET  full_name = '%s', email = '%s', phone = '%s', updated_at = '%s' " +
                         "WHERE id = '%d'",
-                user.getUsername(),
-                user.getPasswordHash(),
                 user.getFullName(),
                 user.getEmail(),
                 user.getPhone(),
