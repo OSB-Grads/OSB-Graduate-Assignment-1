@@ -26,7 +26,7 @@ public class DepositAndWithdrawOrchestrator {
     private String selectAccountNumber(int userId,boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfAccounts = accountDAO.getAccountsByUserId(userId);
         if (listOfAccounts.isEmpty()) {
-            System.out.println("No Accounts found for user : " + userId);
+            System.out.println("No Accounts found for this user." );
             return null;
         }
 
