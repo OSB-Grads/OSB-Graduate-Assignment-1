@@ -1,7 +1,7 @@
 package com.bank.exception;
 
 public class UserNotfoundException extends BankingException{
-    public UserNotfoundException(){super("User Does Not Exist!");}
+    public UserNotfoundException(){super("UserName Is InCorrect Or Does Not Exist.Please Try Again");}
 
     public UserNotfoundException(String message) {
         super(message);
