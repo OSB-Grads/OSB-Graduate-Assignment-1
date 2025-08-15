@@ -73,6 +73,7 @@ public class AccountDAO {
                 Map<String, Object> row = rows.get(0); // Since account IDs are unique, we expect a single row
                 account=AccountMapper.mapToAccountEntity(row);
             }
+            else return null;
         } catch (Exception e) {
             System.out.println(ConsoleColor.RED+"Error retrieving account by ID: " + e+ConsoleColor.RESET);
         }

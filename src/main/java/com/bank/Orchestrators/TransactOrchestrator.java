@@ -30,7 +30,8 @@ public class TransactOrchestrator {
     private String selectAccountNumber(int userId, boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
-            throw new AccountNotFoundException("No Accounts found for user : " + userId);
+            System.out.println(ConsoleColor.RED+"No Accounts found for this user."+ConsoleColor.RESET);
+            return null;
         }
 
         System.out.println(ConsoleColor.BLUE+"Available Accounts"+ConsoleColor.RESET);
@@ -51,9 +52,10 @@ public class TransactOrchestrator {
     }
 
 
-    public void transactAmountBetweenUsers(int userId) throws BankingException, SQLException {
+    public boolean transactAmountBetweenUsers(int userId) throws AccountNotFoundException,BankingException, SQLException {
         System.out.println(ConsoleColor.BLUE+"Select From Account Number"+ConsoleColor.RESET);
         String fromAccountNumber = selectAccountNumber(userId, false);
+        if(fromAccountNumber==null)return false;
         System.out.println(ConsoleColor.BLUE+"Enter To Account Number "+ConsoleColor.RESET);
         String ToAccountNumber = sc.next();
 
@@ -70,6 +72,7 @@ public class TransactOrchestrator {
             crT.setFrom_account_id(fromAccountNumber);
             transactionDAO.saveTransaction(crT);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Successful","user_ip",LogDAO.Status.SUCCESS);
+            return true;
         } catch (DebitFailureException e) {
             System.out.println(ConsoleColor.RED+"Debit Operation has failed"+ConsoleColor.RESET);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
@@ -85,5 +88,6 @@ public class TransactOrchestrator {
             transactionService.creditToAccount(fromAccountNumber, amount);
             transactionService.debitFromAccount(ToAccountNumber, amount);
         }
+        return false;
     }
 }

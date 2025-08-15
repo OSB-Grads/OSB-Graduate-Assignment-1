@@ -106,7 +106,7 @@ public class MenuDisplay {
             
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -258,7 +258,7 @@ public class MenuDisplay {
         }
 
     }
-    
+
     private void handleDeposit()  {
         System.out.println("\n=== DEPOSIT MONEY ===");
         // TODO: Show user's accounts, get account selection and amount
@@ -274,7 +274,7 @@ public class MenuDisplay {
             System.out.println(ConsoleColor.RED+"Error While performing Deposit into Account"+e.getMessage()+ConsoleColor.RESET);
         }
     }
-    
+
     private void handleWithdraw() {
         System.out.println("\n=== WITHDRAW MONEY ===");
         // TODO: Show user's savings accounts only, get account selection and amount
@@ -291,8 +291,8 @@ public class MenuDisplay {
         }
 
     }
-    
-    private void handleTransfer() {
+
+    private void handleTransfer()  {
         System.out.println("\n=== TRANSFER MONEY ===");
         // TODO: Show transfer options (Savings to Savings, Savings to FD)
         //System.out.println("TODO: Implement transfer logic using appropriate Orchestrator");
@@ -320,9 +320,18 @@ public class MenuDisplay {
                     return;
                 }
                 try {
-                    transactOrchestrator.transactAmountBetweenUsers(UserId);
-                    System.out.println(ConsoleColor.GREEN+"Transaction Successful :)"+ ConsoleColor.RESET);
-                } catch (BankingException e) {
+                    boolean trans=transactOrchestrator.transactAmountBetweenUsers(UserId);
+                    if(trans) {
+                        System.out.println(ConsoleColor.GREEN+"Transaction Successful :)"+ConsoleColor.RESET);
+                    }
+                    else{
+                        System.out.println(ConsoleColor.RED+"Transaction Failed"+ConsoleColor.RESET);
+                    }
+                }
+                catch(AccountNotFoundException e){
+                    System.out.println(ConsoleColor.RED+"User Account Not Found"+ConsoleColor.RESET);
+                }
+                catch (BankingException e) {
                     System.out.println(ConsoleColor.RED+"Problem with transactions"+ConsoleColor.RESET);
                 } catch (SQLException e) {
                     System.out.println(ConsoleColor.RED+"SQL Error has Occurred"+ConsoleColor.RESET);
@@ -336,7 +345,7 @@ public class MenuDisplay {
                 break;
         }
     }
-    
+
     private void handleViewAccounts() {
 
         if (UserId == 0) {
@@ -377,7 +386,7 @@ public class MenuDisplay {
 
        // System.out.println("TODO: Implement account viewing using AccountService");
     }
-    
+
     private void handleViewTransactionHistory() {
         System.out.println("\n=== TRANSACTION HISTORY ===");
         // TODO: Show user's accounts, let them select one, then show transaction history
@@ -453,14 +462,14 @@ public class MenuDisplay {
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
-    
+
     /**
      * Utility method to display error messages.
      */
     public void showError(String message) {
         System.err.println(ConsoleColor.RED+"ERROR: " + message+ConsoleColor.RESET);
     }
-    
+
     /**
      * Utility method to display success messages.
      */
