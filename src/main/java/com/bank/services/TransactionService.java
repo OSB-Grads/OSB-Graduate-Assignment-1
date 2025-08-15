@@ -12,6 +12,7 @@ import com.bank.db.AccountDAO;
 import com.bank.exception.InsufficientFundsException;
 import com.bank.mapper.AccountMapper;
 import com.bank.mapper.TransactionMapper;
+import com.bank.util.ConsoleColor;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -86,13 +87,13 @@ public class TransactionService {
         int user_id=accountDTO.getUserId();
 
         if (debitAmount <= 0){
-            System.out.println("Please enter a valid amount to perform debit operation");
+            System.out.println(ConsoleColor.YELLOW +"Please enter a valid amount to perform debit operation"+ ConsoleColor.RESET);
             return null;
         }
 
         else if(balance<debitAmount){
-            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE);
-            throw new InsufficientFundsException(debitAmount+"Not available in the Account");
+            LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE );
+            throw new InsufficientFundsException(debitAmount+"Not available in the Account" );
         }
         else if(!accountDTO.isLocked()){
             accountDTO.setBalance(balance-debitAmount);
@@ -102,7 +103,7 @@ public class TransactionService {
         }
         else{
             LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Cannot debit from FD(Fixed Deposit)","USER IP",LogDAO.Status.FAILURE);
-            throw new BankingException("Cannot debit from FD(Fixed Deposit)");
+            throw new BankingException(ConsoleColor.YELLOW+"Cannot debit from FD(Fixed Deposit)"+ConsoleColor.RESET);
         }
 
         TransactionEntity transaction = new TransactionEntity();
@@ -124,7 +125,7 @@ public class TransactionService {
         // get all accounts by user_id
         List<AccountEntity> accounts = accountDAO.getAccountsByUserId(user_id);
         if (accounts.isEmpty() || accounts.size() == 0 ){
-            System.out.println("There exists no accounts for this UserID.");
+            System.out.println(ConsoleColor.YELLOW+"There exists no accounts for this UserID."+ConsoleColor.RESET);
             return null;
         }
 
@@ -136,7 +137,7 @@ public class TransactionService {
         while (index < 0 || index >= accounts.size()) {
             index = sc.nextInt() - 1;
             if (index < 0 || index >= accounts.size()) {
-                System.out.println("Invalid choice :( Try Again");
+                System.out.println(ConsoleColor.YELLOW +"Invalid choice :( Try Again" + ConsoleColor.RESET);
             }
         }
         String TransactionAccountNumber = accounts.get(index).getAccount_number();

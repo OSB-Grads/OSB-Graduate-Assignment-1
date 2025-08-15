@@ -16,13 +16,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TransferOrchestrator {
+
     private final Scanner sc = new Scanner(System.in);
     private final DatabaseManager dbManager = DatabaseManager.getInstance();
     private final AccountDAO accountDAO = new AccountDAO(dbManager);
     private final TransactionDAO transactionDAO = new TransactionDAO(dbManager);
     private final TransactionService transactionService = new TransactionService(accountDAO, transactionDAO);
 
-    public void transfer(int userId) throws BankingException, SQLException {
+    public TransferOrchestrator() {
+    }
+
+    public boolean transfer(int userId) throws NullPointerException,BankingException, SQLException {
         // get account details
         System.out.println("==== FROM ACCOUNT ====");
         String fromAccountNumber = selectAccountNumber(userId,false);
@@ -30,35 +34,38 @@ public class TransferOrchestrator {
         String toAccountNumber = selectAccountNumber(userId,true);
         if (fromAccountNumber.equals(toAccountNumber)) {
             System.out.println(ConsoleColor.YELLOW+"Cannot transfer to the same account."+ConsoleColor.RESET);
-            return;
+            return false;
         }
 
         System.out.print(ConsoleColor.BLUE+"Enter amount to transfer: "+ConsoleColor.RESET);
         double amount = sc.nextDouble();
         if (amount <= 0) {
-            System.out.println("Invalid amount. Must be positive.");
-            return;
+            System.out.println(ConsoleColor.YELLOW+ "Invalid amount. Must be positive."+ConsoleColor.RESET);
+            return false;
         }
         try {
-            transactionService.debitFromAccount(fromAccountNumber, amount);
+            TransactionEntity dbT = transactionService.debitFromAccount(fromAccountNumber, amount);
             TransactionEntity crT = transactionService.creditToAccount(toAccountNumber, amount);
             crT.setFrom_account_id(fromAccountNumber);
             transactionDAO.saveTransaction(crT);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Successful","user_ip",LogDAO.Status.SUCCESS);
+            return true;
         } catch (DebitFailureException e) {
             System.out.println(ConsoleColor.RED+"Debit Operation has failed"+ConsoleColor.RESET);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
             throw new BankingException("Debit Operation has failed");
+
         } catch ( CreditFailureException e) {
             System.out.println(ConsoleColor.RED+"Credit Operation has failed"+ConsoleColor.RESET);
-            transactionService.creditToAccount(fromAccountNumber, amount);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
+            transactionService.creditToAccount(fromAccountNumber, amount);
         } catch (TransactionFailureException e) {
             System.out.println(ConsoleColor.RED+"Credit Operation has failed"+ConsoleColor.RESET);
+            LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
             transactionService.creditToAccount(fromAccountNumber, amount);
             transactionService.debitFromAccount(toAccountNumber, amount);
-            LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
         }
+        return false;
 
     }
 
@@ -66,7 +73,7 @@ public class TransferOrchestrator {
     private String selectAccountNumber(int userId,boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
-            System.out.println("No Accounts found for this user." );
+            System.out.println(ConsoleColor.YELLOW+"No Accounts found for this user." +ConsoleColor.RESET );
             return null;
         }
 
@@ -81,7 +88,7 @@ public class TransferOrchestrator {
         while (index < 0 || index >= listOfUsers.size()) {
             index = sc.nextInt() - 1;
             if (index < 0 || index >= listOfUsers.size()) {
-                System.out.println("Invalid choice :( Try Again");
+                System.out.println(ConsoleColor.YELLOW+ "Invalid choice :( Try Again"+ ConsoleColor.RESET);
             }
         }
         return listOfUsers.get(index).getAccount_number();

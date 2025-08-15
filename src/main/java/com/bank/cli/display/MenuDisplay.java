@@ -36,7 +36,7 @@ public class MenuDisplay {
     private final UserOrchestrator userOrchestrator;
     private final DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator;
     private final TransactOrchestrator transactOrchestrator;
-    private TransferOrchestrator transferOrchestrator;
+    private final TransferOrchestrator transferOrchestrator;
 
     public MenuDisplay(AccountService accountService, AuthService authService, UserOrchestrator userOrchestrator, DepositAndWithdrawOrchestrator depositAndWithdrawOrchestrator, TransactOrchestrator transactOrchestrator) {
         this.scanner = new Scanner(System.in);
@@ -46,6 +46,7 @@ public class MenuDisplay {
         this.userOrchestrator = userOrchestrator;
         this.depositAndWithdrawOrchestrator = depositAndWithdrawOrchestrator;
         this.transactOrchestrator = transactOrchestrator;
+        this.transferOrchestrator = new TransferOrchestrator();
 
     }
 
@@ -280,7 +281,7 @@ public class MenuDisplay {
 
 
             AccountDTO dto = new AccountDTO();
-            dto.setUserId((int)UserId);
+            dto.setUserId(UserId);
             dto.setAccountType(accountType);
             dto.setBalance(0.0);
             dto.setLocked(isLocked);
@@ -341,13 +342,24 @@ public class MenuDisplay {
         System.out.println(ConsoleColor.PURPLE+"3. Exit "+ConsoleColor.RESET);
         int input = Integer.parseInt(scanner.nextLine().trim());
         switch (input) {
-            case 1:if (UserId == 0) {
+            case 1:
+                if (UserId == 0) {
                 System.out.println(ConsoleColor.YELLOW+"Please login first to withdraw from account."+ConsoleColor.RESET);
                 return;
-            }try {
-                transferOrchestrator.transfer(UserId);
-                System.out.println(ConsoleColor.GREEN+"Transaction Successful :)"+ConsoleColor.RESET);
-            } catch (BankingException e) {
+            }
+            try {
+                boolean transferSuccess = transferOrchestrator.transfer(UserId);
+
+                if (transferSuccess){
+                    System.out.println(ConsoleColor.GREEN+"Transaction Successful :)"+ConsoleColor.RESET);
+                }
+                else{System.out.println(ConsoleColor.RED+"Transaction Failed"+ConsoleColor.RESET); }
+
+            }
+            catch(NullPointerException e){
+                System.out.println(ConsoleColor.YELLOW+" Create Accounts before Transaction"+ConsoleColor.RESET);
+            }
+            catch (BankingException e) {
                 System.out.println(ConsoleColor.RED+"Problem with transactions"+ConsoleColor.RESET);
             } catch (SQLException e) {
                 System.out.println(ConsoleColor.RED+"SQL Error has Occurred"+ConsoleColor.RESET);
