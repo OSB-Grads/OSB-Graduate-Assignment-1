@@ -336,14 +336,29 @@ public class MenuDisplay {
     }
     
     private void handleViewAccounts() {
-        System.out.println("\n=== YOUR ACCOUNTS ===");
-        System.out.println("Choose the option to display the accounts");
-
 
         if (UserId == 0) {
             System.out.println("please login first before ViewAccount");
+            return ;
         }
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
+
+        if (accountDTOs == null || accountDTOs.isEmpty()) {
+            System.out.println("No User Accounts found.");
+            System.out.print("Would you like to create a new account? (yes/no): ");
+
+
+            String choice = scanner.nextLine().trim().toLowerCase();
+
+            if (choice.equals("yes") || choice.equals("y")) {
+                handleCreateAccount();
+            } else {
+                System.out.println("Returning to user menu...");
+            }
+            return;
+        }
+        System.out.println("\n=== YOUR ACCOUNTS ===");
+
 
         for(AccountDTO dto: accountDTOs){
             System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Interest: %f | createdAt:%s %n",
