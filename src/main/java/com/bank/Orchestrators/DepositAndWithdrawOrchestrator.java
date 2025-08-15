@@ -24,31 +24,36 @@ public class DepositAndWithdrawOrchestrator {
      * Common method to display accounts for a user and get the selected account number.
      */
     private String selectAccountNumber(int userId,boolean credit) throws AccountNotFoundException {
-        List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
-        if (listOfUsers.isEmpty()) {
-            throw new AccountNotFoundException("No Accounts found for user : " + userId);
+        List<AccountEntity> listOfAccounts = accountDAO.getAccountsByUserId(userId);
+        if (listOfAccounts.isEmpty()) {
+            System.out.println("No Accounts found for user : " + userId);
+            return null;
         }
 
         System.out.println("Available Accounts");
-        for (int i = 0; i < listOfUsers.size(); i++) {
-            if(credit || !listOfUsers.get(i).isIs_locked())
-            System.out.println((i + 1) + ". Account Number: " + listOfUsers.get(i).getAccount_number());
+        for (int i = 0; i < listOfAccounts.size(); i++) {
+            if(credit || !listOfAccounts.get(i).isIs_locked())
+            System.out.println((i + 1) + ". Account Number: " + listOfAccounts.get(i).getAccount_number());
         }
 
-        System.out.println("Choose account number (1 to " + listOfUsers.size() + "):");
+        System.out.println("Choose account number (1 to " + listOfAccounts.size() + "):");
         int index = -1;
-        while (index < 0 || index >= listOfUsers.size()) {
+        while (index < 0 || index >= listOfAccounts.size()) {
             index = sc.nextInt() - 1;
-            if (index < 0 || index >= listOfUsers.size()) {
+            if (index < 0 || index >= listOfAccounts.size()) {
                 System.out.println("Invalid choice :( Try Again");
             }
         }
-        return listOfUsers.get(index).getAccount_number();
+        return listOfAccounts.get(index).getAccount_number();
     }
 
     public void handleDeposit(int userId) throws AccountNotFoundException, SQLException {
      //   try {
             String accountNumber = selectAccountNumber(userId,true);
+            if (accountNumber == null || accountNumber.isEmpty()){
+                System.out.println("Please create Account to Deposit amount");
+                return ;
+            }
 
             System.out.print("Enter Amount to Deposit: ");
             double depositAmount = sc.nextDouble();
@@ -57,14 +62,15 @@ public class DepositAndWithdrawOrchestrator {
             transactionDAO.saveTransaction(transaction);
 
             System.out.println("Deposit successful for account: " + accountNumber);
-//        } catch (BankingException | SQLException e) {
-//            System.out.println("Error during deposit: " + e.getMessage());
-//        }
     }
 
     public void handleWithdraw(int userId) throws BankingException, SQLException {
        // try {
             String accountNumber = selectAccountNumber(userId,false);
+            if (accountNumber == null || accountNumber.isEmpty()){
+                System.out.println("Please create Account to Withdraw amount");
+                return;
+            }
 
             System.out.print("Enter Amount to Withdraw: ");
             double withdrawAmount = sc.nextDouble();
@@ -73,8 +79,5 @@ public class DepositAndWithdrawOrchestrator {
             transactionDAO.saveTransaction(transaction);
 
             System.out.println("Withdrawal of " + withdrawAmount + " is successful from: " + accountNumber);
-//        } catch (BankingException | SQLException e) {
-//            System.out.println("Error during withdrawal: " + e.getMessage());
-//        }
     }
 }
