@@ -456,40 +456,54 @@ public class MenuDisplay {
 
     private void handleViewTransactionHistory() {
         System.out.println("\n=== TRANSACTION HISTORY ===");
-        // TODO: Show user's accounts, let them select one, then show transaction
-        // history
-        // System.out.println("TODO: Implement transaction history using
-        // TransactionService");
+        System.out.println("Choose Transaction History based on number of Accounts ");
+        System.out.println("1. One Specific Account ");
+        System.out.println("2. All Accounts ");
+        int input = Integer.parseInt(scanner.nextLine().trim());
         TransactionService transactionService = new TransactionService();
-        try {
-            List<TransactionDTO> listOfTransactions = transactionService.getTransactionHistoryById(UserId);
 
-            if (listOfTransactions == null || listOfTransactions.isEmpty()) {
-                System.out.println("No transactions found.");
-                return;
+        switch (input) {
+            case 1:
+                // TODO: Show user's accounts, let them select one, then show transaction
+                try {
+                    List<TransactionDTO> listOfTransactions = transactionService.getTransactionHistoryById(UserId);
+
+                    if (listOfTransactions == null || listOfTransactions.isEmpty()) {
+                        System.out.println("No transactions found.");
+                        return;
+                    }
+                    // Table Header
+                    System.out.println(ConsoleColor.GREEN + "Transaction List:");
+                    System.out.printf("%-15s %-12s %-12s %-20s %-15s %-15s %-10s%n",
+                            "Transaction ID", "Type", "Amount", "Date", "From Account", "To Account", "Status");
+                    System.out.println(
+                            "------------------------------------------------------------------------------------------------------------------");
+
+                    // Table Rows
+                    for (TransactionDTO t : listOfTransactions) {
+                        System.out.printf("%-15s %-12s %-12.2f %-20s %-15s %-15s %-10s%n",
+                                t.getTransaction_id(),
+                                t.getTransaction_type(),
+                                t.getAmount(),
+                                t.getCreated_at(),
+                                t.getFrom_account_id(),
+                                t.getTo_account_id(),
+                                t.getStatus());
+                    }
+                    System.out.println(ConsoleColor.RESET);
+                } catch (BankingException | SQLException e) {
+                    showError(e.getMessage());
+                }
+                break;
+
+            case 2: {
+                try {
+                    transactionService.getTransactionHistoryForUser(UserId);
+                } catch (BankingException | SQLException e) {
+                    showError(e.getMessage());
+                }
+                break;
             }
-
-
-
-            // Table Header
-            System.out.printf("%-15s %-12s %-12s %-20s %-15s %-15s %-10s%n",
-                    "Transaction ID", "Type", "Amount", "Date", "From Account", "To Account", "Status");
-            System.out.println(
-                    "------------------------------------------------------------------------------------------------------------------");
-
-            // Table Rows
-            for (TransactionDTO t : listOfTransactions) {
-                System.out.printf("%-15s %-12s %-12.2f %-20s %-15s %-15s %-10s%n",
-                        t.getTransaction_id(),
-                        t.getTransaction_type(),
-                        t.getAmount(),
-                        t.getCreated_at(),
-                        t.getFrom_account_id(),
-                        t.getTo_account_id(),
-                        t.getStatus());
-            }
-        } catch (BankingException | SQLException e) {
-            showError(e.getMessage());
         }
     }
 
