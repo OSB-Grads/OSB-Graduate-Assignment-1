@@ -40,7 +40,8 @@ public class TransactionService {
 
     public TransactionEntity creditToAccount(String accountNumber, double amount) throws AccountNotFoundException {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0.");
+            System.out.println("Amount must be greater than 0.");
+            return null;
         }
 
         AccountEntity account = accountDAO.getAccountById(accountNumber);
@@ -81,7 +82,12 @@ public class TransactionService {
         double balance=accountDTO.getBalance();
         int user_id=accountDTO.getUserId();
 
-        if(balance<debitAmount){
+        if (debitAmount <= 0){
+            System.out.println("Please enter a valid amount to perform debit operation");
+            return null;
+        }
+
+        else if(balance<debitAmount){
             LogService.logintoDB(user_id, LogDAO.Action.TRANSACTIONS,"Sufficient balance is not available in the account","USER IP",LogDAO.Status.FAILURE);
             throw new InsufficientFundsException(debitAmount+"Not available in the Account");
         }
