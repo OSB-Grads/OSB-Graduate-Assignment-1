@@ -4,6 +4,7 @@ import com.bank.db.userDao;
 import com.bank.dto.UserDTO;
 import com.bank.entity.UserEntity;
 import com.bank.mapper.UserMapper;
+import com.bank.util.ConsoleColor;
 import com.bank.util.PasswordUtil;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -26,12 +27,12 @@ public class UserService {
 
     public boolean createUser(String username, String fullName, String email, String phone, String hashedPassword) throws Exception {
         if (username == null || username.trim().isEmpty()) {
-            System.err.println("Username cannot be empty.");
+            System.err.println(ConsoleColor.YELLOW+"Username cannot be empty."+ConsoleColor.RESET);
             return false;
         }
 
         if (userDao.existsByUsername(username)) {
-            System.err.println("Username already exists. Please choose another.");
+            System.err.println(ConsoleColor.YELLOW+"Username already exists. Please choose another."+ConsoleColor.RESET);
             return false;
         }
 
@@ -53,7 +54,7 @@ public class UserService {
             // Step 3: Save to DB
             return userDao.createUser(userEntity);
         } catch (Exception e) {
-            System.err.println("Error creating user: " + e.getMessage());
+            System.err.println(ConsoleColor.RED+"Error creating user: " + e.getMessage()+ConsoleColor.RESET);
             return false;
         }
     }
@@ -68,7 +69,7 @@ public class UserService {
     public void displayProfile(int user_id) throws Exception {
         UserEntity user = userDao.getUserById(user_id);
         if (user == null) {
-            System.err.println("User not found.");
+            System.err.println(ConsoleColor.YELLOW+"User not found."+ConsoleColor.RESET);
             return;
         }
 

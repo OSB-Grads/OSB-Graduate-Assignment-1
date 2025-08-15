@@ -3,6 +3,7 @@ package com.bank.db;
 import com.bank.entity.AccountEntity;
 import com.bank.entity.LogEntity;
 import com.bank.mapper.AccountMapper;
+import com.bank.util.ConsoleColor;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class AccountDAO {
             );
             db.query(sql);
         } catch (Exception e) {
-            System.out.println("Error while executing the Acoount Details " + e);
+            System.out.println(ConsoleColor.RED+"Error while executing the Acoount Details " + e+ConsoleColor.RESET);
         }
 
     }
@@ -55,7 +56,7 @@ public class AccountDAO {
                 result.add(account);
             }
         } catch (Exception e) {
-            System.out.println("Error retrieving account details: " + e);
+            System.out.println(ConsoleColor.RED+"Error retrieving account details: " + e+ConsoleColor.RESET);
         }
         return result;
     }
@@ -73,7 +74,7 @@ public class AccountDAO {
                 account=AccountMapper.mapToAccountEntity(row);
             }
         } catch (Exception e) {
-            System.out.println("Error retrieving account by ID: " + e);
+            System.out.println(ConsoleColor.RED+"Error retrieving account by ID: " + e+ConsoleColor.RESET);
         }
 
         return account;
@@ -96,7 +97,7 @@ public class AccountDAO {
         try {
             db.query(sql);
         } catch (Exception e) {
-            System.out.println("Error while updating account details: " + e);
+            System.out.println(ConsoleColor.RED+"Error while updating account details: " + e+ConsoleColor.RESET);
         }
     }
     public List<AccountEntity> getAccountsByUserId(int  Userid){
@@ -106,7 +107,7 @@ public class AccountDAO {
             List<Map<String, Object>> rows = db.query(sql);
             return AccountMapper.mapToAccountEntityList(rows);
         }catch (Exception e){
-            System.out.println("Error Retriving the userid");
+            System.out.println(ConsoleColor.RED+"Error Retriving the userid"+ConsoleColor.RESET);
             return new ArrayList<>();
         }
 
