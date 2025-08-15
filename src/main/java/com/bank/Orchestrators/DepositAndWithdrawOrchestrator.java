@@ -8,8 +8,10 @@ import com.bank.entity.TransactionEntity;
 import com.bank.exception.AccountNotFoundException;
 import com.bank.exception.BankingException;
 import com.bank.services.TransactionService;
+import com.bank.util.ConsoleColor;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,17 +28,17 @@ public class DepositAndWithdrawOrchestrator {
     private String selectAccountNumber(int userId,boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfAccounts = accountDAO.getAccountsByUserId(userId);
         if (listOfAccounts.isEmpty()) {
-            System.out.println("No Accounts found for this user." );
+            System.out.println(ConsoleColor.YELLOW+"No Accounts found for this user." +ConsoleColor.RESET);
             return null;
         }
 
-        System.out.println("Available Accounts");
+        System.out.println(ConsoleColor.BLUE+"Available Accounts"+ConsoleColor.RESET);
         for (int i = 0; i < listOfAccounts.size(); i++) {
             if(credit || !listOfAccounts.get(i).isIs_locked())
             System.out.println((i + 1) + ". Account Number: " + listOfAccounts.get(i).getAccount_number());
         }
 
-        System.out.println("Choose account number (1 to " + listOfAccounts.size() + "):");
+        System.out.println(ConsoleColor.BLUE+"Choose account number (1 to " + listOfAccounts.size() + "):"+ConsoleColor.RESET);
         int index = -1;
         while (index < 0 || index >= listOfAccounts.size()) {
             index = sc.nextInt() - 1;
@@ -51,39 +53,33 @@ public class DepositAndWithdrawOrchestrator {
      //   try {
             String accountNumber = selectAccountNumber(userId,true);
             if (accountNumber == null || accountNumber.isEmpty()){
-                System.out.println("Please create Account to Deposit amount");
+                System.out.println(ConsoleColor.YELLOW+"Please create Account to Deposit amount"+ConsoleColor.RESET);
                 return ;
             }
 
-            System.out.print("Enter Amount to Deposit: ");
+            System.out.print(ConsoleColor.BLUE+"Enter Amount to Deposit: "+ConsoleColor.RESET);
             double depositAmount = sc.nextDouble();
 
             TransactionEntity transaction = transactionService.creditToAccount(accountNumber, depositAmount);
             transactionDAO.saveTransaction(transaction);
 
-            System.out.println("Deposit of "+depositAmount+"  successful to account: " + accountNumber);
-//        } catch (BankingException | SQLException e) {
-//            System.out.println("Error during deposit: " + e.getMessage());
-//        }
+            System.out.println(ConsoleColor.GREEN+"Deposit successful for account: " + accountNumber+ConsoleColor.RESET);
     }
 
     public void handleWithdraw(int userId) throws BankingException, SQLException {
        // try {
             String accountNumber = selectAccountNumber(userId,false);
             if (accountNumber == null || accountNumber.isEmpty()){
-                System.out.println("Please create Account to Withdraw amount");
+                System.out.println(ConsoleColor.YELLOW+"Please create Account to Withdraw amount"+ConsoleColor.RESET);
                 return;
             }
 
-            System.out.print("Enter Amount to Withdraw: ");
+            System.out.print(ConsoleColor.BLUE+"Enter Amount to Withdraw: "+ConsoleColor.RESET);
             double withdrawAmount = sc.nextDouble();
 
             TransactionEntity transaction = transactionService.debitFromAccount(accountNumber, withdrawAmount);
             transactionDAO.saveTransaction(transaction);
 
-            System.out.println("Withdrawal of " + withdrawAmount + " is successful from: " + accountNumber);
-//        } catch (BankingException | SQLException e) {
-//            System.out.println("Error during withdrawal: " + e.getMessage());
-//        }
+            System.out.println(ConsoleColor.GREEN+"Withdrawal of " + withdrawAmount + " is successful from: " + accountNumber+ConsoleColor.RESET);
     }
 }
