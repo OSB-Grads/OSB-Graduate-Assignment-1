@@ -11,9 +11,11 @@ import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 import com.bank.services.TransactionService;
+import com.bank.util.ConsoleColor;
 import com.bank.util.DateUtil;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -54,10 +56,10 @@ public class MenuDisplay {
 
         while (running) {
             System.out.println("\n=== MAIN MENU ===");
-            System.out.println("1. Login");
-            System.out.println("2. Create Customer Profile");
-            System.out.println("3. Exit");
-            System.out.print("Please select an option (1-3): ");
+            System.out.println(ConsoleColor.PURPLE+"1. Login"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"2. Create Customer Profile0"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"3. Exit"+ConsoleColor.RESET);
+            System.out.print(ConsoleColor.BLUE+"Please select an option (1-3): "+ConsoleColor.RESET);
 
             try {
 
@@ -71,14 +73,14 @@ public class MenuDisplay {
                         handleCreateProfile();
                         break;
                     case 3:
-                        System.out.println("Thank you for using CLI Banking Application!");
+                        System.out.println(ConsoleColor.GREEN+"Thank you for using CLI Banking Application!"+ConsoleColor.RESET);
                         running = false;
                         break;
                     default:
-                        System.out.println("Invalid option. Please select 1, 2, or 3.");
+                        System.out.println(ConsoleColor.YELLOW+"Invalid option. Please select 1, 2, or 3."+ConsoleColor.RESET);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println(ConsoleColor.RED+"Invalid input. Please enter a number."+ConsoleColor.RESET);
             }
         }
     }
@@ -91,20 +93,20 @@ public class MenuDisplay {
         
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
-            System.out.println("1. Create Bank Account");
-            System.out.println("2. Deposit Money");
-            System.out.println("3. Withdraw Money");
-            System.out.println("4. Transfer Money");
-            System.out.println("5. View Account Details");
-            System.out.println("6. View Transaction History");
-            System.out.println("7. Update Profile Info");
-            System.out.println("8. View User Profile");
-            System.out.println("9. Logout");
-            System.out.print("Please select an option (1-8): ");
+            System.out.println(ConsoleColor.PURPLE+"1. Create Bank Account"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"2. Deposit Money"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"3. Withdraw Money"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"4. Transfer Money"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"5. View Account Details"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"6. View Transaction History"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"7. Update Profile Info"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"8. View User Profile"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"9. Logout"+ConsoleColor.RESET);
+            System.out.print(ConsoleColor.PURPLE+"Please select an option (1-8): "+ConsoleColor.RESET);
             
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -131,15 +133,15 @@ public class MenuDisplay {
                         viewUserProfile();
                         break;
                     case 9:
-                        System.out.println("Logging out...");
+                        System.out.println(ConsoleColor.BLUE+"Logging out..."+ConsoleColor.RESET);
                         UserId =0;
                         loggedIn = false;
                         break;
                     default:
-                        System.out.println("Invalid option. Please select 1-8.");
+                        System.out.println(ConsoleColor.YELLOW+"Invalid option. Please select 1-8."+ConsoleColor.RESET);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println(ConsoleColor.RED+"Invalid input. Please enter a number."+ConsoleColor.RESET);
             }
         }
     }
@@ -158,9 +160,9 @@ public class MenuDisplay {
 
     private void handleLogin() {
         System.out.println("\n=== LOGIN ===");
-        System.out.print("Username: ");
+        System.out.print(ConsoleColor.BLUE+"Username: "+ConsoleColor.RESET);
         String username = scanner.nextLine().trim();
-        System.out.print("Password: ");
+        System.out.print(ConsoleColor.BLUE+"Password: "+ConsoleColor.RESET);
         String password = scanner.nextLine().trim();
 
         UserDTO DTO = null;
@@ -184,15 +186,15 @@ public class MenuDisplay {
 
     private void handleCreateProfile() {
         System.out.println("\n=== CREATE CUSTOMER PROFILE ===");
-        System.out.print("Username: ");
+        System.out.print(ConsoleColor.BLUE+"Username: "+ConsoleColor.RESET);
         String username = scanner.nextLine().trim();
-        System.out.print("Password: ");
+        System.out.print(ConsoleColor.BLUE+"Password: "+ConsoleColor.RESET);
         String password = scanner.nextLine().trim();
-        System.out.print("Full Name: ");
+        System.out.print(ConsoleColor.BLUE+"Full Name: "+ConsoleColor.RESET);
         String fullName = scanner.nextLine().trim();
-        System.out.print("Email: ");
+        System.out.print(ConsoleColor.BLUE+"Email: "+ConsoleColor.RESET);
         String email = scanner.nextLine().trim();
-        System.out.print("Phone: ");
+        System.out.print(ConsoleColor.BLUE+"Phone: "+ConsoleColor.RESET);
         String phone = scanner.nextLine().trim();
 
         try {
@@ -202,16 +204,16 @@ public class MenuDisplay {
             showError(e.getMessage());
         }
         catch (Exception e) {
-            showError("Failed to create profile: " + e.getMessage());
+            showError(ConsoleColor.RED+"Failed to create profile: " + e.getMessage()+ConsoleColor.RESET);
         }
     }
 
 
     private void handleCreateAccount() {
         System.out.println("\n=== CREATE BANK ACCOUNT ===");
-        System.out.println("1. Savings Account");
-        System.out.println("2. Fixed Deposit Account");
-        System.out.print("Select account type (1-2): ");
+        System.out.println(ConsoleColor.PURPLE+"1. Savings Account"+ConsoleColor.RESET);
+        System.out.println(ConsoleColor.PURPLE+"2. Fixed Deposit Account"+ConsoleColor.RESET);
+        System.out.print(ConsoleColor.BLUE+"Select account type (1-2): "+ConsoleColor.RESET);
 
         try {
             int choice = Integer.parseInt(scanner.nextLine().trim());
@@ -228,12 +230,12 @@ public class MenuDisplay {
                     isLocked = true;
                     break;
                 default:
-                    System.out.println("Invalid account type selected.");
+                    System.out.println(ConsoleColor.YELLOW+"Invalid account type selected."+ConsoleColor.RESET);
                     return;
             }
 
             if (UserId == 0) {
-            System.out.println("Please login first to create an account.");
+            System.out.println(ConsoleColor.YELLOW+"Please login first to create an account."+ConsoleColor.RESET);
              return;
              }
 
@@ -247,105 +249,114 @@ public class MenuDisplay {
             // Call service to create account
             accountService.createAccount(dto);
 
-            System.out.println("Account creation request completed.");
+            System.out.println(ConsoleColor.GREEN+"Account creation request completed."+ConsoleColor.RESET);
 
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a number.");
+            System.out.println(ConsoleColor.RED+"Invalid input. Please enter a number."+ConsoleColor.RESET);
         } catch (Exception e) {
-            System.out.println("Error creating account: " + e.getMessage());
+            System.out.println(ConsoleColor.RED+"Error creating account: " + e.getMessage()+ConsoleColor.RESET);
         }
 
     }
-    
+
     private void handleDeposit()  {
         System.out.println("\n=== DEPOSIT MONEY ===");
         // TODO: Show user's accounts, get account selection and amount
         //System.out.println("TODO: Implement deposit logic using TransactionOrchestrator");
         if (UserId == 0) {
-            System.out.println("Please login first to deposit into account.");
+            System.out.println(ConsoleColor.YELLOW+"Please login first to deposit into account."+ConsoleColor.RESET);
             return;
         }
         try {
             depositAndWithdrawOrchestrator.handleDeposit(UserId);
         }
         catch(BankingException | SQLException e){
-            System.out.println("Error While performing Deposit into Account"+e.getMessage());
+            System.out.println(ConsoleColor.RED+"Error While performing Deposit into Account"+e.getMessage()+ConsoleColor.RESET);
         }
     }
-    
+
     private void handleWithdraw() {
         System.out.println("\n=== WITHDRAW MONEY ===");
         // TODO: Show user's savings accounts only, get account selection and amount
         //System.out.println("TODO: Implement withdrawal logic using TransactionOrchestrator");
         if (UserId == 0) {
-            System.out.println("Please login first to withdraw from account.");
+            System.out.println(ConsoleColor.YELLOW+"Please login first to withdraw from account."+ConsoleColor.RESET);
             return;
         }
         try {
             depositAndWithdrawOrchestrator.handleWithdraw(UserId);
         }
         catch (BankingException | SQLException e){
-            System.out.println("Error While performing Withdrawal from Account"+e.getMessage());
+            System.out.println(ConsoleColor.RED+"Error While performing Withdrawal from Account"+e.getMessage()+ConsoleColor.RESET);
         }
 
     }
-    
-    private void handleTransfer() {
+
+    private void handleTransfer()  {
         System.out.println("\n=== TRANSFER MONEY ===");
         // TODO: Show transfer options (Savings to Savings, Savings to FD)
         //System.out.println("TODO: Implement transfer logic using appropriate Orchestrator");
         System.out.println("Select type of Transaction");
-        System.out.println("1. Self Transaction");
-        System.out.println("2. User Transaction");
-        System.out.println("3. Exit ");
+        System.out.println(ConsoleColor.PURPLE+"1. Self Transaction"+ConsoleColor.RESET);
+        System.out.println(ConsoleColor.PURPLE+"2. User Transaction"+ConsoleColor.RESET);
+        System.out.println(ConsoleColor.PURPLE+"3. Exit "+ConsoleColor.RESET);
         int input = Integer.parseInt(scanner.nextLine().trim());
         switch (input) {
             case 1:if (UserId == 0) {
-                System.out.println("Please login first to withdraw from account.");
+                System.out.println(ConsoleColor.YELLOW+"Please login first to withdraw from account."+ConsoleColor.RESET);
                 return;
             }try {
                 transferOrchestrator.transfer(UserId);
-                System.out.println("Transaction Successful :)");
+                System.out.println(ConsoleColor.GREEN+"Transaction Successful :)"+ConsoleColor.RESET);
             } catch (BankingException e) {
-                System.out.println("Problem with transactions");
+                System.out.println(ConsoleColor.RED+"Problem with transactions"+ConsoleColor.RESET);
             } catch (SQLException e) {
-                System.out.println("SQL Error has Occurred");
+                System.out.println(ConsoleColor.RED+"SQL Error has Occurred"+ConsoleColor.RESET);
             }
                 break;
             case 2:
                 if (UserId == 0) {
-                    System.out.println("Please login first to withdraw from account.");
+                    System.out.println(ConsoleColor.YELLOW+"Please login first to withdraw from account."+ConsoleColor.RESET);
                     return;
                 }
                 try {
-                    transactOrchestrator.transactAmountBetweenUsers(UserId);
-                    System.out.println("Transaction Successful :)");
-                } catch (BankingException e) {
-                    System.out.println("Problem with transactions");
+                    boolean trans=transactOrchestrator.transactAmountBetweenUsers(UserId);
+                    if(trans) {
+                        System.out.println(ConsoleColor.GREEN+"Transaction Successful :)"+ConsoleColor.RESET);
+                    }
+                    else{
+                        System.out.println(ConsoleColor.RED+"Transaction Failed"+ConsoleColor.RESET);
+                    }
+                }
+                catch(AccountNotFoundException e){
+                    System.out.println(ConsoleColor.RED+"User Account Not Found"+ConsoleColor.RESET);
+                }
+                catch (BankingException e) {
+                    System.out.println(ConsoleColor.RED+"Problem with transactions"+ConsoleColor.RESET);
                 } catch (SQLException e) {
-                    System.out.println("SQL Error has Occurred");
+                    System.out.println(ConsoleColor.RED+"SQL Error has Occurred"+ConsoleColor.RESET);
                 }
                 break;
             case 3:
                 showUserMenu();
                 break;
             default:
-                System.out.println("Please Select Correct Option");
+                System.out.println(ConsoleColor.YELLOW+"Please Select Correct Option"+ConsoleColor.RESET);
                 break;
         }
     }
-    
+
     private void handleViewAccounts() {
 
         if (UserId == 0) {
-            System.out.println("Please login first before ViewAccount");
+            System.out.println(ConsoleColor.YELLOW+"Please login first before ViewAccount"+ConsoleColor.RESET);
             return ;
         }
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
 
         if (accountDTOs == null || accountDTOs.isEmpty()) {
-            System.out.println("No User Accounts found.");
-            System.out.print("Would you like to create a new account? (yes/no): ");
+            System.out.println(ConsoleColor.YELLOW+"No User Accounts found."+ConsoleColor.RESET);
+            System.out.print(ConsoleColor.BLUE+"Would you like to create a new account? (yes/no): "+ConsoleColor.RESET);
 
 
             String choice = scanner.nextLine().trim().toLowerCase();
@@ -359,20 +370,23 @@ public class MenuDisplay {
         }
         System.out.println("\n=== YOUR ACCOUNTS ===");
 
+        System.out.printf("%-15s %-10s %-12s %-10s %-20s%n",
+                "Account No", "Type", "Balance", "Interest", "Created At");
 
-        for(AccountDTO dto: accountDTOs){
-            System.out.printf("Account number: %s | Type: %s | Balance: %.2f | Interest: %f | createdAt:%s %n",
+        System.out.println("-------------------------------------------------------------");
+
+        for (AccountDTO dto : accountDTOs) {
+            System.out.printf("%-15s %-10s %-12.2f %-10.2f %-20s%n",
                     dto.getAccountNumber(),
                     dto.getAccountType(),
                     dto.getBalance(),
                     dto.getInterest(),
-                    DateUtil.formatStringDate(dto.getCreatedAt())
-            );
+                    DateUtil.formatStringDate(dto.getCreatedAt()));
         }
 
        // System.out.println("TODO: Implement account viewing using AccountService");
     }
-    
+
     private void handleViewTransactionHistory() {
         System.out.println("\n=== TRANSACTION HISTORY ===");
         // TODO: Show user's accounts, let them select one, then show transaction history
@@ -415,13 +429,13 @@ public class MenuDisplay {
         try {
             // No username input needed
 
-            System.out.print("Enter new full name: ");
+            System.out.print(ConsoleColor.BLUE+"Enter new full name: "+ConsoleColor.RESET);
             String fullName = scanner.nextLine();
 
-            System.out.print("Enter new email: ");
+            System.out.print(ConsoleColor.BLUE+"Enter new email: "+ConsoleColor.RESET);
             String email = scanner.nextLine();
 
-            System.out.print("Enter new phone number: ");
+            System.out.print(ConsoleColor.BLUE+"Enter new phone number: "+ConsoleColor.RESET);
             String phone = scanner.nextLine();
 
             UserDTO updatedDTO = new UserDTO();
@@ -432,10 +446,10 @@ public class MenuDisplay {
 
             userOrchestrator.updateUserDetails(UserId, updatedDTO);
 
-            System.out.println("Profile updated successfully!");
+            System.out.println(ConsoleColor.GREEN+"Profile updated successfully!"+ConsoleColor.RESET);
 
         } catch (Exception e) {
-            System.err.println("Failed to update profile: " + e.getMessage());
+            System.err.println(ConsoleColor.RED+"Failed to update profile: " + e.getMessage()+ConsoleColor.RESET);
         }
     }
 
@@ -448,18 +462,18 @@ public class MenuDisplay {
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
-    
+
     /**
      * Utility method to display error messages.
      */
     public void showError(String message) {
-        System.err.println("ERROR: " + message);
+        System.err.println(ConsoleColor.RED+"ERROR: " + message+ConsoleColor.RESET);
     }
-    
+
     /**
      * Utility method to display success messages.
      */
     public void showSuccess(String message) {
-        System.out.println("SUCCESS: " + message);
+        System.out.println(ConsoleColor.GREEN+"SUCCESS: " + message+ConsoleColor.RESET);
     }
 }

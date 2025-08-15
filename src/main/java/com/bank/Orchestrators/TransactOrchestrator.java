@@ -9,6 +9,7 @@ import com.bank.entity.TransactionEntity;
 import com.bank.exception.*;
 import com.bank.services.LogService;
 import com.bank.services.TransactionService;
+import com.bank.util.ConsoleColor;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -29,16 +30,17 @@ public class TransactOrchestrator {
     private String selectAccountNumber(int userId, boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
-            throw new AccountNotFoundException("No Accounts found for user : " + userId);
+            System.out.println(ConsoleColor.RED+"No Accounts found for this user."+ConsoleColor.RESET);
+            return null;
         }
 
-        System.out.println("Available Accounts");
+        System.out.println(ConsoleColor.BLUE+"Available Accounts"+ConsoleColor.RESET);
         for (int i = 0; i < listOfUsers.size(); i++) {
             if (credit || !listOfUsers.get(i).isIs_locked())
                 System.out.println((i + 1) + ". Account Number: " + listOfUsers.get(i).getAccount_number());
         }
 
-        System.out.println("Choose account number (1 to " + listOfUsers.size() + "):");
+        System.out.println(ConsoleColor.BLUE+"Choose account number (1 to " + listOfUsers.size() + "):"+ConsoleColor.RESET);
         int index = -1;
         while (index < 0 || index >= listOfUsers.size()) {
             index = sc.nextInt() - 1;
@@ -50,10 +52,11 @@ public class TransactOrchestrator {
     }
 
 
-    public void transactAmountBetweenUsers(int userId) throws BankingException, SQLException {
-        System.out.println("Select From Account Number");
+    public boolean transactAmountBetweenUsers(int userId) throws AccountNotFoundException,BankingException, SQLException {
+        System.out.println(ConsoleColor.BLUE+"Select From Account Number"+ConsoleColor.RESET);
         String fromAccountNumber = selectAccountNumber(userId, false);
-        System.out.println("Enter To Account Number ");
+        if(fromAccountNumber==null)return false;
+        System.out.println(ConsoleColor.BLUE+"Enter To Account Number "+ConsoleColor.RESET);
         String ToAccountNumber = sc.next();
 
         AccountEntity accountEntity = accountDAO.getAccountById(ToAccountNumber);
@@ -61,7 +64,7 @@ public class TransactOrchestrator {
         if (accountEntity == null) {
             throw new AccountNotFoundException("To Account is not available" + ToAccountNumber);
         }
-        System.out.println("Enter the Amount ::");
+        System.out.println(ConsoleColor.BLUE+"Enter the Amount ::"+ConsoleColor.RESET);
         double amount = sc.nextDouble();
         try {
             TransactionEntity dbT = transactionService.debitFromAccount(fromAccountNumber, amount);
@@ -69,20 +72,22 @@ public class TransactOrchestrator {
             crT.setFrom_account_id(fromAccountNumber);
             transactionDAO.saveTransaction(crT);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Successful","user_ip",LogDAO.Status.SUCCESS);
+            return true;
         } catch (DebitFailureException e) {
-            System.out.println("Debit Operation has failed");
+            System.out.println(ConsoleColor.RED+"Debit Operation has failed"+ConsoleColor.RESET);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
             throw new BankingException("Debit Operation has failed");
 
         } catch ( CreditFailureException e) {
-            System.out.println("Credit Operation has failed");
+            System.out.println(ConsoleColor.RED+"Credit Operation has failed"+ConsoleColor.RESET);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
             transactionService.creditToAccount(fromAccountNumber, amount);
         } catch (TransactionFailureException e) {
-            System.out.println("Credit Operation has failed");
+            System.out.println(ConsoleColor.RED+"Credit Operation has failed"+ConsoleColor.RESET);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
             transactionService.creditToAccount(fromAccountNumber, amount);
             transactionService.debitFromAccount(ToAccountNumber, amount);
         }
+        return false;
     }
 }

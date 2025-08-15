@@ -7,6 +7,7 @@ import com.bank.dto.UserDTO;
 import com.bank.entity.AccountEntity;
 import com.bank.entity.UserEntity;
 import com.bank.mapper.AccountMapper;
+import com.bank.util.ConsoleColor;
 
 import java.security.PublicKey;
 import java.sql.SQLException;
@@ -51,11 +52,11 @@ public class AccountService {
                         LogDAO.Status.SUCCESS
                 );
                 created = true;
-                System.out.println("Account created successfully! Account Number: " + accountNumber);
+                System.out.println(ConsoleColor.GREEN+"Account created successfully! Account Number: " + accountNumber+ConsoleColor.RESET);
 
             } catch (RuntimeException e) {
                 if (e.getMessage().contains("UNIQUE") || e.getMessage().contains("constraint")) {
-                    System.out.println("Duplicate account number detected, regenerating... (Attempt " + attempts + ")");
+                    System.out.println(ConsoleColor.RED+"Duplicate account number detected, regenerating... (Attempt " + attempts + ")"+ConsoleColor.RESET);
                 } else {
                     throw e;
                 }
@@ -63,7 +64,7 @@ public class AccountService {
         }
 
         if (!created) {
-            throw new RuntimeException("Unable to create account after " + attempts + " attempts.");
+            throw new RuntimeException(ConsoleColor.YELLOW+"Unable to create account after " + attempts + " attempts."+ConsoleColor.RESET);
         }
     }
 
