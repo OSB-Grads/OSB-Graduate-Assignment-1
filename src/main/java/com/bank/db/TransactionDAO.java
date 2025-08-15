@@ -43,7 +43,7 @@ public class TransactionDAO {
     //get all transactions by Account Id
     public List<TransactionEntity> getTransactionsByAccountNumber(String account_number) throws SQLException {
         List<TransactionEntity> list = new ArrayList<>();
-        String sql = "SELECT * FROM transactions WHERE from_account_number = " + account_number + " OR to_account_id = " + account_number;
+        String sql = "SELECT * FROM transactions WHERE from_account_id = " + account_number + " OR to_account_id = " + account_number;
         List<Map<String, Object>> rows = dm.query(sql);
         return TransactionMapper.mapToTransactionEntityList(rows);
     }

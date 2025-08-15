@@ -1,5 +1,5 @@
 package com.bank.entity;
-import java.sql.Timestamp;
+
 
 
 public class TransactionEntity {
@@ -15,7 +15,7 @@ public class TransactionEntity {
    private double amount;
    private String description;
    private String status;
-   private Timestamp created_at;
+   private String created_at;
 
     /* =======================
        Constructors
@@ -23,7 +23,7 @@ public class TransactionEntity {
 
     public TransactionEntity() { }
 
-    public TransactionEntity(String transaction_id, String from_account_id, String to_account_id, String transaction_type, double amount, String description, String status, Timestamp created_at) {
+    public TransactionEntity(String transaction_id, String from_account_id, String to_account_id, String transaction_type, double amount, String description, String status, String created_at) {
         this.transaction_id = transaction_id;
         this.from_account_id = from_account_id;
         this.to_account_id = to_account_id;
@@ -96,11 +96,11 @@ public class TransactionEntity {
         this.status = status;
     }
 
-    public Timestamp getCreatedAt() {
+    public String getCreatedAt() {
         return created_at;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.created_at = createdAt;
     }
 }

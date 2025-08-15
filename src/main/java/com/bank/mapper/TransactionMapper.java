@@ -5,7 +5,6 @@ import com.bank.dto.TransactionDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,15 +13,15 @@ public class TransactionMapper {
         if(row==null || row.isEmpty()) {
             return null;
         }
-        TransactionEntity transaction =new TransactionEntity();
-        transaction.setTransaction_id((String) row.get("id"));
+        TransactionEntity transaction = new TransactionEntity();
+        transaction.setTransaction_id((String) row.get("transaction_id"));
         transaction.setFrom_account_id((String) row.get("from_account_id"));
         transaction.setTo_account_id((String) row.get("to_account_id"));
         transaction.setTransaction_type((String) row.get("transaction_type"));
-        transaction.setAmount((double) row.get("amount"));
+        transaction.setAmount(((Number)row.get("amount")).doubleValue());
         transaction.setStatus((String) row.get("status"));
         transaction.setDescription((String) row.get("description"));
-        transaction.setCreatedAt((Timestamp) row.get("created_at"));
+        transaction.setCreatedAt((String) row.get("created_at"));
         return transaction;
     }
     public static TransactionDTO  transactionEntityToDto(TransactionEntity transaction) {
@@ -38,7 +37,7 @@ public class TransactionMapper {
         transactionDTO.setAmount((double) transaction.getAmount());
         transactionDTO.setStatus((String) transaction.getStatus());
         transactionDTO.setDescription((String) transaction.getDescription());
-        transactionDTO.setCreated_at((Timestamp) transaction.getCreatedAt());
+        transactionDTO.setCreated_at((String) transaction.getCreatedAt());
         return transactionDTO;
     }
 
@@ -68,7 +67,7 @@ public class TransactionMapper {
         ts.setAmount(rs.getDouble("amount"));
         ts.setDescription(rs.getString("description"));
         ts.setStatus(rs.getString("status"));
-        ts.setCreatedAt(rs.getTimestamp("created_at"));
+        ts.setCreatedAt(rs.getString("created_at"));
         return ts;
     }
     public static List<TransactionDTO> entityToTransactionDtoList(List<TransactionEntity> entities) {
@@ -97,9 +96,7 @@ public class TransactionMapper {
         if (rows == null) {
             return new ArrayList<>();
         }
-        return rows.stream()
-                .map(TransactionMapper::mapToTransactionEntity)
-                .collect(Collectors.toList());
+        return rows.stream().map(TransactionMapper::mapToTransactionEntity).collect(Collectors.toList());
     }
 
 }
