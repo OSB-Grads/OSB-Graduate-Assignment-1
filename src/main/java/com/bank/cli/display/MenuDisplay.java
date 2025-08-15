@@ -169,10 +169,15 @@ public class MenuDisplay {
             UserId=DTO.getId();
             currentUsername=DTO.getUsername();
             showUserMenu();
-        } catch (InvalidCredentialsException e) {
-            showError(e.getMessage());
         } catch (Exception e) {
-            showError("Exception has occured during Login Operation..!"+e.getMessage());
+            if(e instanceof InvalidCredentialsException){
+                showError(e.getMessage());
+            }
+            else if(e instanceof UserNotfoundException){
+                showError(e.getMessage());
+            }else{
+                showError(new UserNotfoundException().getMessage());
+            }
         }
 
     }
