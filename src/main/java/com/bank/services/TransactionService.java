@@ -60,6 +60,7 @@ public class TransactionService {
         LogService.logintoDB( user_id, LogDAO.Action.TRANSACTIONS,"Amount has been credited into User Account","USER IP",LogDAO.Status.SUCCESS);
 
         TransactionEntity transaction = new TransactionEntity();
+        
         transaction.setFrom_account_id(null); // Since it's a deposit
         transaction.setTo_account_id(accountNumber);
         transaction.setAmount(amount);
