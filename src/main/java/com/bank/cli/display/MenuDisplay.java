@@ -348,7 +348,7 @@ public class MenuDisplay {
             if (choice.equals("yes") || choice.equals("y")) {
                 handleCreateAccount();
             } else {
-                System.out.println("Returning to main menu...");
+                System.out.println("Returning to user menu...");
             }
             return;
         }
