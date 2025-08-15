@@ -58,6 +58,10 @@ banking_app.db
 ehthumbs.db
 Thumbs.db
 
+#CSV and TXT files
+*.csv
+*.txt
+
 # Temporary files
 *.tmp
 *.temp
