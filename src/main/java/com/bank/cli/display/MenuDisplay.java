@@ -11,6 +11,7 @@ import com.bank.exception.*;
 import com.bank.services.AccountService;
 import com.bank.services.AuthService;
 import com.bank.services.TransactionService;
+import com.bank.util.DateUtil;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -360,7 +361,7 @@ public class MenuDisplay {
                     dto.getAccountType(),
                     dto.getBalance(),
                     dto.getInterest(),
-                    dto.getCreatedAt()
+                    DateUtil.formatStringDate(dto.getCreatedAt())
             );
         }
 
@@ -379,6 +380,9 @@ public class MenuDisplay {
                 System.out.println("No transactions found.");
                 return;
             }
+
+
+
             // Table Header
             System.out.printf("%-15s %-12s %-12s %-20s %-15s %-15s %-10s%n",
                     "Transaction ID", "Type", "Amount", "Date", "From Account", "To Account", "Status");
@@ -390,7 +394,7 @@ public class MenuDisplay {
                         t.getTransaction_id(),
                         t.getTransaction_type(),
                         t.getAmount(),
-                        t.getCreated_at(),
+                        DateUtil.formatTimestamp(t.getCreated_at()),
                         t.getFrom_account_id(),
                         t.getTo_account_id(),
                         t.getStatus());
