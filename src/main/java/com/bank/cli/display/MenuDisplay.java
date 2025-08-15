@@ -58,7 +58,7 @@ public class MenuDisplay {
         while (running) {
             System.out.println("\n=== MAIN MENU ===");
             System.out.println(ConsoleColor.PURPLE+"1. Login"+ConsoleColor.RESET);
-            System.out.println(ConsoleColor.PURPLE+"2. Create Customer Profile0"+ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE+"2. Create Customer Profile"+ConsoleColor.RESET);
             System.out.println(ConsoleColor.PURPLE+"3. Exit"+ConsoleColor.RESET);
             System.out.print(ConsoleColor.BLUE+"Please select an option (1-3): "+ConsoleColor.RESET);
 
