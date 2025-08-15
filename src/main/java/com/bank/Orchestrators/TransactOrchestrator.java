@@ -29,7 +29,8 @@ public class TransactOrchestrator {
     private String selectAccountNumber(int userId, boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
-            throw new AccountNotFoundException("No Accounts found for user : " + userId);
+            System.out.println("No Accounts found for this user." );
+            return null;
         }
 
         System.out.println("Available Accounts");
@@ -50,9 +51,10 @@ public class TransactOrchestrator {
     }
 
 
-    public void transactAmountBetweenUsers(int userId) throws BankingException, SQLException {
+    public boolean transactAmountBetweenUsers(int userId) throws AccountNotFoundException,BankingException, SQLException {
         System.out.println("Select From Account Number");
         String fromAccountNumber = selectAccountNumber(userId, false);
+        if(fromAccountNumber==null)return false;
         System.out.println("Enter To Account Number ");
         String ToAccountNumber = sc.next();
 
@@ -69,6 +71,7 @@ public class TransactOrchestrator {
             crT.setFrom_account_id(fromAccountNumber);
             transactionDAO.saveTransaction(crT);
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Successful","user_ip",LogDAO.Status.SUCCESS);
+            return true;
         } catch (DebitFailureException e) {
             System.out.println("Debit Operation has failed");
             LogService.logintoDB(userId, LogDAO.Action.TRANSACTIONS,"Transaction Failure","user_ip",LogDAO.Status.FAILURE);
@@ -84,5 +87,6 @@ public class TransactOrchestrator {
             transactionService.creditToAccount(fromAccountNumber, amount);
             transactionService.debitFromAccount(ToAccountNumber, amount);
         }
+        return false;
     }
 }

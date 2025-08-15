@@ -82,13 +82,13 @@ public class MenuDisplay {
             }
         }
     }
-    
+
     /**
      * Display the user menu after successful login.
      */
     public void showUserMenu() {
         boolean loggedIn = true;
-        
+
         while (loggedIn) {
             System.out.println("\n=== USER MENU ===");
             System.out.println("1. Create Bank Account");
@@ -101,10 +101,10 @@ public class MenuDisplay {
             System.out.println("8. View User Profile");
             System.out.println("9. Logout");
             System.out.print("Please select an option (1-8): ");
-            
+
             try {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
-                
+
                 switch (choice) {
                     case 1:
                         handleCreateAccount();
@@ -256,7 +256,7 @@ public class MenuDisplay {
         }
 
     }
-    
+
     private void handleDeposit()  {
         System.out.println("\n=== DEPOSIT MONEY ===");
         // TODO: Show user's accounts, get account selection and amount
@@ -272,7 +272,7 @@ public class MenuDisplay {
             System.out.println("Error While performing Deposit into Account"+e.getMessage());
         }
     }
-    
+
     private void handleWithdraw() {
         System.out.println("\n=== WITHDRAW MONEY ===");
         // TODO: Show user's savings accounts only, get account selection and amount
@@ -289,7 +289,7 @@ public class MenuDisplay {
         }
 
     }
-    
+
     private void handleTransfer() {
         System.out.println("\n=== TRANSFER MONEY ===");
         // TODO: Show transfer options (Savings to Savings, Savings to FD)
@@ -306,7 +306,11 @@ public class MenuDisplay {
             }try {
                 transferOrchestrator.transfer(UserId);
                 System.out.println("Transaction Successful :)");
-            } catch (BankingException e) {
+            }
+            catch(AccountNotFoundException e) {
+                System.out.println("No Accounts Found for User");
+            }
+            catch (BankingException e) {
                 System.out.println("Problem with transactions");
             } catch (SQLException e) {
                 System.out.println("SQL Error has Occurred");
@@ -318,9 +322,17 @@ public class MenuDisplay {
                     return;
                 }
                 try {
-                    transactOrchestrator.transactAmountBetweenUsers(UserId);
-                    System.out.println("Transaction Successful :)");
-                } catch (BankingException e) {
+                    boolean trans=transactOrchestrator.transactAmountBetweenUsers(UserId);
+                    if(trans) {
+                        System.out.println("Transaction Successful :)");
+                    }
+                    else{
+                        System.out.println("Transaction Failed");
+                    }
+                }
+                catch (AccountNotFoundException e){
+                    System.out.println("User Accounts Are Not Found");
+                }catch (BankingException e) {
                     System.out.println("Problem with transactions");
                 } catch (SQLException e) {
                     System.out.println("SQL Error has Occurred");
@@ -334,7 +346,7 @@ public class MenuDisplay {
                 break;
         }
     }
-    
+
     private void handleViewAccounts() {
 
         if (UserId == 0) {
@@ -372,7 +384,7 @@ public class MenuDisplay {
 
        // System.out.println("TODO: Implement account viewing using AccountService");
     }
-    
+
     private void handleViewTransactionHistory() {
         System.out.println("\n=== TRANSACTION HISTORY ===");
         // TODO: Show user's accounts, let them select one, then show transaction history
@@ -448,14 +460,14 @@ public class MenuDisplay {
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
-    
+
     /**
      * Utility method to display error messages.
      */
     public void showError(String message) {
         System.err.println("ERROR: " + message);
     }
-    
+
     /**
      * Utility method to display success messages.
      */

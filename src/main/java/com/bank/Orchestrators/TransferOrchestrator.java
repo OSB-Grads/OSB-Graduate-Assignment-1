@@ -27,7 +27,6 @@ public class TransferOrchestrator {
         String fromAccountNumber = selectAccountNumber(userId,false);
         System.out.println("==== TO ACCOUNT ====");
         String toAccountNumber = selectAccountNumber(userId,true);
-
         if (fromAccountNumber.equals(toAccountNumber)) {
             System.out.println("Cannot transfer to the same account.");
             return;
@@ -66,7 +65,8 @@ public class TransferOrchestrator {
     private String selectAccountNumber(int userId,boolean credit) throws AccountNotFoundException {
         List<AccountEntity> listOfUsers = accountDAO.getAccountsByUserId(userId);
         if (listOfUsers.isEmpty()) {
-            throw new AccountNotFoundException("No Accounts found for user : " + userId);
+            System.out.println("No Accounts found for this user." );
+            return null;
         }
 
         System.out.println("Available Accounts");

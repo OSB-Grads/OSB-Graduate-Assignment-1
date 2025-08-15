@@ -56,7 +56,7 @@ public class DepositAndWithdrawOrchestrator {
             TransactionEntity transaction = transactionService.creditToAccount(accountNumber, depositAmount);
             transactionDAO.saveTransaction(transaction);
 
-            System.out.println("Deposit successful for account: " + accountNumber);
+            System.out.println("Deposit of "+depositAmount+"  successful to account: " + accountNumber);
 //        } catch (BankingException | SQLException e) {
 //            System.out.println("Error during deposit: " + e.getMessage());
 //        }
