@@ -16,9 +16,7 @@ import com.bank.mapper.TransactionMapper;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -36,6 +34,10 @@ public class TransactionService {
     }
 
     public TransactionService() {
+    }
+
+    private String generateUniqueAccountNumberUUID() {
+        return String.valueOf(Math.abs(UUID.randomUUID().getMostSignificantBits())).substring(0, 10);
     }
 
     public TransactionEntity creditToAccount(String accountNumber, double amount) throws AccountNotFoundException {
@@ -60,13 +62,14 @@ public class TransactionService {
         LogService.logintoDB( user_id, LogDAO.Action.TRANSACTIONS,"Amount has been credited into User Account","USER IP",LogDAO.Status.SUCCESS);
 
         TransactionEntity transaction = new TransactionEntity();
+        transaction.setTransaction_id(generateUniqueAccountNumberUUID());
         transaction.setFrom_account_id(null); // Since it's a deposit
         transaction.setTo_account_id(accountNumber);
         transaction.setAmount(amount);
         transaction.setTransaction_type(TransactionDAO.TransactionType.DEPOSIT.name()); // Convert enum to String
         transaction.setDescription("Deposit of " + amount);
         transaction.setStatus(TransactionDAO.Status.COMPLETED.name()); // Convert enum to String
-        //transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+//        transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()).toString());
 
         return transaction;
     }
@@ -103,13 +106,14 @@ public class TransactionService {
         }
 
         TransactionEntity transaction = new TransactionEntity();
+        transaction.setTransaction_id(generateUniqueAccountNumberUUID());
         transaction.setFrom_account_id(accountNumber); // Since money is debited from this account
         transaction.setTo_account_id(null); // No target account for direct withdrawal
         transaction.setAmount(debitAmount);
         transaction.setTransaction_type(TransactionDAO.TransactionType.WITHDRAWAL.name()); // Enum to String
         transaction.setDescription("Withdrawal of ₹" + debitAmount);
         transaction.setStatus(TransactionDAO.Status.COMPLETED.name()); // Enum to String
-        //transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+       // transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()).toString());
 
         return transaction;
     }

@@ -14,6 +14,8 @@ import com.bank.services.AuthService;
 import com.bank.services.TransactionService;
 import com.bank.util.ConsoleColor;
 import com.bank.util.DateUtil;
+import com.bank.util.InputValidator;
+
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
@@ -56,7 +58,7 @@ public class MenuDisplay {
         while (running) {
             System.out.println("\n=== MAIN MENU ===");
             System.out.println(ConsoleColor.PURPLE + "1. Login" + ConsoleColor.RESET);
-            System.out.println(ConsoleColor.PURPLE + "2. Create Customer Profile0" + ConsoleColor.RESET);
+            System.out.println(ConsoleColor.PURPLE + "2. Create Customer Profile" + ConsoleColor.RESET);
             System.out.println(ConsoleColor.PURPLE + "3. Exit" + ConsoleColor.RESET);
             System.out.print(ConsoleColor.BLUE + "Please select an option (1-3): " + ConsoleColor.RESET);
 
@@ -188,17 +190,62 @@ public class MenuDisplay {
     }
 
     private void handleCreateProfile() {
-        System.out.println("\n=== CREATE CUSTOMER PROFILE ===");
-        System.out.print(ConsoleColor.BLUE + "Username: " + ConsoleColor.RESET);
-        String username = scanner.nextLine().trim();
-        System.out.print(ConsoleColor.BLUE + "Password: " + ConsoleColor.RESET);
-        String password = scanner.nextLine().trim();
-        System.out.print(ConsoleColor.BLUE + "Full Name: " + ConsoleColor.RESET);
-        String fullName = scanner.nextLine().trim();
-        System.out.print(ConsoleColor.BLUE + "Email: " + ConsoleColor.RESET);
-        String email = scanner.nextLine().trim();
-        System.out.print(ConsoleColor.BLUE + "Phone: " + ConsoleColor.RESET);
-        String phone = scanner.nextLine().trim();
+        String username;
+        do {
+            System.out.print(ConsoleColor.BLUE + "Username: " + ConsoleColor.RESET);
+            username = scanner.nextLine().trim();
+            if (!InputValidator.isValidUsername(username)) {
+                System.out.println(ConsoleColor.YELLOW
+                        + "Invalid username. Must be at least 5 characters, only letters & numbers allowed."
+                        + ConsoleColor.RESET);
+                username = null;
+            }
+        } while (username == null);
+
+        String password;
+        do {
+            System.out.print(ConsoleColor.BLUE + "Password: " + ConsoleColor.RESET);
+            password = scanner.nextLine().trim();
+            if (!InputValidator.isValidPassword(password)) {
+                System.out.println(ConsoleColor.YELLOW
+                        + "Invalid password. Must be at least 8 chars, include 1 number and 1 special character."
+                        + ConsoleColor.RESET);
+                password = null;
+            }
+        } while (password == null);
+
+        String fullName;
+        do {
+            System.out.print(ConsoleColor.BLUE + "Full Name: " + ConsoleColor.RESET);
+            fullName = scanner.nextLine().trim();
+            if (!InputValidator.isValidFullName(fullName)) {
+                System.out.println(ConsoleColor.YELLOW + "Invalid full name. Only letters and spaces, min 2 characters."
+                        + ConsoleColor.RESET);
+                fullName = null;
+            }
+        } while (fullName == null);
+
+        String email;
+        do {
+            System.out.print(ConsoleColor.BLUE + "Email: " + ConsoleColor.RESET);
+            email = scanner.nextLine().trim();
+            if (!InputValidator.isValidEmail(email)) {
+                System.out.println(
+                        ConsoleColor.YELLOW + "Invalid email format. Example: user@example.com" + ConsoleColor.RESET);
+                email = null;
+            }
+        } while (email == null);
+
+        String phone;
+        do {
+            System.out.print(ConsoleColor.BLUE + "Phone: " + ConsoleColor.RESET);
+            phone = scanner.nextLine().trim();
+            if (!InputValidator.isValidPhone(phone)) {
+                System.out.println(
+                        ConsoleColor.YELLOW + "Invalid phone number. Must be 10 digits." + ConsoleColor.YELLOW);
+                phone = null;
+            }
+        } while (phone == null);
 
         try {
             userOrchestrator.signup(UserId, username, password, fullName, email, phone); // <-- underlined change
