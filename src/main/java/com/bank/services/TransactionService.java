@@ -66,7 +66,7 @@ public class TransactionService {
         transaction.setTransaction_type(TransactionDAO.TransactionType.DEPOSIT.name()); // Convert enum to String
         transaction.setDescription("Deposit of " + amount);
         transaction.setStatus(TransactionDAO.Status.COMPLETED.name()); // Convert enum to String
-        transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        //transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return transaction;
     }
@@ -109,7 +109,7 @@ public class TransactionService {
         transaction.setTransaction_type(TransactionDAO.TransactionType.WITHDRAWAL.name()); // Enum to String
         transaction.setDescription("Withdrawal of ₹" + debitAmount);
         transaction.setStatus(TransactionDAO.Status.COMPLETED.name()); // Enum to String
-        transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        //transaction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return transaction;
     }
@@ -119,6 +119,10 @@ public class TransactionService {
         Scanner sc = new Scanner(System.in);
         // get all accounts by user_id
         List<AccountEntity> accounts = accountDAO.getAccountsByUserId(user_id);
+        if (accounts.isEmpty() || accounts.size() == 0 ){
+            System.out.println("There exists no accounts for this UserID.");
+            return null;
+        }
 
         for (int i = 0; i < accounts.size(); i++) {
             System.out.println((i + 1) + ". Account Number: " + accounts.get(i).getAccount_number());

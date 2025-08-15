@@ -338,7 +338,7 @@ public class MenuDisplay {
     private void handleViewAccounts() {
 
         if (UserId == 0) {
-            System.out.println("please login first before ViewAccount");
+            System.out.println("Please login first before ViewAccount");
             return ;
         }
         List<AccountDTO> accountDTOs = accountService.getAccountsByUserId(UserId);
@@ -391,7 +391,7 @@ public class MenuDisplay {
             // Table Header
             System.out.printf("%-15s %-12s %-12s %-20s %-15s %-15s %-10s%n",
                     "Transaction ID", "Type", "Amount", "Date", "From Account", "To Account", "Status");
-            System.out.println("-----------------------------------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
 
             // Table Rows
             for (TransactionDTO t : listOfTransactions) {
@@ -399,7 +399,7 @@ public class MenuDisplay {
                         t.getTransaction_id(),
                         t.getTransaction_type(),
                         t.getAmount(),
-                        DateUtil.formatTimestamp(t.getCreated_at()),
+                        t.getCreated_at(),
                         t.getFrom_account_id(),
                         t.getTo_account_id(),
                         t.getStatus());
