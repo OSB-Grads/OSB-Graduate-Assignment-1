@@ -1,44 +1,137 @@
 flowchart TD
-Start(["Start"]) --> ShowMainMenu["Display Main Menu"]
 
-    ShowMainMenu --> Choice1{"Select Option?"}
-    Choice1 -->|1: Login| HandleLogin["handleLogin()"]
-    Choice1 -->|2: Create User| HandleCreateProfile["handleCreateProfile()"]
-    Choice1 -->|3: Exit| ExitMsg["Print Exit Message & End"]
-    Choice1 -->|Invalid Input| ShowMainMenu
+%% ========= START ========= %%
+Start(["Start Application"]) --> InitDB["Initialize Database (DatabaseManager.java) and App Context "]
+InitDB --> LoadMainMenu["Show Main Menu (showMainMenu.java)"]
+showMainMenu --> DisplayOptions["Display Options: 
+         1. Login 
+         2. Create Profile 
+         3. Exit"]
 
-    %% Login Flow
-    HandleLogin --> ValidateLogin{"Credentials valid?"}
-    ValidateLogin -->|Yes| ShowUserMenu["Display User Menu"]
-    ValidateLogin -->|No| ErrorLogin["Print Error - Invalid Credentials"] --> ShowMainMenu
+DisplayOptions --> showUserMenu{"User Input?"}
 
-    %% Create User Flow
-    HandleCreateProfile --> CheckUsername{"Username exists?"}
-    CheckUsername -->|Yes| ErrorUsername["Print Error - Enter unique username"] --> ShowMainMenu
-    CheckUsername -->|No| InputDetails["Prompt fullname, email, phone"] --> CreateProfile["Create user & profile in DB"] --> SuccessSignup["Print Success Message"] --> ShowMainMenu
+%% ========= MAIN MENU OPTIONS ========= %%
+showUserMenu -->|1: Login| HandleLogin["handleLogin()"]
+showUserMenu -->|2: Create Profile| HandleCreateProfile["handleCreateProfile()"]
+showUserMenu -->|3: Exit| ExitApp
+showUserMenu -->|Invalid Input| InvalidMain["Print Error: Invalid Input"] -->  ShowMainMenu
 
-    %% User Menu Options
-    ShowUserMenu --> UserChoice{"Select User Option"}
-    UserChoice -->|1: Create Bank Account| HandleCreateAccount["handleCreateAccount()"] --> ShowUserMenu
-    UserChoice -->|2: Deposit Money| HandleDeposit["handleDeposit()"] --> ShowUserMenu
-    UserChoice -->|3: Withdraw Money| HandleWithdraw["handleWithdraw()"]
 
-    %% Withdraw Rules
-    HandleWithdraw --> IsFD{"Is account FD?"}
-    IsFD -->|Yes| ErrorFD["Error - FD withdrawal not allowed"] --> ShowUserMenu
-    IsFD -->|No| CheckBalance{"Sufficient balance?"}
-    CheckBalance -->|Yes| DeductBalance["Deduct amount from DB"] --> SuccessWithdraw["Print Withdrawal Successful"] --> ShowUserMenu
-    CheckBalance -->|No| ErrorBalance["Error - Insufficient Balance"] --> ShowUserMenu
+%% ========== LOGIN FLOW ========== %%
+StartLogin --> AskLoginCreds["Prompt Username & Password"]
+AskLoginCreds --> ValidateLogin["UserService.validateLogin()"]
+ValidateLogin -->|Invalid| LoginFail["Print 'Invalid Credentials'"] --> DisplayOptions
+ValidateLogin -->|Valid| LoadProfile["ProfileService.getProfileByUserId()"]
+LoadProfile --> LoadAccounts["AccountService.getAccountsByUserId()"]
+LoadAccounts --> ShowUserMenu["Display User Menu (UserMenu.java)"]
 
-    UserChoice -->|4: Transfer Money| HandleTransfer["handleTransfer()"]
-    HandleTransfer --> ValidTransfer{"Is transfer valid?"}
-    ValidTransfer -->|Yes| DoTransfer["Debit & Credit in DB"] --> SuccessTransfer["Print Transfer Successful"] --> ShowUserMenu
-    ValidTransfer -->|No| ErrorTransfer["Print Error - Not allowed"] --> ShowUserMenu
+%% ========== CREATE PROFILE FLOW ========== %%
+StartCreateProfile --> AskNewCreds["Prompt New Username & Password"]
+AskNewCreds --> CheckExistUser["UserService.isUserExist()"]
+CheckExistUser -->|Yes| ErrorUserExists["Print 'Username Exists'"] --> DisplayOptions
+CheckExistUser -->|No| AskProfileDetails["Prompt FullName, Email, Phone"]
+AskProfileDetails --> SaveUser["UserDAO.createUser()"]
+SaveUser --> SaveProfile["ProfileDAO.createProfile()"]
+SaveProfile --> ProfileCreated["Print 'Profile Created Successfully'"] --> DisplayOptions
 
-    UserChoice -->|5: View Account Details| HandleViewAccounts["handleViewAccounts()"] --> ShowUserMenu
-    UserChoice -->|6: View Transaction History| HandleTransactionHistory["handleViewTransactionHistory()"] --> ShowUserMenu
-    UserChoice -->|7: Update Profile Info| HandleUpdateProfile["handleUpdateProfile()"] --> ShowUserMenu
-    UserChoice -->|8: Logout| LogoutMsg["Print 'Logging out...'"] --> ShowMainMenu
-    UserChoice -->|Invalid Input| ShowUserMenu
+%% ========== USER MENU FLOW ========== %%
+ShowUserMenu --> UserMenuChoice{"Select Option:"}
 
-    ExitMsg --> End(["End"])
+UserMenuChoice -->|1. Create Account| Accont Service
+UserMenuChoice -->|2. Deposit Money| DepositAndWithdraw Orchestration
+UserMenuChoice -->|3. Withdraw Money| DepositAndWithdraw Orchestration
+UserMenuChoice -->|4. Transfer Money| TransferOrchestration And Transact Orchestration
+UserMenuChoice -->|5. View Accounts| Accounts Service
+UserMenuChoice -->|6. View Transactions| Transaction Service
+UserMenuChoice -->|7. Download Transactions| FileDownloader 
+UserMenuChoice -->|8. Update Profile| User Orchestration
+UserMenuChoice -->|9. View User Profile| User Orchestration
+UserMenuChoice -->|10. Logout| ---> ShowMainMenu
+
+%% ========== CREATE ACCOUNT FLOW ========== %%
+CreateAccFlow --> AskAccDetails["Prompt: Account Type, Initial Deposit"]
+AskAccDetails --> SaveAccount["AccountService.createAccount()"]
+SaveAccount --> AccountSuccess["Print 'Account Created'"] --> ShowUserMenu
+
+%% ========== DEPOSIT FLOW ========== %%
+DepositFlow --> GetDepositInput[" Account Number + Amount"]
+AskDepositInput --> ValidateAccount["AccountDAO.getAccountById()"]
+ValidateAccount -->|Invalid| DepositError[AccuntNotFound Exception (Return null)] --> ShowUserMenu
+ValidateAccount -->|Valid| DepositOrch["DepositAndWithdrawOrchestrator.handleDeposit()"]
+DepositOrch --> UpdateBalance["AccountDAO.updateBalance()"]
+UpdateBalance --> CreateDepositTxn["TransactionDAO.saveTransaction(DEPOSIT)"]
+CreateDepositTxn --> DepositSuccess["Print 'Deposit Successful'"] --> ShowUserMenu
+
+%% ========== WITHDRAW FLOW ========== %%
+WithdrawFlow --> GetWithdrawInput[" Account Number + Amount"]
+AskWithdrawInput --> GetAccount["AccountDAO.getAccountById()"]
+GetAccount -->|FD Account| FDNotAllowed["Print 'Withdrawal not allowed for FD'"] --> ShowUserMenu
+GetAccount -->|Non-FD| CheckBalance["Is Balance Sufficient?"]
+CheckBalance -->|No| InsuffFunds[InsuffiecientFundsException] --> ShowUserMenu
+CheckBalance -->|Yes| WithdrawOrch["DepositAndWithdrawOrchestrator.handleWithdraw()"]
+WithdrawOrch --> DeductAmt["AccountDAO.updateBalance()"]
+DeductAmt --> CreateWithdrawTxn["TransactionDAO.saveTransaction(WITHDRAW)"]
+CreateWithdrawTxn --> WithdrawSuccess["Print 'Withdrawal Successful'"] --> ShowUserMenu
+
+%% ========== TRANSFER FLOW ========== %%
+TransferFlow --> AskTransferType[ 
+    1. Self Transaction 
+    2.Different User Transaction ]
+Self Transaction --> Transfer Orchestration ---> AskTransferInput [" Input From, To Account Numbers + Amount"]
+AskTransferInput --> ValidateFromTo["Check both accounts exist & different owners"]
+ValidateFromTo -->|Invalid| InvalidTransfer["Print 'Invalid Transfer Details'"] --> ShowUserMenu
+ValidateFromTo --> CheckTransferBalance["Check if FROM account has balance"]
+CheckTransferBalance -->|No| TransferInsuffFunds["Print 'Insufficient Balance'"] --> ShowUserMenu
+CheckTransferBalance -->|Yes| TransferOrch["TransferOrchestrator.handleTransfer()"]
+TransferOrch --> DebitFrom["AccountDAO.updateBalance(FROM)"]
+DebitFrom --> CreditTo["AccountDAO.updateBalance(TO)"]
+CreditTo --> CreateTransferTxn["TransactionDAO.createTransaction(TRANSFER)"]
+saveTransferTxn --> TransferSuccess["Print 'Transfer Successful'"] --> ShowUserMenu
+If DebitFrom or CreditTo fails falls in Exception and re-do the completed function.
+
+
+User Transaction --> Transfer Orchestration ---> AskTransferInput [" Input From, Enter To Account Numbers + Amount"]
+ValidateFromTo -->|Invalid| InvalidTransfer["Print 'Invalid Transfer Details'"] --> ShowUserMenu
+ValidateFromTo --> CheckTransferBalance["Check if FROM account has balance"]
+CheckTransferBalance -->|No| TransferInsuffFunds["Print 'Insufficient Balance'"] --> ShowUserMenu
+CheckTransferBalance -->|Yes| TransferOrch["TransferOrchestrator.handleTransfer()"]
+TransferOrch --> DebitFrom["AccountDAO.updateBalance(FROM)"]
+DebitFrom --> CreditTo["AccountDAO.updateBalance(TO)"]
+CreditTo --> CreateTransferTxn["TransactionDAO.createTransaction(TRANSFER)"]
+saveTransferTxn --> TransferSuccess["Print 'Transfer Successful'"] --> ShowUserMenu
+If DebitFrom or CreditTo fails falls in Exception and re-do the completed function.
+
+
+%% ========== VIEW ACCOUNTS FLOW ========== %%
+ViewAccFlow --> FetchAccounts["AccountService.getAccountsByUserId()"]
+FetchAccounts --> DisplayAccounts["Print Accounts with Balance + Type"] --> ShowUserMenu
+
+%% ========== VIEW TRANSACTIONS FLOW ========== %%
+ViewTxnFlow --> AskAccountsForTxn["
+1. One Specific Account
+2. All Accounts"]
+One Specific Accont ---> GetAccountForTxn --> FetchTxns for Specific Account["TransactionService.getTransactionsByAccountId()"]
+All Accounts ---> GetAccounts --> FetchTxns for all Accounts["TransactionService.getTransactionHistoryForUser()"]
+FetchTxns --> DisplayTxns["Print Transactions (Transaction ID, Type, Amount, Date, From Account, To Account )"] --> ShowUserMenu
+
+%% ========== DOWNLOAD TRANSACTIONS ========== %%
+ViewAccFlow --> FetchTransactions["TransactionService.getTransactionHistoryById()"]
+FetchTxns --> Display Download format [1. .csv 
+2. .txt ] 
+.csv ---> fileDownloader.downloadAsCSV ---> ShowUserMenu 
+.txt ---> fileDownloader.downloadASTXT ---> ShowUserMenu 
+
+%% ========== UPDATE PROFILE FLOW ========== %%
+UpdateProfileFlow --> AskNewProfile["Prompt New FullName, Email, Phone"]
+AskNewProfile --> UpdateProfileDAO["ProfileDAO.updateProfile()"]
+UpdateProfileDAO --> ProfileUpdateSuccess["Print 'Profile Updated Successfully'"] --> ShowUserMenu
+
+%% ========== VIEW USER PROFILE FLOW ========== %%
+UserOrchestration ---> .displayProfile() ---> UserDAO.getUserById ---> Diplay [ Full Name, Email,Phone]
+
+%% ========== LOGOUT FLOW ========== %%
+DoLogout --> LogoutMsg["Print 'Logging out...'"] --> DisplayOptions
+
+%% ========== EXIT ========== %%
+ExitApp --> ExitMsg["Print 'Thank you for using the Bank App'"]
+ExitMsg --> End(["End Application"])
